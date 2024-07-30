@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8" />
+    <title>IFrame</title>
+    <script src="https://unpkg.com/react@18/umd/react.development.js"></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+</head>
+
+<body>
+    <div id="root"></div>
+    <script>
+        const root = document.getElementById('root');
+
+        window.addEventListener('message', (event) => {
+            const { code } = event.data;
+            try {
+                const Component = eval(code);
+                ReactDOM.render(<Component />, root);
+            } catch (error) {
+                console.error('Error executing code:', error);
+            }
+        });
+    </script>
+</body>
+
+</html>

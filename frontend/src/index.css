@@ -1,0 +1,29 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+.scanning::after {
+  content: '';
+  position: absolute;
+  top: 0px;
+  left: 0px;
+  width: 5px;
+  height: 100%;
+  background-image: linear-gradient(
+    to right,
+    rgba(242, 244, 246, 0.971),
+    /* Darker matrix green with full transparency */ rgba(202, 205, 202, 0.8)
+      /* The same green with 80% opacity */
+  );
+  animation: scanning 3s ease-in-out infinite;
+}
+
+@keyframes scanning {
+  0%,
+  100% {
+    transform: translateX(0px);
+  }
+  50% {
+    transform: translateX(410px);
+  }
+}
