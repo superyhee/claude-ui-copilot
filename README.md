@@ -21,8 +21,8 @@ Make sure you have Node.js (version 18 or above) and Docker (optional, but recom
 1. Clone the repository:
 
    ```shell
-   git clone https://github.com/mattzcarey/code-review-gpt.git
-   cd code-review-gpt
+   git clone https://github.com/superyhee/ui-code-copilot.git
+   cd ui-code-copilot
    ```
 
 2. Set up the API key:
