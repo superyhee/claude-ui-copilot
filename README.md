@@ -1,4 +1,4 @@
-# UI Copilot
+# UI Code AI Copilot
 
 <img width="100%" alt="image" src="./images/home.png">
 
