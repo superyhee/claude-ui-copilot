@@ -87,4 +87,4 @@ Licensed under the MIT License.
 
 If you find this project helpful, you can buy the author a cup of coffee to show your support.
 
-<img width="30%" alt="image" src="./images/bmc_qr.png">
+<img width="25%" alt="image" src="./images/bmc_qr.png">
