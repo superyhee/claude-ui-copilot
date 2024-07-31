@@ -64,6 +64,7 @@ Open your browser and visit http://localhost:9000 to see the frontend page.
 
 ## TODO
 
+- [ ] Support more llm api like gpt4o,ollama.
 - [ ] Support more component generation for Angular, and other frontend frameworks.
 
 ## Reporting Issues
