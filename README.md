@@ -4,7 +4,7 @@
 
 A React and Vite-based tool with an Express backend that converts text, screenshots, and Figma designs into clean, functional code using AI. It employs a conversational approach for continuous page effect adjustments. Now supports AWS Bedrock and Claude 3.5 Sonnet.
 
-[Watch the video](https://www.youtube.com/watch?v=hoifXP5bXIU)
+[Watch the demo](https://www.youtube.com/watch?v=hoifXP5bXIU)
 
 ## Supported stacks:
 
