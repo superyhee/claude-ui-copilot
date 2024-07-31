@@ -1,13 +1,12 @@
-# UI Code AI Copilot
+# Ui Vision Copilot
 
 <img width="100%" alt="image" src="./images/home.png">
 
-A tool built with React and Vite, complemented by a backend service using the Express framework, which convert text, screenshots, and Figma designs into clean, functional code using AI. It is based on a conversational approach, allowing you to continuously adjust the page effects.
-Now supporting AWS bedrock and Claude Sonnet 3.5
+A React and Vite-based tool with an Express backend that converts text, screenshots, and Figma designs into clean, functional code using AI. It employs a conversational approach for continuous page effect adjustments. Now supports AWS Bedrock and Claude 3.5 Sonnet.
 
 [Watch the video](https://www.youtube.com/watch?v=hoifXP5bXIU)
 
-#### Supported stacks:
+## Supported stacks:
 
 - React + Mui
 - React + Tailwind
@@ -16,7 +15,11 @@ Now supporting AWS bedrock and Claude Sonnet 3.5
 
 ## Prerequisites
 
-Make sure you have Node.js (version 18 or above) and Docker (optional, but recommended) installed in your development environment.An API key from Anthropic or AWS account access key secret key;
+- Node.js (v18+)
+- Docker (optional, recommended)
+- Anthropic API key or AWS account credentials
+
+## Setup
 
 1. Clone the repository:
 
@@ -25,26 +28,29 @@ Make sure you have Node.js (version 18 or above) and Docker (optional, but recom
    cd ui-code-copilot
    ```
 
-2. Set up the API key:
+2. Configure API key:
 
    ```shell
    cd server
+   cp .env.example .env
    ```
 
-3. Set anthropic or bedrock key in the .env file
-   - Rename the .env.example file to .env.
-   - Replace ANTHROPIC_KEY with your actual Anthropic api key or replace AK and SK with you AWS account.
-   - If running within Docker, set the parameter IS_DOCKER_ENV to true, otherwise set it to false.
+   Edit .env:
 
-## Start with Docker
+   - Set ANTHROPIC_KEY or AWS AK and SK
+   - Set IS_DOCKER_ENV to true for Docker, false otherwise
 
-It is highly recommended to use Docker for a one-click start.In the root directory of the project:
+## Quick Start
+
+### With Docker (Recommended)
+
+In the root directory of the project:
 
 ```sh
 docker-compose up -d --build
 ```
 
-## Start without Docker
+### Without Docker
 
 In the root directory of the project, install dependencies and start the frontend and backend separately:
 
@@ -64,21 +70,14 @@ Open your browser and visit http://localhost:9000 to see the frontend page.
 
 ## TODO
 
-- [ ] Support more llm api like gpt4o,ollama.
-- [ ] Support more component generation for Angular, and other frontend frameworks.
+- [ ] Support for additional LLM APIs (e.g., GPT-4, Ollama)
+- [ ] Extend component generation to Angular and other frontend frameworks
 
-## Reporting Issues
+## Contributing
 
-Encountered a bug? I love to hear about it. Please follow these steps to report any issues:
-Your report will help us make the project better for everyone.
-
-## Feature Requests
-
-Got an idea for a new feature? Feel free to suggest it. Your suggestions for improvements are always welcome.
-
-## Security
-
-Your security is important to us. If you discover a security vulnerability. Please refrain from disclosing any vulnerabilities publicly until said vulnerability has been reported and addressed.
+- Issues: Report bugs to help improve the project
+- Feature Requests: Share your ideas for new features
+- Security: Report vulnerabilities privately
 
 ## License
 
