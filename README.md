@@ -26,8 +26,8 @@ https://github.com/user-attachments/assets/a77d428f-ce29-4f0a-b692-d983fdb02258
 1. Clone the repository:
 
    ```shell
-   git clone https://github.com/superyhee/ui-code-copilot.git
-   cd ui-code-copilot
+   git clone https://github.com/superyhee/generate-ui-copilot.git
+   cd generate-ui-copilot
    ```
 
 2. Configure API key:
