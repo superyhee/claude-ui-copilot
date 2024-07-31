@@ -31,7 +31,7 @@ Make sure you have Node.js (version 18 or above) and Docker (optional, but recom
    cd server
    ```
 
-3. Open the .env file and
+3. Set anthropic or bedrock key in the .env file
    - Rename the .env.example file to .env.
    - Replace ANTHROPIC_KEY with your actual Anthropic api key or replace AK and SK with you AWS account.
    - If running within Docker, set the parameter IS_DOCKER_ENV to true, otherwise set it to false.
@@ -51,7 +51,7 @@ In the root directory of the project, install dependencies and start the fronten
 ```sh
 # Install frontend dependencies
 cd frontend
-npm install
+npm install --legacy-peer-deps
 npm run dev
 
 # Install backend dependencies
