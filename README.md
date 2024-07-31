@@ -1,4 +1,4 @@
-# Ui Vision Copilot
+# Generate Ui Copilot
 
 <img width="100%" alt="image" src="./images/home.png">
 
