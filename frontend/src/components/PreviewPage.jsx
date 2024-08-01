@@ -1,20 +1,22 @@
 import React from 'react';
+import { Box, Typography, Button, Stack } from '@mui/material';
 
-export default function App() {
+const PreviewPage = () => {
   return (
-    <div className="flex justify-center items-center h-screen bg-gray-200">
-      <div className="flex flex-col md:flex-row space-x-0 md:space-x-8">
-        <div className="bg-white p-4 rounded-md shadow-md mb-4 md:mb-0">
-          <div className="bg-gray-200 h-64 rounded-md flex items-center justify-center mb-4">
-            <span className="text-gray-500">Upload or drag your file</span>
-          </div>
-          <button className="bg-green-500 text-white px-4 py-2 rounded-md">confirm</button>
-        </div>
-        <div className="bg-white p-4 rounded-md shadow-md">
-          <h2 className="text-gray-500 mb-2">File list</h2>
-          <div className="bg-gray-200 h-64 rounded-md"></div>
-        </div>
-      </div>
-    </div>
+    <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh', backgroundColor: '#f5f5f5' }}>
+      <Stack spacing={2} alignItems="center">
+        <Box sx={{ border: '1px solid #ccc', borderRadius: '4px', backgroundColor: '#fff', p: 2, width: 300 }}>
+          <Typography variant="body1" align="center">Upload or drag your file</Typography>
+        </Box>
+        <Button variant="contained" color="primary" sx={{ backgroundColor: '#00b050', borderRadius: '16px', py: 1, px: 3 }}>
+          confirm
+        </Button>
+        <Box sx={{ border: '1px solid #ccc', borderRadius: '4px', backgroundColor: '#fff', p: 2, width: 300 }}>
+          <Typography variant="body1" align="center">File list</Typography>
+        </Box>
+      </Stack>
+    </Box>
   );
-}
+};
+
+export default PreviewPage;
