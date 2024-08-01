@@ -3,14 +3,14 @@ import { Box, Typography, Button, Grid } from '@mui/material';
 
 const PreviewPage = () => {
   return (
-    <Box sx={{ p: 4, backgroundColor: '#f5f5f5', height: '100%' }}>
+    <Box sx={{ p: 4, backgroundColor: '#f5f5f5', height: '100vh' }}>
       <Grid container spacing={2}>
         <Grid item xs={8}>
           <Box
             sx={{
               p: 4,
-              bgcolor: '#d9d9d9',
-              border: '1px solid #a9a9a9',
+              bgcolor: '#ffcdd2',
+              border: '1px solid #e57373',
               borderRadius: 1,
             }}
           >
@@ -29,14 +29,28 @@ const PreviewPage = () => {
               variant="contained"
               color="primary"
               sx={{
-                bgcolor: '#d9d9d9',
-                color: '#000',
+                bgcolor: '#ffcdd2',
+                color: '#e57373',
                 '&:hover': {
-                  bgcolor: '#a9a9a9',
+                  bgcolor: '#e57373',
                 },
               }}
             >
               confirm
+            </Button>
+            <Button
+              variant="contained"
+              color="primary"
+              sx={{
+                ml: 2,
+                bgcolor: '#ffcdd2',
+                color: '#e57373',
+                '&:hover': {
+                  bgcolor: '#e57373',
+                },
+              }}
+            >
+              cancel
             </Button>
           </Box>
         </Grid>
@@ -44,8 +58,8 @@ const PreviewPage = () => {
           <Box
             sx={{
               p: 2,
-              bgcolor: '#d9d9d9',
-              border: '1px solid #a9a9a9',
+              bgcolor: '#ffcdd2',
+              border: '1px solid #e57373',
               borderRadius: 1,
             }}
           >
