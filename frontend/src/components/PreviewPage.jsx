@@ -10,36 +10,40 @@ const PreviewPage = () => {
   };
 
   return (
-    <Box sx={{ p: 4, backgroundColor: '#f5f5f5', height: '100%' }}>
-      <form onSubmit={handleSubmit(onSubmit)}>
-        <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
-          <TextField
-            label="Name"
-            variant="outlined"
-            {...register('name')}
-          />
-          <TextField
-            label="Job"
-            variant="outlined"
-            {...register('job')}
-          />
-          <TextField
-            label="Desc"
-            multiline
-            rows={4}
-            variant="outlined"
-            {...register('desc')}
-          />
-          <Box sx={{ display: 'flex', justifyContent: 'flex-end', gap: 2 }}>
-            <Button variant="contained" color="error">
-              cancel
-            </Button>
-            <Button variant="contained" color="primary" type="submit">
-              confirm
-            </Button>
-          </Box>
+    <Box sx={{ p: 4, backgroundColor: '#f5f5f5', height: '100vh', display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
+      <Box sx={{ backgroundColor: '#d9d9d9', p: 4, borderRadius: 2 }}>
+        <Typography variant="h6" sx={{ mb: 2 }}>Name</Typography>
+        <TextField
+          variant="outlined"
+          fullWidth
+          sx={{ mb: 2 }}
+          {...register('name')}
+        />
+        <Typography variant="h6" sx={{ mb: 2 }}>Job</Typography>
+        <TextField
+          variant="outlined"
+          fullWidth
+          sx={{ mb: 2 }}
+          {...register('job')}
+        />
+        <Typography variant="h6" sx={{ mb: 2 }}>Desc</Typography>
+        <TextField
+          variant="outlined"
+          multiline
+          rows={4}
+          fullWidth
+          sx={{ mb: 2 }}
+          {...register('desc')}
+        />
+        <Box sx={{ display: 'flex', justifyContent: 'flex-end', gap: 2 }}>
+          <Button variant="contained" color="error">
+            cancel
+          </Button>
+          <Button variant="contained" color="primary" type="submit" onClick={handleSubmit(onSubmit)}>
+            confirm
+          </Button>
         </Box>
-      </form>
+      </Box>
     </Box>
   );
 };
