@@ -1,62 +1,14 @@
 import React from 'react';
-import { useForm } from 'react-hook-form';
 
-const App = () => {
-  const { register, handleSubmit } = useForm();
-  const onSubmit = (data) => console.log(data);
-
+export default function App() {
   return (
-    <div className="flex items-center justify-center h-screen bg-gray-100">
-      <form onSubmit={handleSubmit(onSubmit)} className="bg-white p-8 rounded-lg shadow-md">
-        <div className="mb-4">
-          <label htmlFor="name" className="block text-gray-700 font-bold mb-2">
-            Name
-          </label>
-          <input
-            id="name"
-            type="text"
-            {...register('name')}
-            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-          />
-        </div>
-        <div className="mb-4">
-          <label htmlFor="job" className="block text-gray-700 font-bold mb-2">
-            Job
-          </label>
-          <input
-            id="job"
-            type="text"
-            {...register('job')}
-            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-          />
-        </div>
-        <div className="mb-6">
-          <label htmlFor="desc" className="block text-gray-700 font-bold mb-2">
-            Desc
-          </label>
-          <textarea
-            id="desc"
-            {...register('desc')}
-            className="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
-          ></textarea>
-        </div>
-        <div className="flex justify-end">
-          <button
-            type="button"
-            className="px-4 py-2 bg-red-500 text-white rounded-md mr-2"
-          >
-            cancel
-          </button>
-          <button
-            type="submit"
-            className="px-4 py-2 bg-green-500 text-white rounded-md"
-          >
-            confirm
-          </button>
-        </div>
-      </form>
+    <div className="bg-black text-white py-8 px-4 flex flex-col items-center justify-center">
+      <h1 className="text-2xl font-bold mb-4">Inside the Box</h1>
+      <h2 className="text-xl mb-2">July Product Update</h2>
+      <p className="text-lg mb-4">Hi there 👋</p>
+      <p className="text-base mb-8">We are back with another issue of "Inside the Box", a summary of the CodeSandbox highlights from last month.</p>
+      <p className="text-base">Let's jump right into it!</p>
+      <img src="https://placehold.co/800x400" alt="A placeholder image" className="mt-8" />
     </div>
   );
-};
-
-export default App;
+}
