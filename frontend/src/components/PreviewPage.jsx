@@ -1,36 +1,33 @@
 import React from 'react';
-import { Box, Typography, Button, Grid } from '@mui/material';
+import { Box, Typography, Button, Stack } from '@mui/material';
 
 const PreviewPage = () => {
+  const handleUpload = () => {
+    // Implement file upload functionality
+  };
+
+  const handleCancel = () => {
+    // Implement cancel functionality
+  };
+
   return (
-    <Box sx={{ p: 4, backgroundColor: '#f5f5f5', height: '100vh', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-      <Grid container spacing={2}>
-        <Grid item xs={12} md={6}>
-          <Box sx={{ backgroundColor: '#fff5f5', p: 4, border: '1px solid #ff0000' }}>
-            <Typography variant="body1" align="center" gutterBottom>
-              Upload or drag your file
-            </Typography>
-            <Box sx={{ display: 'flex', justifyContent: 'center', mt: 2 }}>
-              <Button variant="contained" color="primary" sx={{ mr: 2 }}>
-                confirm
-              </Button>
-              <Button variant="contained" color="secondary">
-                cancel
-              </Button>
-            </Box>
-          </Box>
-        </Grid>
-        <Grid item xs={12} md={6}>
-          <Box sx={{ backgroundColor: '#fff5f5', p: 4, border: '1px solid #ff0000' }}>
-            <Typography variant="h6" gutterBottom>
-              File list
-            </Typography>
-            <Box sx={{ backgroundColor: '#ffffff', p: 2, border: '1px solid #cccccc', height: 200 }}>
-              <img src="https://placehold.co/400x200" alt="Placeholder Image" style={{ maxWidth: '100%', maxHeight: '100%' }} />
-            </Box>
-          </Box>
-        </Grid>
-      </Grid>
+    <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh', bgcolor: '#f5f5f5' }}>
+      <Stack spacing={2} alignItems="center">
+        <Box sx={{ bgcolor: '#ffdada', p: 4, borderRadius: 2, border: '1px solid #ff6b6b' }}>
+          <Typography variant="body1" sx={{ color: '#ff6b6b' }}>Upload or drag your file</Typography>
+        </Box>
+        <Box sx={{ bgcolor: '#ffdada', p: 2, borderRadius: 2, border: '1px solid #ff6b6b' }}>
+          <Typography variant="body1" sx={{ color: '#ff6b6b' }}>File list</Typography>
+        </Box>
+        <Stack direction="row" spacing={2}>
+          <Button variant="contained" color="error" onClick={handleUpload}>
+            confirm
+          </Button>
+          <Button variant="outlined" color="error" onClick={handleCancel}>
+            cancel
+          </Button>
+        </Stack>
+      </Stack>
     </Box>
   );
 };
