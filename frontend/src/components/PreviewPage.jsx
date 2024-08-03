@@ -1,25 +1,45 @@
 import React from 'react';
-import { Box, Typography, Button, Stack } from '@mui/material';
+import { Box, TextField, Button, Typography } from '@mui/material';
+import { useForm } from 'react-hook-form';
 
 const PreviewPage = () => {
+  const { register, handleSubmit } = useForm();
+
+  const onSubmit = (data) => {
+    console.log(data);
+  };
+
   return (
-    <Box sx={{ backgroundImage: 'linear-gradient(to right, #a6c1ee, #fbc2eb)', minHeight: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-      <Box sx={{ maxWidth: '600px', textAlign: 'center' }}>
-        <Typography variant="h3" sx={{ color: 'white', fontWeight: 'bold', mb: 2 }}>
-          ChatGPT on your desktop
-        </Typography>
-        <Typography variant="body1" sx={{ color: 'white', mb: 4 }}>
-          Chat about email, screenshots, files, and anything on your screen.
-        </Typography>
-        <Button variant="contained" color="primary" sx={{ backgroundColor: 'white', color: 'black', '&:hover': { backgroundColor: '#e0e0e0' } }}>
-          Learn more
-        </Button>
-      </Box>
-      <Stack direction="row" justifyContent="center" spacing={2} sx={{ mt: 4 }}>
-        <Box sx={{ width: '10px', height: '10px', borderRadius: '50%', backgroundColor: 'white' }} />
-        <Box sx={{ width: '10px', height: '10px', borderRadius: '50%', backgroundColor: 'rgba(255, 255, 255, 0.5)' }} />
-        <Box sx={{ width: '10px', height: '10px', borderRadius: '50%', backgroundColor: 'rgba(255, 255, 255, 0.5)' }} />
-      </Stack>
+    <Box sx={{ p: 4, backgroundColor: '#f5f5f5', height: '100%' }}>
+      <form onSubmit={handleSubmit(onSubmit)}>
+        <Box sx={{ display: 'flex', flexDirection: 'column', gap: 2 }}>
+          <TextField
+            label="Name"
+            variant="outlined"
+            {...register('name')}
+          />
+          <TextField
+            label="Job"
+            variant="outlined"
+            {...register('job')}
+          />
+          <TextField
+            label="Desc"
+            multiline
+            rows={4}
+            variant="outlined"
+            {...register('desc')}
+          />
+          <Box sx={{ display: 'flex', justifyContent: 'flex-end', gap: 2 }}>
+            <Button variant="contained" color="error">
+              cancel
+            </Button>
+            <Button variant="contained" color="primary" type="submit">
+              confirm
+            </Button>
+          </Box>
+        </Box>
+      </form>
     </Box>
   );
 };
