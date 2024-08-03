@@ -1,30 +1,30 @@
 import React from 'react';
-import { Box, Typography, Button, AppBar, Toolbar } from '@mui/material';
+import { Box, Typography, Button, Grid } from '@mui/material';
 
 const PreviewPage = () => {
   return (
-    <Box sx={{ height: '100vh', display: 'flex', flexDirection: 'column' }}>
-      <AppBar position="static" sx={{ bgcolor: 'white', color: 'black', boxShadow: 'none' }}>
-        <Toolbar sx={{ justifyContent: 'space-between' }}>
-          <Box component="img" src="https://placehold.co/40x40" alt="Logo" />
-          <Box sx={{ display: 'flex', gap: 4 }}>
-            <Typography variant="body1">Research</Typography>
-            <Typography variant="body1">Products</Typography>
-            <Typography variant="body1">Safety</Typography>
-            <Typography variant="body1">Company</Typography>
+    <Box sx={{ minHeight: '100vh', background: 'linear-gradient(to right, #e6b3ff, #ff99cc)' }}>
+      <Grid container justifyContent="center" alignItems="center" sx={{ minHeight: '100vh' }}>
+        <Grid item xs={12} md={8}>
+          <Box sx={{ p: 4, textAlign: 'center' }}>
+            <Typography variant="h2" sx={{ fontWeight: 'bold', color: 'white', mb: 2 }}>
+              ChatGPT on your desktop
+            </Typography>
+            <Typography variant="h5" sx={{ color: 'white', mb: 4 }}>
+              Chat about email, screenshots, files, and anything on your screen.
+            </Typography>
+            <Button variant="contained" color="inherit" sx={{ borderRadius: 20 }}>
+              Learn more
+            </Button>
           </Box>
-          <Box component="img" src="https://placehold.co/24x24" alt="Search Icon" />
-        </Toolbar>
-      </AppBar>
-      <Box sx={{ flex: 1, bgcolor: 'linear-gradient(135deg, #e66465, #9198e5)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexDirection: 'column', p: 4, color: 'white' }}>
-        <Typography variant="h3" sx={{ fontWeight: 'bold', mb: 2 }}>ChatGPT on your desktop</Typography>
-        <Typography variant="body1" sx={{ mb: 4 }}>Chat about email, screenshots, files, and anything on your screen.</Typography>
-        <Button variant="contained" sx={{ bgcolor: 'white', color: 'black' }}>Learn more</Button>
-      </Box>
-      <Box sx={{ display: 'flex', justifyContent: 'center', p: 2 }}>
-        <Box component="span" sx={{ bgcolor: 'grey', width: 8, height: 8, borderRadius: '50%', mx: 1 }} />
-        <Box component="span" sx={{ bgcolor: 'grey', width: 8, height: 8, borderRadius: '50%', mx: 1 }} />
-        <Box component="span" sx={{ bgcolor: 'grey', width: 8, height: 8, borderRadius: '50%', mx: 1 }} />
+        </Grid>
+      </Grid>
+      <Box sx={{ display: 'flex', justifyContent: 'center', mt: 4 }}>
+        <img src="https://placehold.co/32x32" alt="Placeholder" style={{ marginRight: 8 }} />
+        <img src="https://placehold.co/32x32" alt="Placeholder" style={{ marginRight: 8 }} />
+        <img src="https://placehold.co/32x32" alt="Placeholder" style={{ marginRight: 8 }} />
+        <img src="https://placehold.co/32x32" alt="Placeholder" style={{ marginRight: 8 }} />
+        <img src="https://placehold.co/32x32" alt="Placeholder" />
       </Box>
     </Box>
   );
