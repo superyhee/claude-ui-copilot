@@ -2,27 +2,34 @@ import React from 'react';
 
 export default function App() {
   return (
-    <div className="bg-black text-white py-8 px-8">
-      <div className="text-center mb-8">
-        <h1 className="text-4xl font-bold mb-2 uppercase">TOP NEWS</h1>
-        <p className="text-lg">Hello! Happy hump Day, is it just me, or is this weeks going super fast In todays digest, Im covering a new wearable that wants to be your friend But first</p>
+    <div className="flex flex-col bg-white w-full max-w-md mx-auto rounded-lg shadow-lg overflow-hidden">
+      <div className="flex items-center p-4">
+        <img src="https://placehold.co/40x40" alt="Profile picture" className="w-10 h-10 rounded-full" />
+        <div className="ml-4">
+          <p className="text-gray-800 font-bold">Hi, yang</p>
+          <p className="text-gray-600 text-sm">buymeacoffee.com/superhew</p>
+        </div>
+        <button className="ml-auto bg-gray-200 hover:bg-gray-300 text-gray-800 font-bold py-1 px-3 rounded-full text-sm">Share page</button>
       </div>
-      <div className="flex flex-col space-y-4">
-        <div className="flex items-center space-x-4">
-          <img src="https://placehold.co/24x24" alt="Apple icon" className="w-6 h-6" />
-          <p className="text-base">According to a leak, this is what the next iPhone will look like.</p>
+      <div className="p-4">
+        <div className="flex justify-between items-center mb-4">
+          <p className="text-gray-800 font-bold text-lg">Earnings</p>
+          <div className="bg-gray-200 rounded-full py-1 px-3 text-gray-800 text-sm">Last 30 days</div>
         </div>
-        <div className="flex items-center space-x-4">
-          <img src="https://placehold.co/24x24" alt="Meta icon" className="w-6 h-6" />
-          <p className="text-base">Meta: AI is displaying some pretty significant hallucinations.</p>
-        </div>
-        <div className="flex items-center space-x-4">
-          <img src="https://placehold.co/24x24" alt="Nothing icon" className="w-6 h-6" />
-          <p className="text-base">Nothing has revealed its latest flagship phone, the Nothing 2A.</p>
-        </div>
-        <div className="flex items-center space-x-4">
-          <img src="https://placehold.co/24x24" alt="Meta icon" className="w-6 h-6" />
-          <p className="text-base">Meta has scrapped its celebrity AI feature less than a year after its launch.</p>
+        <p className="text-4xl font-bold text-gray-800">$0</p>
+        <div className="flex justify-between items-center mt-4">
+          <div className="flex items-center">
+            <div className="bg-yellow-400 w-4 h-4 rounded-full mr-2"></div>
+            <p className="text-gray-600 text-sm">$0 Supporters</p>
+          </div>
+          <div className="flex items-center">
+            <div className="bg-red-400 w-4 h-4 rounded-full mr-2"></div>
+            <p className="text-gray-600 text-sm">$0 Membership</p>
+          </div>
+          <div className="flex items-center">
+            <div className="bg-teal-400 w-4 h-4 rounded-full mr-2"></div>
+            <p className="text-gray-600 text-sm">$0 Extras</p>
+          </div>
         </div>
       </div>
     </div>
