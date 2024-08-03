@@ -1,61 +1,21 @@
-import React, { useState } from 'react';
-import { Box, Typography, Stack, Button } from '@mui/material';
+import React from 'react';
+import { Box, Typography, Button } from '@mui/material';
 
 const PreviewPage = () => {
-  const [files, setFiles] = useState([]);
-
-  const handleDragOver = (e) => {
-    e.preventDefault();
-  };
-
-  const handleDropFile = (e) => {
-    e.preventDefault();
-    const droppedFiles = Array.from(e.dataTransfer.files);
-    setFiles([...files, ...droppedFiles]);
-  };
-
   return (
-    <Box sx={{ p: 4, backgroundColor: '#f5f5f5', height: '100%' }}>
-      <Stack spacing={2}>
-        <Box
-          sx={{
-            border: '1px solid red',
-            p: 2,
-            backgroundColor: '#fff',
-            display: 'flex',
-            justifyContent: 'center',
-            alignItems: 'center',
-            minHeight: '200px',
-          }}
-          onDragOver={handleDragOver}
-          onDrop={handleDropFile}
-        >
+    <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', height: '100vh' }}>
+      <Box sx={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between', width: '500px' }}>
+        <Box sx={{ border: '1px solid red', p: 2, bgcolor: '#ffedf5' }}>
           <Typography variant="body1">Upload or drag your file</Typography>
         </Box>
-        <Box
-          sx={{
-            border: '1px solid red',
-            p: 2,
-            backgroundColor: '#fff',
-            minHeight: '200px',
-          }}
-        >
-          <Typography variant="h6">File list</Typography>
-          {files.map((file, index) => (
-            <Typography key={index} variant="body2">
-              {file.name}
-            </Typography>
-          ))}
+        <Box sx={{ border: '1px solid red', p: 2, bgcolor: '#ffedf5' }}>
+          <Typography variant="body1">File list</Typography>
         </Box>
-        <Stack direction="row" spacing={2} justifyContent="center">
-          <Button variant="contained" color="primary">
-            confirm
-          </Button>
-          <Button variant="contained" color="secondary">
-            cancel
-          </Button>
-        </Stack>
-      </Stack>
+      </Box>
+      <Box sx={{ display: 'flex', flexDirection: 'row', justifyContent: 'space-between', width: '200px', mt: 2 }}>
+        <Button variant="contained" color="error" sx={{ borderRadius: '16px' }}>confirm</Button>
+        <Button variant="outlined" color="error" sx={{ borderRadius: '16px' }}>cancel</Button>
+      </Box>
     </Box>
   );
 };
