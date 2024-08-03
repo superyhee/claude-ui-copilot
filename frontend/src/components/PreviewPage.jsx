@@ -1,44 +1,63 @@
-import React from 'react';
+import React, { useState } from 'react';
+import { Box, Typography, Stack, Button } from '@mui/material';
 
-export default function App() {
+const PreviewPage = () => {
+  const [files, setFiles] = useState([]);
+
+  const handleDragOver = (e) => {
+    e.preventDefault();
+  };
+
+  const handleDropFile = (e) => {
+    e.preventDefault();
+    const droppedFiles = Array.from(e.dataTransfer.files);
+    setFiles([...files, ...droppedFiles]);
+  };
+
   return (
-    <div className="bg-white min-h-screen flex flex-col">
-      <header className="bg-white py-4 px-8 flex justify-between items-center">
-        <a href="#" className="text-blue-600 text-2xl font-bold">
-          <img src="https://placehold.co/48x48" alt="Logo" className="h-12" />
-        </a>
-        <nav>
-          <button className="bg-blue-600 text-white px-4 py-2 rounded-md mr-2">Login</button>
-          <button className="bg-blue-600 text-white px-4 py-2 rounded-md">Register</button>
-        </nav>
-      </header>
-      <main className="flex-grow flex flex-col justify-center items-center">
-        <div className="flex mb-8">
-          <img src="https://placehold.co/48x48" alt="Avatar" className="rounded-full mr-2" />
-          <img src="https://placehold.co/48x48" alt="Avatar" className="rounded-full mr-2" />
-          <img src="https://placehold.co/48x48" alt="Avatar" className="rounded-full mr-2" />
-          <img src="https://placehold.co/48x48" alt="Avatar" className="rounded-full mr-2" />
-          <img src="https://placehold.co/48x48" alt="Avatar" className="rounded-full mr-2" />
-        </div>
-        <h1 className="text-4xl font-bold mb-4 text-center">The website builder you're looking for</h1>
-        <p className="text-lg mb-8 text-center">Simple is a modern website builder powered by AI that changes how companies create user interfaces together.</p>
-        <div className="flex mb-12">
-          <button className="bg-blue-600 text-white px-6 py-3 rounded-md mr-4">Start Free Trial</button>
-          <button className="bg-white text-blue-600 px-6 py-3 rounded-md border border-blue-600">Learn More</button>
-        </div>
-        <div className="bg-black text-white p-8 rounded-md">
-          <pre>
-            npm login --registry=https://npm.pkg.github.com <br />
-            --scope=@ghanatic Successfully logged-in. <br />
-            <br />
-            npm publish <br />
-            Package published.
-          </pre>
-        </div>
-      </main>
-      <footer className="bg-gray-200 py-4 px-8 text-center">
-        <p className="text-sm">&copy; {new Date().getFullYear()} Crud.com</p>
-      </footer>
-    </div>
+    <Box sx={{ p: 4, backgroundColor: '#f5f5f5', height: '100%' }}>
+      <Stack spacing={2}>
+        <Box
+          sx={{
+            border: '1px solid red',
+            p: 2,
+            backgroundColor: '#fff',
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center',
+            minHeight: '200px',
+          }}
+          onDragOver={handleDragOver}
+          onDrop={handleDropFile}
+        >
+          <Typography variant="body1">Upload or drag your file</Typography>
+        </Box>
+        <Box
+          sx={{
+            border: '1px solid red',
+            p: 2,
+            backgroundColor: '#fff',
+            minHeight: '200px',
+          }}
+        >
+          <Typography variant="h6">File list</Typography>
+          {files.map((file, index) => (
+            <Typography key={index} variant="body2">
+              {file.name}
+            </Typography>
+          ))}
+        </Box>
+        <Stack direction="row" spacing={2} justifyContent="center">
+          <Button variant="contained" color="primary">
+            confirm
+          </Button>
+          <Button variant="contained" color="secondary">
+            cancel
+          </Button>
+        </Stack>
+      </Stack>
+    </Box>
   );
-}
+};
+
+export default PreviewPage;
