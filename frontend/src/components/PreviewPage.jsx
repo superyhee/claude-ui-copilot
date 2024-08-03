@@ -1,63 +1,38 @@
-import React, { useState } from 'react';
+import React from 'react';
+import { Box, Typography, Button, Grid } from '@mui/material';
 
-const App = () => {
-  const [files, setFiles] = useState([]);
-
-  const handleFileUpload = (e) => {
-    const uploadedFiles = Array.from(e.target.files);
-    setFiles([...files, ...uploadedFiles]);
-  };
-
-  const handleDragOver = (e) => {
-    e.preventDefault();
-  };
-
-  const handleDrop = (e) => {
-    e.preventDefault();
-    const droppedFiles = Array.from(e.dataTransfer.files);
-    setFiles([...files, ...droppedFiles]);
-  };
-
+const PreviewPage = () => {
   return (
-    <div className="flex justify-center items-center h-screen">
-      <div className="flex">
-        <div
-          className="bg-pink-200 border-red-500 border-2 p-8 mr-4 w-96 h-64 flex flex-col justify-center items-center"
-          onDragOver={handleDragOver}
-          onDrop={handleDrop}
-        >
-          <p className="text-center mb-4">Upload or drag your file</p>
-          <input
-            type="file"
-            multiple
-            onChange={handleFileUpload}
-            className="hidden"
-          />
-          <div className="flex justify-center space-x-4">
-            <button className="bg-red-500 text-white px-4 py-2 rounded">
-              confirm
-            </button>
-            <button className="bg-red-500 text-white px-4 py-2 rounded">
-              cancel
-            </button>
-          </div>
-        </div>
-        <div className="bg-pink-200 border-red-500 border-2 p-8 w-64 h-64">
-          <h2 className="mb-4 underline">File list</h2>
-          {files.map((file, index) => (
-            <div key={index}>
-              <img
-                src={`https://placehold.co/64x64?text=${file.name}`}
-                alt={`File ${index + 1} preview`}
-                className="inline-block mr-2"
-              />
-              {file.name}
-            </div>
-          ))}
-        </div>
-      </div>
-    </div>
+    <Box sx={{ p: 4, backgroundColor: '#f5f5f5', height: '100vh', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+      <Grid container spacing={2}>
+        <Grid item xs={12} md={6}>
+          <Box sx={{ backgroundColor: '#fff5f5', p: 4, border: '1px solid #ff0000' }}>
+            <Typography variant="body1" align="center" gutterBottom>
+              Upload or drag your file
+            </Typography>
+            <Box sx={{ display: 'flex', justifyContent: 'center', mt: 2 }}>
+              <Button variant="contained" color="primary" sx={{ mr: 2 }}>
+                confirm
+              </Button>
+              <Button variant="contained" color="secondary">
+                cancel
+              </Button>
+            </Box>
+          </Box>
+        </Grid>
+        <Grid item xs={12} md={6}>
+          <Box sx={{ backgroundColor: '#fff5f5', p: 4, border: '1px solid #ff0000' }}>
+            <Typography variant="h6" gutterBottom>
+              File list
+            </Typography>
+            <Box sx={{ backgroundColor: '#ffffff', p: 2, border: '1px solid #cccccc', height: 200 }}>
+              <img src="https://placehold.co/400x200" alt="Placeholder Image" style={{ maxWidth: '100%', maxHeight: '100%' }} />
+            </Box>
+          </Box>
+        </Grid>
+      </Grid>
+    </Box>
   );
 };
 
-export default App;
+export default PreviewPage;
