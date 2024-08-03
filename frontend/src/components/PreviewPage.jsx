@@ -4,8 +4,8 @@ export default function App() {
   return (
     <div className="bg-black text-white py-8 px-8">
       <div className="text-center mb-8">
-        <h1 className="text-4xl font-bold mb-2">TOP NEWS</h1>
-        <p className="text-lg">Hello! Happy hump Day, is it just me, or is this week going super fast In today digest, Im covering a new wearable that wants to be your friend But first</p>
+        <h1 className="text-4xl font-bold mb-2 uppercase">TOP NEWS</h1>
+        <p className="text-lg">Hello! Happy hump Day, is it just me, or is this weeks going super fast In todays digest, Im covering a new wearable that wants to be your friend But first</p>
       </div>
       <div className="flex flex-col space-y-4">
         <div className="flex items-center space-x-4">
