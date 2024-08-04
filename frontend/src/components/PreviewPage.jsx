@@ -1,248 +1,203 @@
-import React from 'react';
-import { Box, Typography, Stack, Container, Grid, Button, Card, CardContent, CardMedia, Avatar, Divider, IconButton } from '@mui/material';
-import { FaLaptopCode, FaChartLine, FaRocket, FaQuestionCircle } from 'react-icons/fa';
-import { FiMail, FiTwitter, FiFacebook, FiInstagram } from 'react-icons/fi';
+import React, { useState } from 'react';
 
-const LandingPage = () => {
-  const features = [
-    { icon: <FaLaptopCode size={32} />, title: 'Feature 1', description: 'Powerful coding capabilities' },
-    { icon: <FaChartLine size={32} />, title: 'Feature 2', description: 'Advanced analytics and reporting' },
-    { icon: <FaRocket size={32} />, title: 'Feature 3', description: 'Accelerate your business growth' },
+const App = () => {
+  const [cart, setCart] = useState([]);
+  const [showCart, setShowCart] = useState(false);
+
+  const addToCart = (product) => {
+    setCart([...cart, product]);
+  };
+
+  const removeFromCart = (index) => {
+    const updatedCart = [...cart];
+    updatedCart.splice(index, 1);
+    setCart(updatedCart);
+  };
+
+  const products = [
+    {
+      id: 1,
+      name: 'Espresso',
+      description: 'A rich and concentrated coffee drink.',
+      image: 'https://placehold.co/300x200?text=Espresso',
+    },
+    {
+      id: 2,
+      name: 'Cappuccino',
+      description: 'A classic Italian coffee drink with steamed milk and foam.',
+      image: 'https://placehold.co/300x200?text=Cappuccino',
+    },
+    {
+      id: 3,
+      name: 'Latte',
+      description: 'A smooth and creamy coffee drink with steamed milk.',
+      image: 'https://placehold.co/300x200?text=Latte',
+    },
   ];
 
-  const testimonials = [
-    { avatar: <Avatar alt="User 1">U1</Avatar>, name: 'User 1', quote: 'This startup is amazing! It has transformed my business.' },
-    { avatar: <Avatar alt="User 2">U2</Avatar>, name: 'User 2', quote: 'I highly recommend this startup to anyone looking for a powerful solution.' },
-    { avatar: <Avatar alt="User 3">U3</Avatar>, name: 'User 3', quote: 'The support team is incredibly responsive and helpful.' },
-  ];
-
-  const faqs = [
-    { question: 'What is this startup about?', answer: 'This startup provides innovative solutions to help businesses grow and succeed.' },
-    { question: 'How much does it cost?', answer: 'We offer flexible pricing plans to fit your needs and budget.' },
-    { question: 'Do you offer customer support?', answer: 'Yes, we have a dedicated support team available to assist you.' },
+  const offers = [
+    'Buy one, get one free on all Espresso drinks!',
+    'Loyalty program: Earn points for every purchase.',
+    'Exclusive discounts for members.',
   ];
 
   return (
-    <Box>
+    <div className="flex flex-col min-h-screen bg-warm-gray-100">
       {/* Header */}
-      <Box sx={{ py: 2, bgcolor: 'primary.main', color: 'common.white' }}>
-        <Container maxWidth="lg">
-          <Stack direction="row" justifyContent="space-between" alignItems="center">
-            <Typography variant="h6" component="div">
-              Startup Logo
-            </Typography>
-            <Stack direction="row" spacing={2}>
-              <Button color="inherit">Home</Button>
-              <Button color="inherit">Features</Button>
-              <Button color="inherit">Pricing</Button>
-              <Button color="inherit">Contact</Button>
-            </Stack>
-          </Stack>
-        </Container>
-      </Box>
+      <header className="bg-warm-gray-800 text-white py-4 px-6">
+        <nav className="flex justify-between items-center">
+          <div className="text-2xl font-bold">Coffee Shop</div>
+          <ul className="flex space-x-4">
+            <li>
+              <a href="#" className="hover:text-warm-gray-400">
+                Home
+              </a>
+            </li>
+            <li>
+              <a href="#" className="hover:text-warm-gray-400">
+                Menu
+              </a>
+            </li>
+            <li>
+              <a href="#" className="hover:text-warm-gray-400">
+                About
+              </a>
+            </li>
+            <li>
+              <button
+                className="text-warm-gray-800 bg-white px-4 py-2 rounded hover:bg-warm-gray-200"
+                onClick={() => setShowCart(true)}
+              >
+                Cart ({cart.length})
+              </button>
+            </li>
+          </ul>
+        </nav>
+      </header>
 
       {/* Hero */}
-      <Box sx={{ py: 8, bgcolor: 'background.paper' }}>
-        <Container maxWidth="lg">
-          <Grid container spacing={4}>
-            <Grid item xs={12} md={6}>
-              <Typography variant="h4" component="h1" gutterBottom>
-                Welcome to Our Startup
-              </Typography>
-              <Typography variant="body1" gutterBottom>
-                Discover the power of our innovative solutions and unlock your business potential.
-              </Typography>
-              <Button variant="contained" color="primary">
-                Learn More
-              </Button>
-            </Grid>
-            <Grid item xs={12} md={6}>
-              <Box
-                sx={{
-                  backgroundImage: 'linear-gradient(to right, #6a11cb, #2575fc)',
-                  borderRadius: '50%',
-                  p: 4,
-                  display: 'flex',
-                  justifyContent: 'center',
-                  alignItems: 'center',
-                }}
-              >
-                <CardMedia
-                  component="img"
-                  alt="Hero Image"
-                  image="https://placehold.co/400x400"
-                  sx={{ maxWidth: '100%', maxHeight: '100%' }}
-                />
-              </Box>
-            </Grid>
-          </Grid>
-        </Container>
-      </Box>
+      <section className="bg-warm-gray-200 py-16 px-6">
+        <div className="max-w-3xl mx-auto flex items-center justify-between">
+          <div>
+            <h1 className="text-4xl font-bold mb-4">Crafting Perfection</h1>
+            <p className="mb-6">
+              At our coffee shop, we believe in the art of crafting the perfect cup of coffee. From responsibly sourced beans to expertly trained baristas, every step is carefully executed to ensure a rich, flavorful experience.
+            </p>
+            <button className="bg-warm-gray-800 text-white px-6 py-3 rounded hover:bg-warm-gray-700">
+              Learn More
+            </button>
+          </div>
+          <img
+            src="https://placehold.co/400x300?text=Coffee+Shop+Hero+Image"
+            alt="Coffee Shop Hero Image"
+            className="rounded-lg shadow-lg"
+          />
+        </div>
+      </section>
 
-      {/* Features */}
-      <Box sx={{ py: 8, bgcolor: 'background.default' }}>
-        <Container maxWidth="lg">
-          <Typography variant="h4" component="h2" align="center" gutterBottom>
-            Key Features
-          </Typography>
-          <Grid container spacing={4} justifyContent="center">
-            {features.map((feature, index) => (
-              <Grid item xs={12} md={4} key={index}>
-                <Card>
-                  <CardContent>
-                    <Stack direction="row" spacing={2} alignItems="center">
-                      <Box sx={{ bgcolor: 'primary.main', color: 'common.white', borderRadius: '50%', p: 2 }}>
-                        {feature.icon}
-                      </Box>
-                      <Typography variant="h6" component="h3">
-                        {feature.title}
-                      </Typography>
-                    </Stack>
-                    <Typography variant="body1" color="text.secondary">
-                      {feature.description}
-                    </Typography>
-                  </CardContent>
-                </Card>
-              </Grid>
-            ))}
-          </Grid>
-        </Container>
-      </Box>
-
-      {/* Social Proof */}
-      <Box sx={{ py: 8, bgcolor: 'background.paper' }}>
-        <Container maxWidth="lg">
-          <Typography variant="h4" component="h2" align="center" gutterBottom>
-            What Our Customers Say
-          </Typography>
-          <Grid container spacing={4} justifyContent="center">
-            {testimonials.map((testimonial, index) => (
-              <Grid item xs={12} md={4} key={index}>
-                <Card>
-                  <CardContent>
-                    <Stack direction="row" spacing={2} alignItems="center">
-                      {testimonial.avatar}
-                      <Typography variant="subtitle1" component="div">
-                        {testimonial.name}
-                      </Typography>
-                    </Stack>
-                    <Typography variant="body1" color="text.secondary">
-                      {testimonial.quote}
-                    </Typography>
-                  </CardContent>
-                </Card>
-              </Grid>
-            ))}
-          </Grid>
-        </Container>
-      </Box>
-
-      {/* FAQ */}
-      <Box sx={{ py: 8, bgcolor: 'background.default' }}>
-        <Container maxWidth="lg">
-          <Typography variant="h4" component="h2" align="center" gutterBottom>
-            Frequently Asked Questions
-          </Typography>
-          <Grid container spacing={4} justifyContent="center">
-            {faqs.map((faq, index) => (
-              <Grid item xs={12} md={6} key={index}>
-                <Card>
-                  <CardContent>
-                    <Stack direction="row" spacing={2} alignItems="center">
-                      <FaQuestionCircle size={24} />
-                      <Typography variant="h6" component="h3">
-                        {faq.question}
-                      </Typography>
-                    </Stack>
-                    <Typography variant="body1" color="text.secondary">
-                      {faq.answer}
-                    </Typography>
-                  </CardContent>
-                </Card>
-              </Grid>
-            ))}
-          </Grid>
-        </Container>
-      </Box>
+      {/* Products */}
+      <section className="py-16 px-6">
+        <h2 className="text-3xl font-bold mb-8 text-center">Our Specialties</h2>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+          {products.map((product) => (
+            <div key={product.id} className="bg-white rounded-lg shadow-md overflow-hidden">
+              <img
+                src={product.image}
+                alt={`${product.name} Image`}
+                className="w-full h-48 object-cover"
+              />
+              <div className="p-4">
+                <h3 className="text-xl font-bold mb-2">{product.name}</h3>
+                <p className="text-gray-700">{product.description}</p>
+                <button
+                  className="bg-warm-gray-800 text-white px-4 py-2 rounded mt-4 hover:bg-warm-gray-700"
+                  onClick={() => addToCart(product)}
+                >
+                  Add to Cart
+                </button>
+              </div>
+            </div>
+          ))}
+        </div>
+      </section>
 
       {/* Banner */}
-      <Box sx={{ py: 8, bgcolor: 'primary.main', color: 'common.white' }}>
-        <Container maxWidth="lg">
-          <Typography variant="h4" component="h2" align="center" gutterBottom>
-            Unlock Your Business Potential
-          </Typography>
-          <Typography variant="body1" align="center" gutterBottom>
-            Get started with our powerful solutions and take your business to new heights.
-          </Typography>
-          <Box display="flex" justifyContent="center">
-            <Button variant="contained" color="inherit">
-              Get Started
-            </Button>
-          </Box>
-        </Container>
-      </Box>
+      <section className="bg-warm-gray-800 text-white py-16 px-6">
+        <div className="max-w-3xl mx-auto text-center">
+          <h2 className="text-3xl font-bold mb-4">Exclusive Offers</h2>
+          <ul className="space-y-4">
+            {offers.map((offer, index) => (
+              <li key={index} className="text-lg">
+                {offer}
+              </li>
+            ))}
+          </ul>
+        </div>
+      </section>
 
       {/* Footer */}
-      <Box sx={{ py: 4, bgcolor: 'background.paper' }}>
-        <Container maxWidth="lg">
-          <Grid container spacing={4}>
-            <Grid item xs={12} md={4}>
-              <Typography variant="h6" component="h3" gutterBottom>
-                Startup Logo
-              </Typography>
-              <Typography variant="body1" gutterBottom>
-                We are dedicated to providing innovative solutions to help businesses grow and succeed.
-              </Typography>
-              <Stack direction="row" spacing={2}>
-                <IconButton aria-label="Twitter">
-                  <FiTwitter />
-                </IconButton>
-                <IconButton aria-label="Facebook">
-                  <FiFacebook />
-                </IconButton>
-                <IconButton aria-label="Instagram">
-                  <FiInstagram />
-                </IconButton>
-              </Stack>
-            </Grid>
-            <Grid item xs={12} md={4}>
-              <Typography variant="h6" component="h3" gutterBottom>
-                Quick Links
-              </Typography>
-              <Stack spacing={1}>
-                <Button>Home</Button>
-                <Button>Features</Button>
-                <Button>Pricing</Button>
-                <Button>Contact</Button>
-              </Stack>
-            </Grid>
-            <Grid item xs={12} md={4}>
-              <Typography variant="h6" component="h3" gutterBottom>
-                Contact Us
-              </Typography>
-              <Stack spacing={1}>
-                <Typography variant="body1">
-                  <FiMail style={{ verticalAlign: 'middle', marginRight: '0.5rem' }} />
-                  contact@startup.com
-                </Typography>
-                <Typography variant="body1">
-                  123 Main Street
-                  <br />
-                  City, State 12345
-                  <br />
-                  USA
-                </Typography>
-              </Stack>
-            </Grid>
-          </Grid>
-          <Divider sx={{ my: 4 }} />
-          <Typography variant="body2" color="text.secondary" align="center">
-            &copy; {new Date().getFullYear()} Startup. All rights reserved.
-          </Typography>
-        </Container>
-      </Box>
-    </Box>
+      <footer className="bg-warm-gray-900 text-white py-8 px-6">
+        <div className="max-w-3xl mx-auto flex justify-between items-center">
+          <div>
+            <h4 className="text-xl font-bold mb-2">Contact Us</h4>
+            <p>123 Main Street</p>
+            <p>Anytown, USA 12345</p>
+            <p>Phone: (123) 456-7890</p>
+          </div>
+          <div>
+            <h4 className="text-xl font-bold mb-2">Policies</h4>
+            <ul className="space-y-2">
+              <li>
+                <a href="#" className="hover:text-warm-gray-400">
+                  Privacy Policy
+                </a>
+              </li>
+              <li>
+                <a href="#" className="hover:text-warm-gray-400">
+                  Terms of Service
+                </a>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </footer>
+
+      {/* Shopping Cart Dialog */}
+      {showCart && (
+        <div className="fixed inset-0 z-50 flex items-center justify-center">
+          <div className="bg-white rounded-lg shadow-lg p-8 max-w-md mx-auto">
+            <h2 className="text-2xl font-bold mb-4">Shopping Cart</h2>
+            {cart.length === 0 ? (
+              <p>Your cart is empty.</p>
+            ) : (
+              <ul>
+                {cart.map((item, index) => (
+                  <li key={index} className="flex justify-between items-center mb-4">
+                    <div>
+                      <h3 className="text-lg font-bold">{item.name}</h3>
+                      <p className="text-gray-700">{item.description}</p>
+                    </div>
+                    <button
+                      className="text-red-500 hover:text-red-700"
+                      onClick={() => removeFromCart(index)}
+                    >
+                      Remove
+                    </button>
+                  </li>
+                ))}
+              </ul>
+            )}
+            <button
+              className="bg-warm-gray-800 text-white px-4 py-2 rounded mt-4 hover:bg-warm-gray-700"
+              onClick={() => setShowCart(false)}
+            >
+              Close
+            </button>
+          </div>
+        </div>
+      )}
+    </div>
   );
 };
 
-export default LandingPage;
+export default App;
