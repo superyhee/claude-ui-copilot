@@ -1,44 +1,75 @@
 import React from 'react';
+import { Box, Typography, Stack } from '@mui/material';
+import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, LineChart, Line } from 'recharts';
 
-const App = () => {
+const data1 = [
+  { name: 'Apr', value: 200 },
+  { name: 'May', value: 400 },
+  { name: 'Jun', value: 300 },
+  { name: 'Jul', value: 100 },
+];
+
+const data2 = [
+  { name: 'Jan', value: 100 },
+  { name: 'Feb', value: 200 },
+  { name: 'Mar', value: 400 },
+  { name: 'Apr', value: 600 },
+  { name: 'May', value: 800 },
+  { name: 'Jun', value: 900 },
+];
+
+const PreviewPage = () => {
   return (
-    <div className="bg-gray-100 min-h-screen">
-      <nav className="flex justify-between items-center bg-white py-4 px-8">
-        <div className="text-purple-600 font-bold">Logo</div>
-        <div className="flex space-x-6 text-gray-600">
-          <a href="#" className="hover:text-purple-600">Home</a>
-          <a href="#" className="hover:text-purple-600">Features</a>
-          <a href="#" className="hover:text-purple-600">Pricing</a>
-          <a href="#" className="hover:text-purple-600">Contact</a>
-        </div>
-      </nav>
-      <div className="bg-purple-600 py-24 px-8 text-center">
-        <h1 className="text-4xl font-bold text-white mb-4">Revolutionizing the way you work</h1>
-        <p className="text-white text-lg mb-8">Our startup provides innovative solutions to streamline your business processes.</p>
-        <button className="bg-white text-purple-600 py-2 px-4 rounded-md hover:bg-purple-700 hover:text-white">Get Started</button>
-      </div>
-      <div className="py-16 px-8">
-        <h2 className="text-3xl font-bold text-gray-800 mb-8">Key Features</h2>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-          <div className="bg-white p-6 rounded-lg shadow-md">
-            <img src="https://placehold.co/64x64" alt="Feature 1 Icon" className="mb-4" />
-            <h3 className="text-xl font-bold text-gray-800 mb-2">Feature 1</h3>
-            <p className="text-gray-600">Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
-          </div>
-          <div className="bg-white p-6 rounded-lg shadow-md">
-            <img src="https://placehold.co/64x64" alt="Feature 2 Icon" className="mb-4" />
-            <h3 className="text-xl font-bold text-gray-800 mb-2">Feature 2</h3>
-            <p className="text-gray-600">Sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.</p>
-          </div>
-          <div className="bg-white p-6 rounded-lg shadow-md">
-            <img src="https://placehold.co/64x64" alt="Feature 3 Icon" className="mb-4" />
-            <h3 className="text-xl font-bold text-gray-800 mb-2">Feature 3</h3>
-            <p className="text-gray-600">Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.</p>
-          </div>
-        </div>
-      </div>
-    </div>
+    <Box sx={{ p: 4, backgroundColor: '#f5f5f5', height: '100vh', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+      <Stack direction="row" spacing={4}>
+        <Box sx={{ backgroundColor: '#fff', p: 2, borderRadius: 2 }}>
+          <Stack spacing={1}>
+            <Box sx={{ backgroundColor: '#333', p: 1, borderRadius: 1 }} />
+            <Box sx={{ backgroundColor: '#333', p: 1, borderRadius: 1 }} />
+            <Box sx={{ backgroundColor: '#333', p: 1, borderRadius: 1 }} />
+            <Box sx={{ backgroundColor: '#333', p: 1, borderRadius: 1 }} />
+          </Stack>
+        </Box>
+        <Box sx={{ backgroundColor: '#fff', p: 2, borderRadius: 2 }}>
+          <Stack direction="row" spacing={2}>
+            <Box sx={{ backgroundColor: '#333', p: 2, borderRadius: 2 }}>
+              <Typography variant="h6" color="#fff">234</Typography>
+            </Box>
+            <Box sx={{ backgroundColor: '#333', p: 2, borderRadius: 2 }}>
+              <Typography variant="h6" color="#fff">434</Typography>
+            </Box>
+            <Box sx={{ backgroundColor: '#333', p: 2, borderRadius: 2 }}>
+              <Typography variant="h6" color="#fff">434</Typography>
+            </Box>
+          </Stack>
+          <Stack direction="row" spacing={2} mt={2}>
+            <Box sx={{ backgroundColor: '#333', p: 2, borderRadius: 2 }}>
+              <BarChart width={200} height={100} data={data1}>
+                <XAxis dataKey="name" />
+                <YAxis />
+                <CartesianGrid strokeDasharray="3 3" />
+                <Tooltip />
+                <Legend />
+                <Bar dataKey="value" fill="#8884d8" />
+              </BarChart>
+              <Typography variant="body1" color="#fff" textAlign="center">Chart</Typography>
+            </Box>
+            <Box sx={{ backgroundColor: '#333', p: 2, borderRadius: 2 }}>
+              <LineChart width={200} height={100} data={data2}>
+                <XAxis dataKey="name" />
+                <YAxis />
+                <CartesianGrid strokeDasharray="3 3" />
+                <Tooltip />
+                <Legend />
+                <Line type="monotone" dataKey="value" stroke="#8884d8" />
+              </LineChart>
+              <Typography variant="body1" color="#fff" textAlign="center">Chart</Typography>
+            </Box>
+          </Stack>
+        </Box>
+      </Stack>
+    </Box>
   );
 };
 
-export default App;
+export default PreviewPage;
