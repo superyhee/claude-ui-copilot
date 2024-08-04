@@ -1,40 +1,34 @@
-import React from "react";
-import { ResponsiveContainer, LineChart, Line, XAxis, YAxis, CartesianGrid } from "recharts";
+import React from 'react';
+import { Box, Typography, Stack } from '@mui/material';
 
-const data = [
-  { name: "Page A", uv: 0 },
-  { name: "Page B", uv: 0 },
-  { name: "Page C", uv: 0 },
-  { name: "Page D", uv: 0 },
-  { name: "Page E", uv: 0 },
-  { name: "Page F", uv: 1000 },
-  { name: "Page G", uv: 2000 },
-  { name: "Page H", uv: 4000 },
-  { name: "Page I", uv: 8000 },
-  { name: "Page J", uv: 16000 },
-];
-
-export default function App() {
+const PreviewPage = () => {
   return (
-    <div className="bg-black h-screen flex justify-center items-center">
-      <div className="bg-white p-4 rounded-lg shadow-md">
-        <div className="flex mb-4">
-          <div className="bg-gray-200 p-2 rounded-l-md">navigation</div>
-          <div className="bg-gray-300 p-2">chart</div>
-        </div>
-        <div className="bg-gray-200 p-2 mb-2 rounded-md">title</div>
-        <div className="bg-gray-200 p-2 rounded-md">menu</div>
-        <div className="mt-4">
-          <ResponsiveContainer width="100%" height={300}>
-            <LineChart data={data}>
-              <Line type="monotone" dataKey="uv" stroke="#8884d8" />
-              <CartesianGrid stroke="#ccc" />
-              <XAxis dataKey="name" />
-              <YAxis />
-            </LineChart>
-          </ResponsiveContainer>
-        </div>
-      </div>
-    </div>
+    <Box sx={{ display: 'flex', height: '100vh', backgroundColor: '#000' }}>
+      <Box sx={{ bgcolor: '#333', p: 2 }}>
+        <Stack spacing={2}>
+          <Typography variant="body1" sx={{ color: '#fff' }}>
+            navigation
+          </Typography>
+          <Typography variant="body1" sx={{ color: '#fff' }}>
+            title
+          </Typography>
+          <Typography variant="body1" sx={{ color: '#fff' }}>
+            menu
+          </Typography>
+        </Stack>
+      </Box>
+      <Box sx={{ flex: 1, bgcolor: '#f5f5f5', p: 2, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+        <Box sx={{ bgcolor: '#ffcdd2', p: 2, width: '80%', height: '80%', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+          <Typography variant="h5" sx={{ color: '#000' }}>
+            chart
+          </Typography>
+          <Box sx={{ position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%, -50%)' }}>
+            <img src="https://placehold.co/400x200" alt="Line chart with a sharp upward curve" />
+          </Box>
+        </Box>
+      </Box>
+    </Box>
   );
-}
+};
+
+export default PreviewPage;
