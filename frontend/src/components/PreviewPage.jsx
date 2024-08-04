@@ -1,5 +1,36 @@
 import React, { useState } from 'react';
-import { Box, Typography, Stack, Button, Grid } from '@mui/material';
+import { Box, Typography, Stack, Button, Grid, Paper } from '@mui/material';
+import { styled } from '@mui/system';
+
+const CalculatorWrapper = styled(Paper)(({ theme }) => ({
+  backgroundColor: theme.palette.grey[800],
+  borderRadius: theme.spacing(2),
+  padding: theme.spacing(4),
+  width: 300,
+}));
+
+const Display = styled(Box)(({ theme }) => ({
+  backgroundColor: theme.palette.grey[900],
+  borderRadius: theme.spacing(1),
+  padding: theme.spacing(2),
+  marginBottom: theme.spacing(2),
+}));
+
+const DigitButton = styled(Button)(({ theme }) => ({
+  backgroundColor: theme.palette.primary.main,
+  color: theme.palette.common.white,
+  '&:hover': {
+    backgroundColor: theme.palette.primary.dark,
+  },
+}));
+
+const OperatorButton = styled(Button)(({ theme }) => ({
+  backgroundColor: theme.palette.secondary.main,
+  color: theme.palette.common.white,
+  '&:hover': {
+    backgroundColor: theme.palette.secondary.dark,
+  },
+}));
 
 const PreviewPage = () => {
   const [display, setDisplay] = useState('0');
@@ -58,95 +89,95 @@ const PreviewPage = () => {
 
   return (
     <Box sx={{ bgcolor: 'background.default', height: '100vh', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-      <Box sx={{ bgcolor: '#333', p: 4, borderRadius: 2, width: 300 }}>
-        <Box sx={{ bgcolor: '#000', borderRadius: 1, p: 2, mb: 2 }}>
-          <Typography variant="h6" sx={{ color: '#fff', textAlign: 'right' }}>
+      <CalculatorWrapper>
+        <Display>
+          <Typography variant="h6" sx={{ color: 'common.white', textAlign: 'right' }}>
             {display}
           </Typography>
-        </Box>
+        </Display>
         <Grid container spacing={1}>
           <Grid item xs={3}>
-            <Button variant="contained" color="primary" fullWidth onClick={() => handleDigit('1')}>
+            <DigitButton fullWidth onClick={() => handleDigit('1')}>
               1
-            </Button>
+            </DigitButton>
           </Grid>
           <Grid item xs={3}>
-            <Button variant="contained" color="primary" fullWidth onClick={() => handleDigit('2')}>
+            <DigitButton fullWidth onClick={() => handleDigit('2')}>
               2
-            </Button>
+            </DigitButton>
           </Grid>
           <Grid item xs={3}>
-            <Button variant="contained" color="primary" fullWidth onClick={() => handleDigit('3')}>
+            <DigitButton fullWidth onClick={() => handleDigit('3')}>
               3
-            </Button>
+            </DigitButton>
           </Grid>
           <Grid item xs={3}>
-            <Button variant="contained" color="primary" fullWidth onClick={() => handleOperator('+')}>
+            <OperatorButton fullWidth onClick={() => handleOperator('+')}>
               +
-            </Button>
+            </OperatorButton>
           </Grid>
           <Grid item xs={3}>
-            <Button variant="contained" color="primary" fullWidth onClick={() => handleDigit('4')}>
+            <DigitButton fullWidth onClick={() => handleDigit('4')}>
               4
-            </Button>
+            </DigitButton>
           </Grid>
           <Grid item xs={3}>
-            <Button variant="contained" color="primary" fullWidth onClick={() => handleDigit('5')}>
+            <DigitButton fullWidth onClick={() => handleDigit('5')}>
               5
-            </Button>
+            </DigitButton>
           </Grid>
           <Grid item xs={3}>
-            <Button variant="contained" color="primary" fullWidth onClick={() => handleDigit('6')}>
+            <DigitButton fullWidth onClick={() => handleDigit('6')}>
               6
-            </Button>
+            </DigitButton>
           </Grid>
           <Grid item xs={3}>
-            <Button variant="contained" color="primary" fullWidth onClick={() => handleOperator('-')}>
+            <OperatorButton fullWidth onClick={() => handleOperator('-')}>
               -
-            </Button>
+            </OperatorButton>
           </Grid>
           <Grid item xs={3}>
-            <Button variant="contained" color="primary" fullWidth onClick={() => handleDigit('7')}>
+            <DigitButton fullWidth onClick={() => handleDigit('7')}>
               7
-            </Button>
+            </DigitButton>
           </Grid>
           <Grid item xs={3}>
-            <Button variant="contained" color="primary" fullWidth onClick={() => handleDigit('8')}>
+            <DigitButton fullWidth onClick={() => handleDigit('8')}>
               8
-            </Button>
+            </DigitButton>
           </Grid>
           <Grid item xs={3}>
-            <Button variant="contained" color="primary" fullWidth onClick={() => handleDigit('9')}>
+            <DigitButton fullWidth onClick={() => handleDigit('9')}>
               9
-            </Button>
+            </DigitButton>
           </Grid>
           <Grid item xs={3}>
-            <Button variant="contained" color="primary" fullWidth onClick={() => handleOperator('/')}>
+            <OperatorButton fullWidth onClick={() => handleOperator('/')}>
               /
-            </Button>
+            </OperatorButton>
           </Grid>
           <Grid item xs={3}>
-            <Button variant="contained" color="primary" fullWidth onClick={handleDecimal}>
+            <DigitButton fullWidth onClick={handleDecimal}>
               .
-            </Button>
+            </DigitButton>
           </Grid>
           <Grid item xs={3}>
-            <Button variant="contained" color="primary" fullWidth onClick={() => handleOperator('*')}>
+            <OperatorButton fullWidth onClick={() => handleOperator('*')}>
               *
-            </Button>
+            </OperatorButton>
           </Grid>
           <Grid item xs={3}>
-            <Button variant="contained" color="primary" fullWidth onClick={handleClear}>
+            <Button variant="contained" color="error" fullWidth onClick={handleClear}>
               C
             </Button>
           </Grid>
           <Grid item xs={3}>
-            <Button variant="contained" color="primary" fullWidth onClick={handleEqual}>
+            <OperatorButton fullWidth onClick={handleEqual}>
               =
-            </Button>
+            </OperatorButton>
           </Grid>
         </Grid>
-      </Box>
+      </CalculatorWrapper>
     </Box>
   );
 };
