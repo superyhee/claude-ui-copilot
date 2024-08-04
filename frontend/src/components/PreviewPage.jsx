@@ -1,91 +1,40 @@
-import React from 'react';
-import { Box, Typography, Stack, Grid } from '@mui/material';
-import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, LineChart, Line } from 'recharts';
+import React from "react";
+import { ResponsiveContainer, LineChart, Line, XAxis, YAxis, CartesianGrid } from "recharts";
 
-const data1 = [
-  { name: 'Apr', value: 200 },
-  { name: 'May', value: 400 },
-  { name: 'Jun', value: 300 },
-  { name: 'Jul', value: 100 },
+const data = [
+  { name: "Page A", uv: 0 },
+  { name: "Page B", uv: 0 },
+  { name: "Page C", uv: 0 },
+  { name: "Page D", uv: 0 },
+  { name: "Page E", uv: 0 },
+  { name: "Page F", uv: 1000 },
+  { name: "Page G", uv: 2000 },
+  { name: "Page H", uv: 4000 },
+  { name: "Page I", uv: 8000 },
+  { name: "Page J", uv: 16000 },
 ];
 
-const data2 = [
-  { name: 'Jan', value: 100 },
-  { name: 'Feb', value: 200 },
-  { name: 'Mar', value: 400 },
-  { name: 'Apr', value: 600 },
-  { name: 'May', value: 800 },
-  { name: 'Jun', value: 900 },
-];
-
-const PreviewPage = () => {
+export default function App() {
   return (
-    <Box sx={{ p: 4, backgroundColor: '#f5f5f5', height: '100vh', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-      <Grid container spacing={4}>
-        <Grid item xs={12} sm={6}>
-          <Box sx={{ backgroundColor: '#fff', p: 2, borderRadius: 2, boxShadow: '0 0 10px rgba(0, 0, 0, 0.1)' }}>
-            <Stack spacing={1}>
-              <Box sx={{ backgroundColor: '#333', p: 1, borderRadius: 1 }}>
-                <img src="https://placehold.co/100x50" alt="Placeholder Image" style={{ width: '100%', height: 'auto' }} />
-              </Box>
-              <Box sx={{ backgroundColor: '#333', p: 1, borderRadius: 1 }}>
-                <img src="https://placehold.co/100x50" alt="Placeholder Image" style={{ width: '100%', height: 'auto' }} />
-              </Box>
-              <Box sx={{ backgroundColor: '#333', p: 1, borderRadius: 1 }}>
-                <img src="https://placehold.co/100x50" alt="Placeholder Image" style={{ width: '100%', height: 'auto' }} />
-              </Box>
-              <Box sx={{ backgroundColor: '#333', p: 1, borderRadius: 1 }}>
-                <img src="https://placehold.co/100x50" alt="Placeholder Image" style={{ width: '100%', height: 'auto' }} />
-              </Box>
-            </Stack>
-          </Box>
-        </Grid>
-        <Grid item xs={12} sm={6}>
-          <Box sx={{ backgroundColor: '#fff', p: 2, borderRadius: 2, boxShadow: '0 0 10px rgba(0, 0, 0, 0.1)' }}>
-            <Stack direction="row" spacing={2} alignItems="center" justifyContent="center" mb={2}>
-              <Box sx={{ backgroundColor: '#333', p: 2, borderRadius: 2 }}>
-                <Typography variant="h6" color="#fff">234</Typography>
-              </Box>
-              <Box sx={{ backgroundColor: '#333', p: 2, borderRadius: 2 }}>
-                <Typography variant="h6" color="#fff">434</Typography>
-              </Box>
-              <Box sx={{ backgroundColor: '#333', p: 2, borderRadius: 2 }}>
-                <Typography variant="h6" color="#fff">434</Typography>
-              </Box>
-            </Stack>
-            <Grid container spacing={2}>
-              <Grid item xs={6}>
-                <Box sx={{ backgroundColor: '#333', p: 2, borderRadius: 2 }}>
-                  <BarChart width={200} height={100} data={data1}>
-                    <XAxis dataKey="name" />
-                    <YAxis />
-                    <CartesianGrid strokeDasharray="3 3" />
-                    <Tooltip />
-                    <Legend />
-                    <Bar dataKey="value" fill="#8884d8" />
-                  </BarChart>
-                  <Typography variant="body1" color="#fff" textAlign="center">Bar Chart</Typography>
-                </Box>
-              </Grid>
-              <Grid item xs={6}>
-                <Box sx={{ backgroundColor: '#333', p: 2, borderRadius: 2 }}>
-                  <LineChart width={200} height={100} data={data2}>
-                    <XAxis dataKey="name" />
-                    <YAxis />
-                    <CartesianGrid strokeDasharray="3 3" />
-                    <Tooltip />
-                    <Legend />
-                    <Line type="monotone" dataKey="value" stroke="#8884d8" />
-                  </LineChart>
-                  <Typography variant="body1" color="#fff" textAlign="center">Line Chart</Typography>
-                </Box>
-              </Grid>
-            </Grid>
-          </Box>
-        </Grid>
-      </Grid>
-    </Box>
+    <div className="bg-black h-screen flex justify-center items-center">
+      <div className="bg-white p-4 rounded-lg shadow-md">
+        <div className="flex mb-4">
+          <div className="bg-gray-200 p-2 rounded-l-md">navigation</div>
+          <div className="bg-gray-300 p-2">chart</div>
+        </div>
+        <div className="bg-gray-200 p-2 mb-2 rounded-md">title</div>
+        <div className="bg-gray-200 p-2 rounded-md">menu</div>
+        <div className="mt-4">
+          <ResponsiveContainer width="100%" height={300}>
+            <LineChart data={data}>
+              <Line type="monotone" dataKey="uv" stroke="#8884d8" />
+              <CartesianGrid stroke="#ccc" />
+              <XAxis dataKey="name" />
+              <YAxis />
+            </LineChart>
+          </ResponsiveContainer>
+        </div>
+      </div>
+    </div>
   );
-};
-
-export default PreviewPage;
+}
