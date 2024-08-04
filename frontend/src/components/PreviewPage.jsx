@@ -42,30 +42,30 @@ const App = () => {
   ];
 
   return (
-    <div className="flex flex-col min-h-screen bg-warm-gray-100">
+    <div className="flex flex-col min-h-screen bg-gray-50">
       {/* Header */}
-      <header className="bg-warm-gray-800 text-white py-4 px-6">
+      <header className="bg-gray-800 text-white py-4 px-6">
         <nav className="flex justify-between items-center">
           <div className="text-2xl font-bold">Coffee Shop</div>
           <ul className="flex space-x-4">
             <li>
-              <a href="#" className="hover:text-warm-gray-400">
+              <a href="#" className="hover:text-gray-400">
                 Home
               </a>
             </li>
             <li>
-              <a href="#" className="hover:text-warm-gray-400">
+              <a href="#" className="hover:text-gray-400">
                 Menu
               </a>
             </li>
             <li>
-              <a href="#" className="hover:text-warm-gray-400">
+              <a href="#" className="hover:text-gray-400">
                 About
               </a>
             </li>
             <li>
               <button
-                className="text-warm-gray-800 bg-white px-4 py-2 rounded hover:bg-warm-gray-200"
+                className="text-gray-800 bg-white px-4 py-2 rounded hover:bg-gray-200"
                 onClick={() => setShowCart(true)}
               >
                 Cart ({cart.length})
@@ -76,14 +76,14 @@ const App = () => {
       </header>
 
       {/* Hero */}
-      <section className="bg-warm-gray-200 py-16 px-6">
+      <section className="bg-gray-200 py-16 px-6">
         <div className="max-w-3xl mx-auto flex items-center justify-between">
           <div>
             <h1 className="text-4xl font-bold mb-4">Crafting Perfection</h1>
             <p className="mb-6">
               At our coffee shop, we believe in the art of crafting the perfect cup of coffee. From responsibly sourced beans to expertly trained baristas, every step is carefully executed to ensure a rich, flavorful experience.
             </p>
-            <button className="bg-warm-gray-800 text-white px-6 py-3 rounded hover:bg-warm-gray-700">
+            <button className="bg-gray-800 text-white px-6 py-3 rounded hover:bg-gray-700">
               Learn More
             </button>
           </div>
@@ -110,7 +110,7 @@ const App = () => {
                 <h3 className="text-xl font-bold mb-2">{product.name}</h3>
                 <p className="text-gray-700">{product.description}</p>
                 <button
-                  className="bg-warm-gray-800 text-white px-4 py-2 rounded mt-4 hover:bg-warm-gray-700"
+                  className="bg-gray-800 text-white px-4 py-2 rounded mt-4 hover:bg-gray-700"
                   onClick={() => addToCart(product)}
                 >
                   Add to Cart
@@ -122,7 +122,7 @@ const App = () => {
       </section>
 
       {/* Banner */}
-      <section className="bg-warm-gray-800 text-white py-16 px-6">
+      <section className="bg-gray-800 text-white py-16 px-6">
         <div className="max-w-3xl mx-auto text-center">
           <h2 className="text-3xl font-bold mb-4">Exclusive Offers</h2>
           <ul className="space-y-4">
@@ -136,7 +136,7 @@ const App = () => {
       </section>
 
       {/* Footer */}
-      <footer className="bg-warm-gray-900 text-white py-8 px-6">
+      <footer className="bg-gray-900 text-white py-8 px-6">
         <div className="max-w-3xl mx-auto flex justify-between items-center">
           <div>
             <h4 className="text-xl font-bold mb-2">Contact Us</h4>
@@ -148,12 +148,12 @@ const App = () => {
             <h4 className="text-xl font-bold mb-2">Policies</h4>
             <ul className="space-y-2">
               <li>
-                <a href="#" className="hover:text-warm-gray-400">
+                <a href="#" className="hover:text-gray-400">
                   Privacy Policy
                 </a>
               </li>
               <li>
-                <a href="#" className="hover:text-warm-gray-400">
+                <a href="#" className="hover:text-gray-400">
                   Terms of Service
                 </a>
               </li>
@@ -188,7 +188,7 @@ const App = () => {
               </ul>
             )}
             <button
-              className="bg-warm-gray-800 text-white px-4 py-2 rounded mt-4 hover:bg-warm-gray-700"
+              className="bg-gray-800 text-white px-4 py-2 rounded mt-4 hover:bg-gray-700"
               onClick={() => setShowCart(false)}
             >
               Close
