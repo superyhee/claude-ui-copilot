@@ -1,5 +1,6 @@
 import React from 'react';
 import { Box, Typography, Grid, Card, CardContent, CardMedia } from '@mui/material';
+import { useInView } from 'react-intersection-observer';
 
 const PreviewPage = () => {
   const blogPosts = [
@@ -29,6 +30,11 @@ const PreviewPage = () => {
     },
   ];
 
+  const { ref, inView } = useInView({
+    threshold: 0.2,
+    triggerOnce: true,
+  });
+
   return (
     <Box sx={{ p: 4, height: '100vh', display: 'flex', flexDirection: 'column', backgroundImage: 'linear-gradient(to right, #0f0c29, #302b63, #24243e)' }}>
       <Typography variant="h4" sx={{ color: '#ffffff', mb: 4, textAlign: 'center' }}>
@@ -36,7 +42,7 @@ const PreviewPage = () => {
       </Typography>
       <Grid container spacing={4} justifyContent="center" alignItems="center" sx={{ flexGrow: 1 }}>
         {blogPosts.map((post) => (
-          <Grid item xs={12} sm={6} md={4} key={post.id}>
+          <Grid item xs={12} sm={6} md={4} key={post.id} ref={ref} style={{ opacity: inView ? 1 : 0, transform: `translateY(${inView ? 0 : 50}px)`, transition: 'all 0.5s ease-in-out' }}>
             <Card sx={{ maxWidth: 400, margin: 'auto' }}>
               <CardMedia
                 component="img"
