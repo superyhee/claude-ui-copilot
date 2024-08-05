@@ -31,10 +31,12 @@ const CopilotTab = ({
   temperature,
   handleSnackbarOpen,
   setIsCodeChanged,
-  provider
+  provider,
+  files,
+  setFiles
 }) => {
   const [anchorEl, setAnchorEl] = useState(null);
-  const [files, setFiles] = useState([]);
+
   const [openDialog, setOpenDialog] = useState(false);
   const [snapshot, setSnapshot] = useLocalStorage(false);
   const handleOpenDialog = () => setOpenDialog(true);
@@ -79,7 +81,7 @@ const CopilotTab = ({
     try {
       setIsGenerating(true);
       let formData = new FormData();
-      files.forEach((file) => formData.append('images', file));
+      if (snapshot) files.forEach((file) => formData.append('images', file));
       formData.append('prompt', prompt);
       formData.append('model', model);
       formData.append('template', template);

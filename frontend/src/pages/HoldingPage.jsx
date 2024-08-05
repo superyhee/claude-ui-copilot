@@ -16,12 +16,17 @@ import Tabs from '@mui/material/Tabs';
 import Typography from '@mui/material/Typography';
 import { styled } from '@mui/material/styles';
 import { saveAs } from 'file-saver';
+import { Button } from '@mui/material';
 import React, { Suspense, useEffect, useState } from 'react';
 import { useSSE } from 'react-hooks-sse';
 import { Outlet } from 'react-router-dom';
 import useThrottle from '../hooks/useThrottle';
 import CircularProgress from '@mui/material/CircularProgress';
 import PageSkeleton from '../components/PageSkeleton';
+import DrawIcon from '@mui/icons-material/Draw';
+// import { Tldraw, useEditor } from 'tldraw';
+// import 'tldraw/tldraw.css';
+import Tldraw from '../components/Tldraw';
 
 const StyledTabs = styled(Tabs)(({ theme }) => ({}));
 
@@ -42,7 +47,7 @@ const TabPanel = (props) => {
   );
 };
 
-const HoldingPage = ({ codeUpdated, isGenerating }) => {
+const HoldingPage = ({ codeUpdated, isGenerating, setFiles }) => {
   const [isMobile, setIsMobile] = useState(false);
   const [code, setCode] = useState('');
   const [value, setValue] = useState(0);
@@ -127,6 +132,7 @@ const HoldingPage = ({ codeUpdated, isGenerating }) => {
             }
           />
           <Tab label="Preview" icon={<ViewModuleIcon />} />
+          <Tab label="tldraw" icon={<DrawIcon />} />
         </StyledTabs>
       </Box>
       {value === 0 && (
@@ -260,6 +266,19 @@ const HoldingPage = ({ codeUpdated, isGenerating }) => {
                 </Paper>
               </Box>
             </Grid>
+          </Box>
+        </TabPanel>
+      )}
+      {value === 2 && (
+        <TabPanel>
+          <Box
+            height="calc(100vh - 185px)"
+            display="flex"
+            justifyContent="center"
+            flexDirection="column"
+            sx={{ p: 0 }}
+          >
+            <Tldraw setFiles={setFiles} />
           </Box>
         </TabPanel>
       )}

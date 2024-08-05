@@ -105,7 +105,7 @@ const HomePage = () => {
   const [temperature, setTemperature] = useLocalStorage('temperature', 0.9);
   const [topP, setTopP] = useLocalStorage('top_p', 0.9);
   const [provider, setProvider] = useLocalStorage('Bedrock', 'Bedrock');
-
+  const [files, setFiles] = useState([]);
   const toggleRightDrawer = () => {
     setShowRightDrawer(!showRightDrawer);
   };
@@ -294,6 +294,8 @@ const HomePage = () => {
               temperature={temperature}
               provider={provider}
               setIsCodeChanged={setIsCodeChanged}
+              setFiles={setFiles}
+              files={files}
             />
           )}
           {tabValue === 1 && (
@@ -320,7 +322,7 @@ const HomePage = () => {
           }}
         /> */}
 
-        <HoldingPage isGenerating={isGenerating} />
+        <HoldingPage isGenerating={isGenerating} setFiles={setFiles} />
 
         <Dialog open={openDialog} onClose={handleCloseDialog}>
           <DialogTitle>About</DialogTitle>

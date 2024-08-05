@@ -117,7 +117,7 @@ const pageTags = [
   },
 
   {
-    id: 6,
+    id: 7,
     text: 'Calculator',
     desc: 'Develop a web-based mini application that functions as a calculator. The user interface should be intuitive and user-friendly,'
   }

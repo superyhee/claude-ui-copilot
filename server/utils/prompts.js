@@ -2,7 +2,7 @@
 
 const getDetailedPrompt = (currentCode, prompt) => {
   return `
-You are an expert at building single page,please make the following changes:
+You are a professional front-end expert at building single page,please make the following changes:
 <>
 ${prompt}
 </>
@@ -27,7 +27,7 @@ You might also be given a screenshot(The second image) of a web page that you ha
 update it to look more like the reference image(The first image).
 1. Choose ${ui}, React Recharts and React Hook Form for the implementation.
 2. Make sure the app looks exactly like the screenshot.
-3. Pay close attention to layout,style,background color, text color, font size, font family,padding, margin, border etc. Match the colors,sizes and page layout exactly.
+3. Pay close attention to layout,style,background color,text color,font size,padding, margin, border etc. Match the colors,sizes and page layout exactly.
 4. Use the exact text from the screenshot, text don't include charactor like "'".
 5. Repeat elements as needed to match the screenshot. For example, if there are 15 items, the code should have 15 items.
 Only provide the complete and react functional components implementation code directly without any additional explanations or markdown code block markers,Do not include markdown \`\`\` or \`\`\`jsx a at the start or end.

@@ -74,7 +74,7 @@ const generateCode = async (req, res) => {
     const currentCode = await readCode(template);
     const uiTemplate = getUITemplate(template);
     const myPrompt = hasFile
-      ? 'Make sure the page looks exactly like the screenshot,match the colors,sizes exactly.'
+      ? `Replicate the page design exactly as shown in the screenshot.`
       : prompt;
     const detailedPrompt = getPrompt(currentCode, myPrompt);
     const content = await handleFileUpload(req.files);
