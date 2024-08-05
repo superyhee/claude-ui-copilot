@@ -1,4 +1,4 @@
-#  UI Generate Copilot
+#  UI Code Generate
 
 <img width="100%" alt="image" src="./images/home.png">
 
