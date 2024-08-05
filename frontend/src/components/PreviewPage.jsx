@@ -30,7 +30,7 @@ const PreviewPage = () => {
   ];
 
   return (
-    <Box sx={{ p: 4, backgroundColor: '#000000', height: '100vh', display: 'flex', flexDirection: 'column' }}>
+    <Box sx={{ p: 4, height: '100vh', display: 'flex', flexDirection: 'column', backgroundImage: 'linear-gradient(to right, #0f0c29, #302b63, #24243e)' }}>
       <Typography variant="h4" sx={{ color: '#ffffff', mb: 4, textAlign: 'center' }}>
         Blog
       </Typography>
