@@ -1,11 +1,17 @@
 #  UI Code Generate
 
 A React and Vite-based tool with an Express backend that converts text, screenshots, and Figma designs into clean, functional code using AI. It employs a conversational approach for continuous page effect adjustments. Now supports AWS Bedrock and Claude 3.5 Sonnet.
+
 ### Text to code
+
 <img width="100%" alt="image" src="./images/code.png">
+
 ### ScreenShot to code 
+
 <img width="100%" alt="image" src="./images/home.png">
+
 ### Tldraw to code
+
 <img width="100%" alt="image" src="./images/tldraw.png">
 
 https://github.com/user-attachments/assets/a77d428f-ce29-4f0a-b692-d983fdb02258
