@@ -1,5 +1,4 @@
 import React from 'react';
-import { Box, Typography, Stack } from '@mui/material';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend } from 'recharts';
 
 const data = [
@@ -17,29 +16,25 @@ const data = [
   { name: 'Dec', value: 120 },
 ];
 
-const PreviewPage = () => {
+const App = () => {
   return (
-    <Box sx={{ display: 'flex', height: '100vh', backgroundColor: '#000000' }}>
-      <Box sx={{ width: '20%', backgroundColor: '#282828', p: 2 }}>
-        <Typography variant="h6" sx={{ color: '#FFFFFF' }}>
-          navigator
-        </Typography>
-      </Box>
-      <Box sx={{ width: '80%', p: 2 }}>
+    <div className="bg-black flex h-screen">
+      <div className="bg-gray-800 text-white p-4 w-64">
+        <h2 className="text-lg font-bold mb-4">navigator</h2>
+        {/* Add navigation links here */}
+      </div>
+      <div className="flex-1 p-4">
         <LineChart width={800} height={400} data={data}>
-          <XAxis dataKey="name" stroke="#FFFFFF" />
-          <YAxis stroke="#FFFFFF" />
-          <CartesianGrid stroke="#282828" strokeDasharray="5 5" />
+          <XAxis dataKey="name" />
+          <YAxis />
+          <CartesianGrid strokeDasharray="3 3" />
           <Tooltip />
           <Legend />
           <Line type="monotone" dataKey="value" stroke="#8884d8" />
         </LineChart>
-        <Typography variant="h6" sx={{ color: '#FFFFFF' }}>
-          Chart
-        </Typography>
-      </Box>
-    </Box>
+      </div>
+    </div>
   );
 };
 
-export default PreviewPage;
+export default App;
