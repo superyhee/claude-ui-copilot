@@ -27,7 +27,7 @@ https://github.com/user-attachments/assets/a77d428f-ce29-4f0a-b692-d983fdb02258
 
    ```shell
    git clone https://github.com/superyhee/ui-code-generator.git
-   cd generate-ui-copilot
+   cd ui-code-generator
    ```
 
 2. Configure API key:
