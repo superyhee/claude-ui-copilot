@@ -1,48 +1,34 @@
 import React from 'react';
-import { Box, Typography, Stack, Card, CardMedia } from '@mui/material';
+import { Box, Typography, Grid } from '@mui/material';
 
 const PreviewPage = () => {
   return (
-    <Box sx={{ p: 4, backgroundColor: '#f5f5f5', height: '100vh' }}>
-      <Typography variant="h4" gutterBottom align="center">
+    <Box sx={{ p: 4, backgroundColor: '#000000', height: '100vh' }}>
+      <Typography variant="h4" sx={{ color: '#ffffff', mb: 4 }}>
         Blog
       </Typography>
-      <Stack spacing={4} direction="row" justifyContent="center" alignItems="center">
-        <Card>
-          <CardMedia
-            component="img"
-            alt="Placeholder Image"
-            height="140"
-            image="https://placehold.co/300x200"
-          />
-        </Card>
-        <Card>
-          <CardMedia
-            component="img"
-            alt="Placeholder Image"
-            height="140"
-            image="https://placehold.co/300x200"
-          />
-        </Card>
-      </Stack>
-      <Stack spacing={4} direction="row" justifyContent="center" alignItems="center">
-        <Card>
-          <CardMedia
-            component="img"
-            alt="Placeholder Image"
-            height="140"
-            image="https://placehold.co/300x200"
-          />
-        </Card>
-        <Card>
-          <CardMedia
-            component="img"
-            alt="Placeholder Image"
-            height="140"
-            image="https://placehold.co/300x200"
-          />
-        </Card>
-      </Stack>
+      <Grid container spacing={4}>
+        <Grid item xs={6}>
+          <Box sx={{ backgroundColor: '#ffffff', p: 2 }}>
+            <Typography variant="body1">Blog1...</Typography>
+          </Box>
+        </Grid>
+        <Grid item xs={6}>
+          <Box sx={{ backgroundColor: '#ffffff', p: 2 }}>
+            <Typography variant="body1">Blog2...</Typography>
+          </Box>
+        </Grid>
+        <Grid item xs={6}>
+          <Box sx={{ backgroundColor: '#ffffff', p: 2 }}>
+            <Typography variant="body1">Blog3...</Typography>
+          </Box>
+        </Grid>
+        <Grid item xs={6}>
+          <Box sx={{ backgroundColor: '#ffffff', p: 2 }}>
+            <Typography variant="body1">Blog4...</Typography>
+          </Box>
+        </Grid>
+      </Grid>
     </Box>
   );
 };
