@@ -43,9 +43,9 @@ const LLMApiComparisonTool = () => {
   return (
     <Box sx={{ p: 4, backgroundColor: '#f5f5f5', height: '100%' }}>
       <Stack alignItems="center" spacing={2} mb={4}>
-        <Typography variant="h5">LLM API 价格比较器</Typography>
-        <Typography variant="body1">今日汇率 (USD/CNY): 7.1520</Typography>
-        <Typography variant="body2">GitHub @CookSleep</Typography>
+        <Typography variant="h5" sx={{ fontWeight: 'bold', color: '#333' }}>LLM API 价格比较器</Typography>
+        <Typography variant="body1" sx={{ color: '#666' }}>今日汇率 (USD/CNY): 7.1520</Typography>
+        <Typography variant="body2" sx={{ color: '#999' }}>GitHub @CookSleep</Typography>
       </Stack>
       <Stack direction="row" spacing={2} mb={2}>
         <FormControl>
@@ -53,6 +53,19 @@ const LLMApiComparisonTool = () => {
             label="输入token数:"
             value={tokenInput}
             onChange={handleTokenInputChange}
+            sx={{
+              '& .MuiInputLabel-root': {
+                color: '#666',
+              },
+              '& .MuiOutlinedInput-root': {
+                '&:hover fieldset': {
+                  borderColor: '#666',
+                },
+                '&.Mui-focused fieldset': {
+                  borderColor: '#333',
+                },
+              },
+            }}
           />
         </FormControl>
         <FormControl>
@@ -60,22 +73,48 @@ const LLMApiComparisonTool = () => {
             label="输出token数:"
             value={tokenOutput}
             onChange={handleTokenOutputChange}
+            sx={{
+              '& .MuiInputLabel-root': {
+                color: '#666',
+              },
+              '& .MuiOutlinedInput-root': {
+                '&:hover fieldset': {
+                  borderColor: '#666',
+                },
+                '&.Mui-focused fieldset': {
+                  borderColor: '#333',
+                },
+              },
+            }}
           />
         </FormControl>
         <FormControl>
-          <Select value={tokenUnit} onChange={handleTokenUnitChange}>
+          <Select
+            value={tokenUnit}
+            onChange={handleTokenUnitChange}
+            sx={{
+              '& .MuiOutlinedInput-root': {
+                '&:hover fieldset': {
+                  borderColor: '#666',
+                },
+                '&.Mui-focused fieldset': {
+                  borderColor: '#333',
+                },
+              },
+            }}
+          >
             <MenuItem value="K">K</MenuItem>
           </Select>
         </FormControl>
       </Stack>
-      <Typography variant="body2" mb={2}>
+      <Typography variant="body2" sx={{ color: '#999' }} mb={2}>
         • 使用提点方向键可以快速在输入、选择框间移动
         <br />
         • 使用键盘浏览移可以快速切换下拉选项
         <br />
         • 按 Enter 键可以选择值、下拉菜单项、按钮交互
       </Typography>
-      <Stack direction="row" spacing={2} mb={2} alignItems="center">
+      <Stack direction="row" spacing={2} mb={2} alignItems="center" sx={{ color: '#666' }}>
         <Typography variant="body1">服务商名称</Typography>
         <Typography variant="body1">充值金额</Typography>
         <Typography variant="body1">充值货币</Typography>
@@ -90,15 +129,51 @@ const LLMApiComparisonTool = () => {
           <TextField
             value={item.name}
             onChange={(event) => handleInputChange(index, 'name', event.target.value)}
+            sx={{
+              '& .MuiInputLabel-root': {
+                color: '#666',
+              },
+              '& .MuiOutlinedInput-root': {
+                '&:hover fieldset': {
+                  borderColor: '#666',
+                },
+                '&.Mui-focused fieldset': {
+                  borderColor: '#333',
+                },
+              },
+            }}
           />
           <TextField
             value={item.chargeAmount}
             onChange={(event) => handleInputChange(index, 'chargeAmount', event.target.value)}
+            sx={{
+              '& .MuiInputLabel-root': {
+                color: '#666',
+              },
+              '& .MuiOutlinedInput-root': {
+                '&:hover fieldset': {
+                  borderColor: '#666',
+                },
+                '&.Mui-focused fieldset': {
+                  borderColor: '#333',
+                },
+              },
+            }}
           />
           <FormControl>
             <Select
               value={item.currency}
               onChange={(event) => handleInputChange(index, 'currency', event.target.value)}
+              sx={{
+                '& .MuiOutlinedInput-root': {
+                  '&:hover fieldset': {
+                    borderColor: '#666',
+                  },
+                  '&.Mui-focused fieldset': {
+                    borderColor: '#333',
+                  },
+                },
+              }}
             >
               <MenuItem value="CNY">CNY</MenuItem>
             </Select>
@@ -106,29 +181,89 @@ const LLMApiComparisonTool = () => {
           <TextField
             value={item.chargeAmount}
             onChange={(event) => handleInputChange(index, 'chargeAmount', event.target.value)}
+            sx={{
+              '& .MuiInputLabel-root': {
+                color: '#666',
+              },
+              '& .MuiOutlinedInput-root': {
+                '&:hover fieldset': {
+                  borderColor: '#666',
+                },
+                '&.Mui-focused fieldset': {
+                  borderColor: '#333',
+                },
+              },
+            }}
           />
           <TextField
             value={item.inputPrice}
             onChange={(event) => handleInputChange(index, 'inputPrice', event.target.value)}
+            sx={{
+              '& .MuiInputLabel-root': {
+                color: '#666',
+              },
+              '& .MuiOutlinedInput-root': {
+                '&:hover fieldset': {
+                  borderColor: '#666',
+                },
+                '&.Mui-focused fieldset': {
+                  borderColor: '#333',
+                },
+              },
+            }}
           />
           <TextField
             value={item.outputPrice}
             onChange={(event) => handleInputChange(index, 'outputPrice', event.target.value)}
+            sx={{
+              '& .MuiInputLabel-root': {
+                color: '#666',
+              },
+              '& .MuiOutlinedInput-root': {
+                '&:hover fieldset': {
+                  borderColor: '#666',
+                },
+                '&.Mui-focused fieldset': {
+                  borderColor: '#333',
+                },
+              },
+            }}
           />
           <FormControl>
             <Select
               value={item.tokenUnit}
               onChange={(event) => handleInputChange(index, 'tokenUnit', event.target.value)}
+              sx={{
+                '& .MuiOutlinedInput-root': {
+                  '&:hover fieldset': {
+                    borderColor: '#666',
+                  },
+                  '&.Mui-focused fieldset': {
+                    borderColor: '#333',
+                  },
+                },
+              }}
             >
               <MenuItem value="K">K</MenuItem>
             </Select>
           </FormControl>
-          <IconButton onClick={() => handleRemoveItem(index)}>
+          <IconButton onClick={() => handleRemoveItem(index)} sx={{ color: '#666', '&:hover': { color: '#333' } }}>
             <RemoveIcon />
           </IconButton>
         </Stack>
       ))}
-      <Button variant="contained" onClick={handleAddItem} startIcon={<AddIcon />}>
+      <Button
+        variant="contained"
+        onClick={handleAddItem}
+        startIcon={<AddIcon />}
+        sx={{
+          backgroundColor: '#333',
+          color: '#fff',
+          '&:hover': {
+            backgroundColor: '#666',
+          },
+        }}
+      >
         添加一行
       </Button>
     </Box>
