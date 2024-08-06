@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
-import { Box, Typography, Stack, TextField, FormControl, Select, MenuItem, Button } from '@mui/material';
+import { Box, Typography, Stack, TextField, FormControl, Select, MenuItem, Button, IconButton } from '@mui/material';
+import AddIcon from '@mui/icons-material/Add';
+import RemoveIcon from '@mui/icons-material/Remove';
 
 const LLMApiComparisonTool = () => {
   const [tokenInput, setTokenInput] = useState('');
@@ -40,12 +42,12 @@ const LLMApiComparisonTool = () => {
 
   return (
     <Box sx={{ p: 4, backgroundColor: '#f5f5f5', height: '100%' }}>
-      <Stack alignItems="center" spacing={2}>
+      <Stack alignItems="center" spacing={2} mb={4}>
         <Typography variant="h5">LLM API 价格比较器</Typography>
         <Typography variant="body1">今日汇率 (USD/CNY): 7.1520</Typography>
         <Typography variant="body2">GitHub @CookSleep</Typography>
       </Stack>
-      <Stack direction="row" spacing={2} mt={4}>
+      <Stack direction="row" spacing={2} mb={2}>
         <FormControl>
           <TextField
             label="输入token数:"
@@ -66,14 +68,14 @@ const LLMApiComparisonTool = () => {
           </Select>
         </FormControl>
       </Stack>
-      <Typography variant="body2" mt={2}>
+      <Typography variant="body2" mb={2}>
         • 使用提点方向键可以快速在输入、选择框间移动
         <br />
         • 使用键盘浏览移可以快速切换下拉选项
         <br />
         • 按 Enter 键可以选择值、下拉菜单项、按钮交互
       </Typography>
-      <Stack direction="row" spacing={2} mt={4}>
+      <Stack direction="row" spacing={2} mb={2} alignItems="center">
         <Typography variant="body1">服务商名称</Typography>
         <Typography variant="body1">充值金额</Typography>
         <Typography variant="body1">充值货币</Typography>
@@ -84,7 +86,7 @@ const LLMApiComparisonTool = () => {
         <Typography variant="body1">操作</Typography>
       </Stack>
       {listItems.map((item, index) => (
-        <Stack key={index} direction="row" spacing={2} mt={2} alignItems="center">
+        <Stack key={index} direction="row" spacing={2} alignItems="center" mb={2}>
           <TextField
             value={item.name}
             onChange={(event) => handleInputChange(index, 'name', event.target.value)}
@@ -121,13 +123,13 @@ const LLMApiComparisonTool = () => {
               <MenuItem value="K">K</MenuItem>
             </Select>
           </FormControl>
-          <Button onClick={() => handleRemoveItem(index)}>
-            <img src="https://placehold.co/24x24" alt="Remove Item" />
-          </Button>
+          <IconButton onClick={() => handleRemoveItem(index)}>
+            <RemoveIcon />
+          </IconButton>
         </Stack>
       ))}
-      <Button variant="contained" onClick={handleAddItem} mt={2}>
-        <img src="https://placehold.co/24x24" alt="Add Item" />
+      <Button variant="contained" onClick={handleAddItem} startIcon={<AddIcon />}>
+        添加一行
       </Button>
     </Box>
   );
