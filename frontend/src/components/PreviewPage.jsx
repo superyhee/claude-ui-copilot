@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
-import { Box, Grid, Button, Typography } from '@mui/material';
+import { Box, Grid, Button, Typography, useTheme } from '@mui/material';
 
 const Calculator = () => {
+  const theme = useTheme();
   const [display, setDisplay] = useState('');
 
   const handleClick = (value) => {
@@ -22,15 +23,15 @@ const Calculator = () => {
   };
 
   return (
-    <Box sx={{ backgroundColor: '#000', p: 2, borderRadius: 2 }}>
-      <Box sx={{ backgroundColor: '#fff', p: 2, borderRadius: 1 }}>
+    <Box sx={{ backgroundColor: theme.palette.background.paper, p: 2, borderRadius: 2, boxShadow: 3 }}>
+      <Box sx={{ backgroundColor: '#fff', p: 2, borderRadius: 1, boxShadow: 1 }}>
         <Typography
-          variant="h6"
+          variant="h5"
           component="div"
           sx={{
             mb: 2,
-            backgroundColor: '#000',
-            color: '#fff',
+            backgroundColor: theme.palette.primary.main,
+            color: theme.palette.primary.contrastText,
             p: 1,
             borderRadius: 1,
             textAlign: 'right',
@@ -45,7 +46,7 @@ const Calculator = () => {
                 <Button
                   variant="contained"
                   onClick={() => handleClick('7')}
-                  sx={{ backgroundColor: '#333', color: '#fff' }}
+                  sx={{ backgroundColor: theme.palette.grey[700], color: theme.palette.common.white }}
                 >
                   7
                 </Button>
@@ -54,7 +55,7 @@ const Calculator = () => {
                 <Button
                   variant="contained"
                   onClick={() => handleClick('8')}
-                  sx={{ backgroundColor: '#333', color: '#fff' }}
+                  sx={{ backgroundColor: theme.palette.grey[700], color: theme.palette.common.white }}
                 >
                   8
                 </Button>
@@ -63,7 +64,7 @@ const Calculator = () => {
                 <Button
                   variant="contained"
                   onClick={() => handleClick('9')}
-                  sx={{ backgroundColor: '#333', color: '#fff' }}
+                  sx={{ backgroundColor: theme.palette.grey[700], color: theme.palette.common.white }}
                 >
                   9
                 </Button>
@@ -72,7 +73,7 @@ const Calculator = () => {
                 <Button
                   variant="contained"
                   onClick={() => handleClick('/')}
-                  sx={{ backgroundColor: '#ff9800', color: '#fff' }}
+                  sx={{ backgroundColor: theme.palette.secondary.main, color: theme.palette.secondary.contrastText }}
                 >
                   /
                 </Button>
@@ -81,7 +82,7 @@ const Calculator = () => {
                 <Button
                   variant="contained"
                   onClick={() => handleClick('4')}
-                  sx={{ backgroundColor: '#333', color: '#fff' }}
+                  sx={{ backgroundColor: theme.palette.grey[700], color: theme.palette.common.white }}
                 >
                   4
                 </Button>
@@ -90,7 +91,7 @@ const Calculator = () => {
                 <Button
                   variant="contained"
                   onClick={() => handleClick('5')}
-                  sx={{ backgroundColor: '#333', color: '#fff' }}
+                  sx={{ backgroundColor: theme.palette.grey[700], color: theme.palette.common.white }}
                 >
                   5
                 </Button>
@@ -99,7 +100,7 @@ const Calculator = () => {
                 <Button
                   variant="contained"
                   onClick={() => handleClick('6')}
-                  sx={{ backgroundColor: '#333', color: '#fff' }}
+                  sx={{ backgroundColor: theme.palette.grey[700], color: theme.palette.common.white }}
                 >
                   6
                 </Button>
@@ -108,7 +109,7 @@ const Calculator = () => {
                 <Button
                   variant="contained"
                   onClick={() => handleClick('-')}
-                  sx={{ backgroundColor: '#ff9800', color: '#fff' }}
+                  sx={{ backgroundColor: theme.palette.secondary.main, color: theme.palette.secondary.contrastText }}
                 >
                   -
                 </Button>
@@ -117,7 +118,7 @@ const Calculator = () => {
                 <Button
                   variant="contained"
                   onClick={() => handleClick('1')}
-                  sx={{ backgroundColor: '#333', color: '#fff' }}
+                  sx={{ backgroundColor: theme.palette.grey[700], color: theme.palette.common.white }}
                 >
                   1
                 </Button>
@@ -126,7 +127,7 @@ const Calculator = () => {
                 <Button
                   variant="contained"
                   onClick={() => handleClick('2')}
-                  sx={{ backgroundColor: '#333', color: '#fff' }}
+                  sx={{ backgroundColor: theme.palette.grey[700], color: theme.palette.common.white }}
                 >
                   2
                 </Button>
@@ -135,7 +136,7 @@ const Calculator = () => {
                 <Button
                   variant="contained"
                   onClick={() => handleClick('3')}
-                  sx={{ backgroundColor: '#333', color: '#fff' }}
+                  sx={{ backgroundColor: theme.palette.grey[700], color: theme.palette.common.white }}
                 >
                   3
                 </Button>
@@ -144,7 +145,7 @@ const Calculator = () => {
                 <Button
                   variant="contained"
                   onClick={() => handleClick('+')}
-                  sx={{ backgroundColor: '#ff9800', color: '#fff' }}
+                  sx={{ backgroundColor: theme.palette.secondary.main, color: theme.palette.secondary.contrastText }}
                 >
                   +
                 </Button>
@@ -153,7 +154,7 @@ const Calculator = () => {
                 <Button
                   variant="contained"
                   onClick={() => clear()}
-                  sx={{ backgroundColor: '#333', color: '#fff' }}
+                  sx={{ backgroundColor: theme.palette.grey[700], color: theme.palette.common.white }}
                 >
                   C
                 </Button>
@@ -162,7 +163,7 @@ const Calculator = () => {
                 <Button
                   variant="contained"
                   onClick={() => handleClick('0')}
-                  sx={{ backgroundColor: '#333', color: '#fff' }}
+                  sx={{ backgroundColor: theme.palette.grey[700], color: theme.palette.common.white }}
                 >
                   0
                 </Button>
@@ -171,7 +172,7 @@ const Calculator = () => {
                 <Button
                   variant="contained"
                   onClick={() => handleClick('.')}
-                  sx={{ backgroundColor: '#333', color: '#fff' }}
+                  sx={{ backgroundColor: theme.palette.grey[700], color: theme.palette.common.white }}
                 >
                   .
                 </Button>
@@ -180,7 +181,7 @@ const Calculator = () => {
                 <Button
                   variant="contained"
                   onClick={calculate}
-                  sx={{ backgroundColor: '#ff9800', color: '#fff' }}
+                  sx={{ backgroundColor: theme.palette.secondary.main, color: theme.palette.secondary.contrastText }}
                 >
                   =
                 </Button>
@@ -188,9 +189,12 @@ const Calculator = () => {
             </Grid>
           </Grid>
           <Grid item xs={3}>
-            <Typography variant="h6" component="div" sx={{ color: '#fff' }}>
-              calculator
-            </Typography>
+            <Box
+              component="img"
+              src="https://placehold.co/100x100?text=Calculator+Logo"
+              alt="Calculator Logo"
+              sx={{ maxWidth: '100%' }}
+            />
           </Grid>
         </Grid>
       </Box>
