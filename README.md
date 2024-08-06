@@ -30,6 +30,7 @@ https://github.com/user-attachments/assets/a77d428f-ce29-4f0a-b692-d983fdb02258
 
 - Node.js (v18+)
 - Docker (optional, recommended)
+- Git (optional)
 - Anthropic API key or AWS account credentials
 
 ## Setup
