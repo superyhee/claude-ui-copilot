@@ -1,40 +1,37 @@
 import React from 'react';
-import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend } from 'recharts';
+import { Box, Typography, Stack } from '@mui/material';
 
-const data = [
-  { name: 'Jan', value: 10 },
-  { name: 'Feb', value: 20 },
-  { name: 'Mar', value: 30 },
-  { name: 'Apr', value: 40 },
-  { name: 'May', value: 50 },
-  { name: 'Jun', value: 60 },
-  { name: 'Jul', value: 70 },
-  { name: 'Aug', value: 80 },
-  { name: 'Sep', value: 90 },
-  { name: 'Oct', value: 100 },
-  { name: 'Nov', value: 110 },
-  { name: 'Dec', value: 120 },
-];
+const PreviewPage = () => {
+  const blogPostTitles = ['Blog post title', 'Blog post title', 'Blog post title'];
 
-const App = () => {
   return (
-    <div className="bg-black flex h-screen">
-      <div className="bg-gray-800 text-white p-4 w-64">
-        <h2 className="text-lg font-bold mb-4">navigator</h2>
-        {/* Add navigation links here */}
-      </div>
-      <div className="flex-1 p-4">
-        <LineChart width={800} height={400} data={data}>
-          <XAxis dataKey="name" />
-          <YAxis />
-          <CartesianGrid strokeDasharray="3 3" />
-          <Tooltip />
-          <Legend />
-          <Line type="monotone" dataKey="value" stroke="#8884d8" />
-        </LineChart>
-      </div>
-    </div>
+    <Box sx={{ backgroundColor: 'black', height: '100vh', display: 'flex', flexDirection: 'column' }}>
+      <Box sx={{ p: 2, backgroundColor: 'black', color: 'white' }}>
+        <Typography variant="h5">Site title</Typography>
+      </Box>
+      <Box sx={{ p: 2, backgroundColor: 'black', flex: 1, overflowY: 'auto' }}>
+        <Stack spacing={2}>
+          {blogPostTitles.map((title, index) => (
+            <Box key={index} sx={{ p: 2, backgroundColor: 'white', color: 'black' }}>
+              <Typography variant="h6">{title}</Typography>
+            </Box>
+          ))}
+        </Stack>
+      </Box>
+      <Box
+        sx={{
+          height: '200px',
+          backgroundColor: 'gray',
+          display: 'flex',
+          justifyContent: 'center',
+          alignItems: 'center',
+        }}
+      >
+        <Typography variant="h6">image background</Typography>
+        <img src="https://placehold.co/200x100" alt="Placeholder Image" />
+      </Box>
+    </Box>
   );
 };
 
-export default App;
+export default PreviewPage;
