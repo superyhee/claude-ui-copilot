@@ -1,273 +1,222 @@
 import React, { useState } from 'react';
-import { Box, Typography, Stack, TextField, FormControl, Select, MenuItem, Button, IconButton } from '@mui/material';
-import AddIcon from '@mui/icons-material/Add';
-import RemoveIcon from '@mui/icons-material/Remove';
 
-const LLMApiComparisonTool = () => {
-  const [tokenInput, setTokenInput] = useState('');
-  const [tokenOutput, setTokenOutput] = useState('');
+export default function App() {
+  const [inputTokenIn, setInputTokenIn] = useState('');
+  const [inputTokenOut, setInputTokenOut] = useState('');
   const [tokenUnit, setTokenUnit] = useState('K');
-  const [listItems, setListItems] = useState([
-    { name: '', currency: 'CNY', chargeAmount: '', inputPrice: '', outputPrice: '', tokenUnit: 'K', isEditing: false },
-    { name: '', currency: 'CNY', chargeAmount: '', inputPrice: '', outputPrice: '', tokenUnit: 'K', isEditing: false },
+  const [itemList, setItemList] = useState([
+    {
+      name: '服务商名称',
+      sellAmount: '',
+      sellCurrency: 'CNY',
+      commission: '',
+      buyPrice: '',
+      sellPrice: '',
+      tokenUnit: 'K',
+      isActive: true,
+    },
+    {
+      name: '服务商名称',
+      sellAmount: '',
+      sellCurrency: 'CNY',
+      commission: '',
+      buyPrice: '',
+      sellPrice: '',
+      tokenUnit: 'K',
+      isActive: false,
+    },
   ]);
 
+  const handleInputTokenInChange = (e) => {
+    setInputTokenIn(e.target.value);
+  };
+
+  const handleInputTokenOutChange = (e) => {
+    setInputTokenOut(e.target.value);
+  };
+
+  const handleTokenUnitChange = (e) => {
+    setTokenUnit(e.target.value);
+  };
+
+  const handleItemChange = (index, field, value) => {
+    const newItemList = [...itemList];
+    newItemList[index][field] = value;
+    setItemList(newItemList);
+  };
+
   const handleAddItem = () => {
-    setListItems([...listItems, { name: '', currency: 'CNY', chargeAmount: '', inputPrice: '', outputPrice: '', tokenUnit: 'K', isEditing: false }]);
+    const newItem = {
+      name: '',
+      sellAmount: '',
+      sellCurrency: 'CNY',
+      commission: '',
+      buyPrice: '',
+      sellPrice: '',
+      tokenUnit: 'K',
+      isActive: true,
+    };
+    setItemList([...itemList, newItem]);
   };
 
   const handleRemoveItem = (index) => {
-    const newList = [...listItems];
-    newList.splice(index, 1);
-    setListItems(newList);
-  };
-
-  const handleInputChange = (index, field, value) => {
-    const newList = [...listItems];
-    newList[index][field] = value;
-    setListItems(newList);
-  };
-
-  const handleTokenInputChange = (event) => {
-    setTokenInput(event.target.value);
-  };
-
-  const handleTokenOutputChange = (event) => {
-    setTokenOutput(event.target.value);
-  };
-
-  const handleTokenUnitChange = (event) => {
-    setTokenUnit(event.target.value);
+    const newItemList = [...itemList];
+    newItemList.splice(index, 1);
+    setItemList(newItemList);
   };
 
   return (
-    <Box sx={{ p: 4, backgroundColor: '#f5f5f5', height: '100%' }}>
-      <Stack alignItems="center" spacing={2} mb={4}>
-        <Typography variant="h5" sx={{ fontWeight: 'bold', color: '#333' }}>LLM API 价格比较器</Typography>
-        <Typography variant="body1" sx={{ color: '#666' }}>今日汇率 (USD/CNY): 7.1520</Typography>
-        <Typography variant="body2" sx={{ color: '#999' }}>GitHub @CookSleep</Typography>
-      </Stack>
-      <Stack direction="row" spacing={2} mb={2}>
-        <FormControl>
-          <TextField
-            label="输入token数:"
-            value={tokenInput}
-            onChange={handleTokenInputChange}
-            sx={{
-              '& .MuiInputLabel-root': {
-                color: '#666',
-              },
-              '& .MuiOutlinedInput-root': {
-                '&:hover fieldset': {
-                  borderColor: '#666',
-                },
-                '&.Mui-focused fieldset': {
-                  borderColor: '#333',
-                },
-              },
-            }}
+    <div className="flex flex-col items-center justify-center">
+      <div className="flex items-center mb-4">
+        <img
+          src="https://placehold.co/50x50?text=Logo"
+          alt="Cloud logo"
+          className="h-12 w-12 mr-2"
+        />
+        <h1 className="text-2xl">LLM API 价格比较器</h1>
+      </div>
+      <div className="mb-4">
+        今日汇率 (USD/CNY): 7.1520
+        <a
+          href="#"
+          className="text-blue-500 hover:text-blue-700 ml-2"
+        >
+          GitHub @CookSleep
+        </a>
+      </div>
+      <div className="mb-4">
+        <input
+          type="text"
+          placeholder="仅数字"
+          value={inputTokenIn}
+          onChange={handleInputTokenInChange}
+          className="border border-gray-300 px-2 py-1 rounded-md mr-2"
+        />
+        <input
+          type="text"
+          placeholder="仅数字"
+          value={inputTokenOut}
+          onChange={handleInputTokenOutChange}
+          className="border border-gray-300 px-2 py-1 rounded-md mr-2"
+        />
+        <select
+          value={tokenUnit}
+          onChange={handleTokenUnitChange}
+          className="border border-gray-300 px-2 py-1 rounded-md"
+        >
+          <option value="K">K</option>
+          {/* Add more options here */}
+        </select>
+      </div>
+      <div className="mb-4">
+        <ul className="list-disc list-inside">
+          <li>使用提示点为向导可以快速在输入、选择框间移动</li>
+          <li>使用键盘浏览可以快速切换下拉选项</li>
+          <li>按 Enter 键可以切换框框、下拉菜单项选择。按 Tab 交互</li>
+        </ul>
+      </div>
+      <div className="grid grid-cols-7 gap-4 mb-4">
+        <div className="font-bold">服务商名称</div>
+        <div className="font-bold">充值金额</div>
+        <div className="font-bold">充值货币</div>
+        <div className="font-bold">到账余额</div>
+        <div className="font-bold">输入价格</div>
+        <div className="font-bold">输出价格</div>
+        <div className="font-bold flex items-center justify-center">
+          TOKEN单位
+          <img
+            src="https://placehold.co/20x20?text=Info"
+            alt="Info icon"
+            className="h-4 w-4 ml-2"
           />
-        </FormControl>
-        <FormControl>
-          <TextField
-            label="输出token数:"
-            value={tokenOutput}
-            onChange={handleTokenOutputChange}
-            sx={{
-              '& .MuiInputLabel-root': {
-                color: '#666',
-              },
-              '& .MuiOutlinedInput-root': {
-                '&:hover fieldset': {
-                  borderColor: '#666',
-                },
-                '&.Mui-focused fieldset': {
-                  borderColor: '#333',
-                },
-              },
-            }}
-          />
-        </FormControl>
-        <FormControl>
-          <Select
-            value={tokenUnit}
-            onChange={handleTokenUnitChange}
-            sx={{
-              '& .MuiOutlinedInput-root': {
-                '&:hover fieldset': {
-                  borderColor: '#666',
-                },
-                '&.Mui-focused fieldset': {
-                  borderColor: '#333',
-                },
-              },
-            }}
-          >
-            <MenuItem value="K">K</MenuItem>
-          </Select>
-        </FormControl>
-      </Stack>
-      <Typography variant="body2" sx={{ color: '#999' }} mb={2}>
-        • 使用提点方向键可以快速在输入、选择框间移动
-        <br />
-        • 使用键盘浏览移可以快速切换下拉选项
-        <br />
-        • 按 Enter 键可以选择值、下拉菜单项、按钮交互
-      </Typography>
-      <Stack direction="row" spacing={2} mb={2} alignItems="center" sx={{ color: '#666' }}>
-        <Typography variant="body1">服务商名称</Typography>
-        <Typography variant="body1">充值金额</Typography>
-        <Typography variant="body1">充值货币</Typography>
-        <Typography variant="body1">到账余额</Typography>
-        <Typography variant="body1">输入价格</Typography>
-        <Typography variant="body1">输出价格</Typography>
-        <Typography variant="body1">TOKEN单位</Typography>
-        <Typography variant="body1">操作</Typography>
-      </Stack>
-      {listItems.map((item, index) => (
-        <Stack key={index} direction="row" spacing={2} alignItems="center" mb={2}>
-          <TextField
+        </div>
+      </div>
+      {itemList.map((item, index) => (
+        <div
+          key={index}
+          className="grid grid-cols-7 gap-4 mb-2 items-center"
+        >
+          <input
+            type="text"
+            placeholder="服务商名称"
             value={item.name}
-            onChange={(event) => handleInputChange(index, 'name', event.target.value)}
-            sx={{
-              '& .MuiInputLabel-root': {
-                color: '#666',
-              },
-              '& .MuiOutlinedInput-root': {
-                '&:hover fieldset': {
-                  borderColor: '#666',
-                },
-                '&.Mui-focused fieldset': {
-                  borderColor: '#333',
-                },
-              },
-            }}
+            onChange={(e) =>
+              handleItemChange(index, 'name', e.target.value)
+            }
+            className="border border-gray-300 px-2 py-1 rounded-md"
           />
-          <TextField
-            value={item.chargeAmount}
-            onChange={(event) => handleInputChange(index, 'chargeAmount', event.target.value)}
-            sx={{
-              '& .MuiInputLabel-root': {
-                color: '#666',
-              },
-              '& .MuiOutlinedInput-root': {
-                '&:hover fieldset': {
-                  borderColor: '#666',
-                },
-                '&.Mui-focused fieldset': {
-                  borderColor: '#333',
-                },
-              },
-            }}
+          <input
+            type="text"
+            placeholder="仅数字"
+            value={item.sellAmount}
+            onChange={(e) =>
+              handleItemChange(index, 'sellAmount', e.target.value)
+            }
+            className="border border-gray-300 px-2 py-1 rounded-md"
           />
-          <FormControl>
-            <Select
-              value={item.currency}
-              onChange={(event) => handleInputChange(index, 'currency', event.target.value)}
-              sx={{
-                '& .MuiOutlinedInput-root': {
-                  '&:hover fieldset': {
-                    borderColor: '#666',
-                  },
-                  '&.Mui-focused fieldset': {
-                    borderColor: '#333',
-                  },
-                },
-              }}
-            >
-              <MenuItem value="CNY">CNY</MenuItem>
-            </Select>
-          </FormControl>
-          <TextField
-            value={item.chargeAmount}
-            onChange={(event) => handleInputChange(index, 'chargeAmount', event.target.value)}
-            sx={{
-              '& .MuiInputLabel-root': {
-                color: '#666',
-              },
-              '& .MuiOutlinedInput-root': {
-                '&:hover fieldset': {
-                  borderColor: '#666',
-                },
-                '&.Mui-focused fieldset': {
-                  borderColor: '#333',
-                },
-              },
-            }}
+          <select
+            value={item.sellCurrency}
+            onChange={(e) =>
+              handleItemChange(index, 'sellCurrency', e.target.value)
+            }
+            className="border border-gray-300 px-2 py-1 rounded-md"
+          >
+            <option value="CNY">CNY</option>
+            {/* Add more options here */}
+          </select>
+          <input
+            type="text"
+            placeholder="仅数字"
+            value={item.commission}
+            onChange={(e) =>
+              handleItemChange(index, 'commission', e.target.value)
+            }
+            className="border border-gray-300 px-2 py-1 rounded-md"
           />
-          <TextField
-            value={item.inputPrice}
-            onChange={(event) => handleInputChange(index, 'inputPrice', event.target.value)}
-            sx={{
-              '& .MuiInputLabel-root': {
-                color: '#666',
-              },
-              '& .MuiOutlinedInput-root': {
-                '&:hover fieldset': {
-                  borderColor: '#666',
-                },
-                '&.Mui-focused fieldset': {
-                  borderColor: '#333',
-                },
-              },
-            }}
+          <input
+            type="text"
+            placeholder="仅数字"
+            value={item.buyPrice}
+            onChange={(e) =>
+              handleItemChange(index, 'buyPrice', e.target.value)
+            }
+            className="border border-gray-300 px-2 py-1 rounded-md"
           />
-          <TextField
-            value={item.outputPrice}
-            onChange={(event) => handleInputChange(index, 'outputPrice', event.target.value)}
-            sx={{
-              '& .MuiInputLabel-root': {
-                color: '#666',
-              },
-              '& .MuiOutlinedInput-root': {
-                '&:hover fieldset': {
-                  borderColor: '#666',
-                },
-                '&.Mui-focused fieldset': {
-                  borderColor: '#333',
-                },
-              },
-            }}
+          <input
+            type="text"
+            placeholder="仅数字"
+            value={item.sellPrice}
+            onChange={(e) =>
+              handleItemChange(index, 'sellPrice', e.target.value)
+            }
+            className="border border-gray-300 px-2 py-1 rounded-md"
           />
-          <FormControl>
-            <Select
+          <div className="flex items-center justify-center">
+            <select
               value={item.tokenUnit}
-              onChange={(event) => handleInputChange(index, 'tokenUnit', event.target.value)}
-              sx={{
-                '& .MuiOutlinedInput-root': {
-                  '&:hover fieldset': {
-                    borderColor: '#666',
-                  },
-                  '&.Mui-focused fieldset': {
-                    borderColor: '#333',
-                  },
-                },
-              }}
+              onChange={(e) =>
+                handleItemChange(index, 'tokenUnit', e.target.value)
+              }
+              className="border border-gray-300 px-2 py-1 rounded-md"
             >
-              <MenuItem value="K">K</MenuItem>
-            </Select>
-          </FormControl>
-          <IconButton onClick={() => handleRemoveItem(index)} sx={{ color: '#666', '&:hover': { color: '#333' } }}>
-            <RemoveIcon />
-          </IconButton>
-        </Stack>
+              <option value="K">K</option>
+              {/* Add more options here */}
+            </select>
+            <button
+              onClick={() => handleRemoveItem(index)}
+              className="bg-red-500 text-white rounded-full h-6 w-6 flex items-center justify-center ml-2"
+            >
+              &times;
+            </button>
+          </div>
+        </div>
       ))}
-      <Button
-        variant="contained"
+      <button
         onClick={handleAddItem}
-        startIcon={<AddIcon />}
-        sx={{
-          backgroundColor: '#333',
-          color: '#fff',
-          '&:hover': {
-            backgroundColor: '#666',
-          },
-        }}
+        className="bg-blue-500 text-white px-4 py-2 rounded-md mb-4"
       >
-        添加一行
-      </Button>
-    </Box>
+        +
+      </button>
+    </div>
   );
-};
-
-export default LLMApiComparisonTool;
+}
