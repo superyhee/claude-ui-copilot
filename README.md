@@ -48,10 +48,17 @@ https://github.com/user-attachments/assets/a77d428f-ce29-4f0a-b692-d983fdb02258
    cp .env.example .env
    ```
 
-   Edit .env:
+3. Edit .env:
 
    - Set ANTHROPIC_KEY or AWS AK and SK
    - Set IS_DOCKER_ENV to true for Docker, false otherwise
+   ```shell 
+   IS_DOCKER_ENV=true
+   ANTHROPIC_API_KEY= 
+   AWS_ACCESS_KEY_ID= 
+   AWS_SECRET_ACCESS_KEY= 
+   AWS_REGION=us-east-1
+   ```
 
 ## Quick Start
 
