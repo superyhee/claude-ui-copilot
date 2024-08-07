@@ -1,166 +1,146 @@
-import React, { useState } from 'react';
-import { FaCheck, FaStar, FaQuestionCircle } from 'react-icons/fa';
+import React, { useState, useEffect, useCallback } from 'react';
 
-const Header = () => (
-  <header className="bg-white shadow-md py-4">
-    <div className="container mx-auto flex justify-between items-center">
-      <img src="https://placehold.co/200x50" alt="Startup Logo" className="h-8" />
-      <nav>
-        <ul className="flex space-x-6">
-          <li><a href="#" className="text-gray-600 hover:text-blue-600">Home</a></li>
-          <li><a href="#" className="text-gray-600 hover:text-blue-600">Features</a></li>
-          <li><a href="#" className="text-gray-600 hover:text-blue-600">Testimonials</a></li>
-          <li><a href="#" className="text-gray-600 hover:text-blue-600">FAQ</a></li>
-          <li><a href="#" className="text-gray-600 hover:text-blue-600">Contact</a></li>
-        </ul>
-      </nav>
-    </div>
-  </header>
-);
+const GRID_SIZE = 20;
+const CELL_SIZE = 20;
+const INITIAL_SNAKE = [{ x: 10, y: 10 }];
+const INITIAL_DIRECTION = 'RIGHT';
+const INITIAL_FOOD = { x: 15, y: 15 };
 
-const Hero = () => (
-  <section className="bg-gradient-to-r from-blue-500 to-purple-600 text-white py-20">
-    <div className="container mx-auto text-center">
-      <h1 className="text-5xl font-bold mb-4">Revolutionize Your Workflow</h1>
-      <p className="text-xl mb-8">Streamline your business processes with our cutting-edge SaaS solution</p>
-      <button className="bg-white text-blue-600 font-bold py-2 px-6 rounded-full hover:bg-blue-100 transition duration-300">
-        Get Started
-      </button>
-    </div>
-  </section>
-);
+const App = () => {
+  const [snake, setSnake] = useState(INITIAL_SNAKE);
+  const [direction, setDirection] = useState(INITIAL_DIRECTION);
+  const [food, setFood] = useState(INITIAL_FOOD);
+  const [gameOver, setGameOver] = useState(false);
+  const [score, setScore] = useState(0);
 
-const Features = () => (
-  <section className="py-20 bg-gray-100">
-    <div className="container mx-auto">
-      <h2 className="text-3xl font-bold text-center mb-12">Key Features</h2>
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-        {[
-          { icon: FaCheck, title: "Easy Integration", description: "Seamlessly integrate with your existing tools" },
-          { icon: FaStar, title: "Advanced Analytics", description: "Gain insights with powerful data visualization" },
-          { icon: FaQuestionCircle, title: "24/7 Support", description: "Our team is always here to help you succeed" }
-        ].map((feature, index) => (
-          <div key={index} className="bg-white p-6 rounded-lg shadow-md">
-            <feature.icon className="text-4xl text-blue-500 mb-4" />
-            <h3 className="text-xl font-semibold mb-2">{feature.title}</h3>
-            <p className="text-gray-600">{feature.description}</p>
-          </div>
-        ))}
-      </div>
-    </div>
-  </section>
-);
+  const moveSnake = useCallback(() => {
+    const newSnake = [...snake];
+    const head = { ...newSnake[0] };
 
-const Testimonials = () => (
-  <section className="py-20 bg-blue-50">
-    <div className="container mx-auto">
-      <h2 className="text-3xl font-bold text-center mb-12">What Our Clients Say</h2>
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-        {[
-          { name: "John Doe", company: "Tech Co", quote: "This solution has transformed our business operations." },
-          { name: "Jane Smith", company: "Design Inc", quote: "The analytics features are unparalleled in the industry." },
-          { name: "Mike Johnson", company: "StartUp LLC", quote: "Customer support is responsive and always helpful." }
-        ].map((testimonial, index) => (
-          <div key={index} className="bg-white p-6 rounded-lg shadow-md">
-            <p className="text-gray-600 mb-4">"{testimonial.quote}"</p>
-            <div className="font-semibold">{testimonial.name}</div>
-            <div className="text-sm text-gray-500">{testimonial.company}</div>
-          </div>
-        ))}
-      </div>
-    </div>
-  </section>
-);
+    switch (direction) {
+      case 'UP':
+        head.y -= 1;
+        break;
+      case 'DOWN':
+        head.y += 1;
+        break;
+      case 'LEFT':
+        head.x -= 1;
+        break;
+      case 'RIGHT':
+        head.x += 1;
+        break;
+      default:
+        break;
+    }
 
-const FAQ = () => {
-  const [activeIndex, setActiveIndex] = useState(null);
+    newSnake.unshift(head);
 
-  const faqs = [
-    { question: "How does the free trial work?", answer: "Our 14-day free trial gives you full access to all features. No credit card required." },
-    { question: "What kind of support do you offer?", answer: "We offer 24/7 email support and live chat during business hours." },
-    { question: "Can I cancel my subscription at any time?", answer: "Yes, you can cancel your subscription at any time with no questions asked." }
-  ];
+    if (head.x === food.x && head.y === food.y) {
+      setFood(generateFood());
+      setScore(prevScore => prevScore + 1);
+    } else {
+      newSnake.pop();
+    }
+
+    if (
+      head.x < 0 ||
+      head.x >= GRID_SIZE ||
+      head.y < 0 ||
+      head.y >= GRID_SIZE ||
+      newSnake.slice(1).some(segment => segment.x === head.x && segment.y === head.y)
+    ) {
+      setGameOver(true);
+    } else {
+      setSnake(newSnake);
+    }
+  }, [snake, direction, food]);
+
+  useEffect(() => {
+    if (!gameOver) {
+      const gameLoop = setInterval(moveSnake, 100);
+      return () => clearInterval(gameLoop);
+    }
+  }, [moveSnake, gameOver]);
+
+  useEffect(() => {
+    const handleKeyPress = (e) => {
+      switch (e.key) {
+        case 'ArrowUp':
+          setDirection('UP');
+          break;
+        case 'ArrowDown':
+          setDirection('DOWN');
+          break;
+        case 'ArrowLeft':
+          setDirection('LEFT');
+          break;
+        case 'ArrowRight':
+          setDirection('RIGHT');
+          break;
+        default:
+          break;
+      }
+    };
+
+    document.addEventListener('keydown', handleKeyPress);
+    return () => document.removeEventListener('keydown', handleKeyPress);
+  }, []);
+
+  const generateFood = () => {
+    const x = Math.floor(Math.random() * GRID_SIZE);
+    const y = Math.floor(Math.random() * GRID_SIZE);
+    return { x, y };
+  };
+
+  const resetGame = () => {
+    setSnake(INITIAL_SNAKE);
+    setDirection(INITIAL_DIRECTION);
+    setFood(INITIAL_FOOD);
+    setGameOver(false);
+    setScore(0);
+  };
 
   return (
-    <section className="py-20">
-      <div className="container mx-auto">
-        <h2 className="text-3xl font-bold text-center mb-12">Frequently Asked Questions</h2>
-        <div className="max-w-3xl mx-auto">
-          {faqs.map((faq, index) => (
-            <div key={index} className="mb-4">
-              <button
-                className="flex justify-between items-center w-full p-4 bg-gray-100 hover:bg-gray-200 transition duration-300 rounded-lg"
-                onClick={() => setActiveIndex(activeIndex === index ? null : index)}
-              >
-                <span className="font-semibold">{faq.question}</span>
-                <span>{activeIndex === index ? "-" : "+"}</span>
-              </button>
-              {activeIndex === index && (
-                <div className="p-4 bg-white">
-                  <p className="text-gray-600">{faq.answer}</p>
-                </div>
-              )}
-            </div>
-          ))}
-        </div>
+    <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100">
+      <h1 className="text-4xl font-bold mb-4">Snake Game</h1>
+      <div className="relative bg-white border-2 border-gray-300 rounded-lg shadow-lg" style={{ width: GRID_SIZE * CELL_SIZE, height: GRID_SIZE * CELL_SIZE }}>
+        {snake.map((segment, index) => (
+          <div
+            key={index}
+            className="absolute bg-green-500 rounded-sm"
+            style={{
+              left: segment.x * CELL_SIZE,
+              top: segment.y * CELL_SIZE,
+              width: CELL_SIZE,
+              height: CELL_SIZE,
+            }}
+          />
+        ))}
+        <div
+          className="absolute bg-red-500 rounded-full"
+          style={{
+            left: food.x * CELL_SIZE,
+            top: food.y * CELL_SIZE,
+            width: CELL_SIZE,
+            height: CELL_SIZE,
+          }}
+        />
       </div>
-    </section>
+      <div className="mt-4 text-xl font-semibold">Score: {score}</div>
+      {gameOver && (
+        <div className="mt-4 text-center">
+          <p className="text-2xl font-bold text-red-600 mb-2">Game Over!</p>
+          <button
+            className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 transition-colors"
+            onClick={resetGame}
+          >
+            Play Again
+          </button>
+        </div>
+      )}
+    </div>
   );
 };
 
-const Banner = () => (
-  <section className="bg-gradient-to-r from-purple-600 to-blue-500 text-white py-12">
-    <div className="container mx-auto text-center">
-      <h2 className="text-3xl font-bold mb-4">Limited Time Offer</h2>
-      <p className="text-xl mb-6">Sign up now and get 3 months free on any annual plan!</p>
-      <button className="bg-white text-blue-600 font-bold py-2 px-6 rounded-full hover:bg-blue-100 transition duration-300">
-        Claim Offer
-      </button>
-    </div>
-  </section>
-);
-
-const Footer = () => (
-  <footer className="bg-gray-800 text-white py-8">
-    <div className="container mx-auto grid grid-cols-1 md:grid-cols-3 gap-8">
-      <div>
-        <h3 className="text-xl font-semibold mb-4">Contact Us</h3>
-        <p>Email: info@startup.com</p>
-        <p>Phone: (123) 456-7890</p>
-      </div>
-      <div>
-        <h3 className="text-xl font-semibold mb-4">Quick Links</h3>
-        <ul>
-          <li><a href="#" className="hover:text-blue-300">Privacy Policy</a></li>
-          <li><a href="#" className="hover:text-blue-300">Terms of Service</a></li>
-          <li><a href="#" className="hover:text-blue-300">Careers</a></li>
-        </ul>
-      </div>
-      <div>
-        <h3 className="text-xl font-semibold mb-4">Follow Us</h3>
-        <div className="flex space-x-4">
-          <a href="#" className="hover:text-blue-300">Facebook</a>
-          <a href="#" className="hover:text-blue-300">Twitter</a>
-          <a href="#" className="hover:text-blue-300">LinkedIn</a>
-        </div>
-      </div>
-    </div>
-    <div className="mt-8 text-center text-gray-400">
-      © 2023 Startup Name. All rights reserved.
-    </div>
-  </footer>
-);
-
-export default function App() {
-  return (
-    <div className="text-black">
-      <Header />
-      <Hero />
-      <Features />
-      <Testimonials />
-      <FAQ />
-      <Banner />
-      <Footer />
-    </div>
-  );
-}
+export default App;
