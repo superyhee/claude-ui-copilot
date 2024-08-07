@@ -1,8 +1,12 @@
 import React from 'react';
-import { Box, Typography, Stack, AppBar, Toolbar, Button, Card, CardContent, Grid, TextField, Accordion, AccordionSummary, AccordionDetails } from '@mui/material';
+import { Box, Typography, Stack, AppBar, Toolbar, Button, Card, CardContent, Grid, TextField, Accordion, AccordionSummary, AccordionDetails, useMediaQuery, useTheme } from '@mui/material';
 import { ExpandMore, Star, CheckCircle, Person } from '@mui/icons-material';
 
 const LandingPage = () => {
+  const theme = useTheme();
+  const isMobile = useMediaQuery(theme.breakpoints.down('sm'));
+  const isTablet = useMediaQuery(theme.breakpoints.between('sm', 'md'));
+
   const features = [
     { title: 'Easy to Use', description: 'Our platform is designed with simplicity in mind.', icon: <Star /> },
     { title: 'Secure', description: 'Your data is protected with state-of-the-art encryption.', icon: <CheckCircle /> },
@@ -26,23 +30,30 @@ const LandingPage = () => {
           <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
             StartupLogo
           </Typography>
-          <Button color="inherit">Home</Button>
-          <Button color="inherit">Features</Button>
-          <Button color="inherit">Pricing</Button>
-          <Button color="inherit">Contact</Button>
+          {!isMobile && (
+            <>
+              <Button color="inherit">Home</Button>
+              <Button color="inherit">Features</Button>
+              <Button color="inherit">Pricing</Button>
+              <Button color="inherit">Contact</Button>
+            </>
+          )}
+          {isMobile && (
+            <Button color="inherit">Menu</Button>
+          )}
         </Toolbar>
       </AppBar>
 
       <Box sx={{ 
         background: 'linear-gradient(45deg, #3498db 30%, #2980b9 90%)',
         color: 'white',
-        padding: '4rem',
+        padding: isMobile ? '2rem' : '4rem',
         textAlign: 'center'
       }}>
-        <Typography variant="h2" gutterBottom>
+        <Typography variant={isMobile ? 'h3' : 'h2'} gutterBottom>
           Revolutionize Your Business
         </Typography>
-        <Typography variant="h5">
+        <Typography variant={isMobile ? 'body1' : 'h5'}>
           Our startup provides cutting-edge solutions to streamline your operations
         </Typography>
         <Button variant="contained" sx={{ mt: 4, backgroundColor: '#e74c3c', color: 'white', '&:hover': { backgroundColor: '#c0392b' } }}>
@@ -56,7 +67,7 @@ const LandingPage = () => {
         </Typography>
         <Grid container spacing={4} justifyContent="center">
           {features.map((feature, index) => (
-            <Grid item key={index} xs={12} sm={4}>
+            <Grid item key={index} xs={12} sm={6} md={4}>
               <Card sx={{ backgroundColor: '#fff', transition: '0.3s', '&:hover': { transform: 'translateY(-5px)', boxShadow: 3 } }}>
                 <CardContent>
                   <Typography variant="h6" gutterBottom sx={{ color: '#2c3e50' }}>
