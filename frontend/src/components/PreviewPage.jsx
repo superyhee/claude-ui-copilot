@@ -1,180 +1,154 @@
-import React, { useState, useEffect } from 'react';
-import { Box, Typography, Stack, Button, TextField, Dialog, DialogTitle, DialogContent, DialogActions, IconButton, createTheme, ThemeProvider } from '@mui/material';
-import { DataGrid, GridToolbar } from '@mui/x-data-grid';
-import AddIcon from '@mui/icons-material/Add';
-import EditIcon from '@mui/icons-material/Edit';
-import DeleteIcon from '@mui/icons-material/Delete';
+import React, { useState } from 'react';
+import { AppBar, Box, Button, Card, CardContent, CardMedia, Container, Dialog, DialogActions, DialogContent, DialogTitle, Divider, Grid, IconButton, Link, List, ListItem, ListItemText, Stack, Toolbar, Typography } from '@mui/material';
+import { ShoppingCart, Add, Remove, Close } from '@mui/icons-material';
 
-const theme = createTheme({
-  palette: {
-    primary: {
-      main: '#2196f3',
-    },
-    secondary: {
-      main: '#f50057',
-    },
-    background: {
-      default: '#f0f4f8',
-      paper: '#ffffff',
-    },
-  },
-});
+const CoffeeShopPage = () => {
+  const [cart, setCart] = useState([]);
+  const [openCart, setOpenCart] = useState(false);
 
-const PreviewPage = () => {
-  const [rows, setRows] = useState([]);
-  const [openDialog, setOpenDialog] = useState(false);
-  const [editingRow, setEditingRow] = useState(null);
-  const [formData, setFormData] = useState({ name: '', age: '', email: '' });
-
-  useEffect(() => {
-    const mockData = [
-      { id: 1, name: 'John Doe', age: 30, email: 'john@example.com' },
-      { id: 2, name: 'Jane Smith', age: 28, email: 'jane@example.com' },
-      { id: 3, name: 'Bob Johnson', age: 35, email: 'bob@example.com' },
-    ];
-    setRows(mockData);
-  }, []);
-
-  const columns = [
-    { field: 'id', headerName: 'ID', width: 70 },
-    { field: 'name', headerName: 'Name', width: 200, editable: true },
-    { field: 'age', headerName: 'Age', type: 'number', width: 100, editable: true },
-    { field: 'email', headerName: 'Email', width: 230, editable: true },
-    {
-      field: 'actions',
-      headerName: 'Actions',
-      width: 120,
-      renderCell: (params) => (
-        <Stack direction="row">
-          <IconButton onClick={() => handleEdit(params.row)} color="primary">
-            <EditIcon />
-          </IconButton>
-          <IconButton onClick={() => handleDelete(params.row.id)} color="secondary">
-            <DeleteIcon />
-          </IconButton>
-        </Stack>
-      ),
-    },
+  const products = [
+    { id: 1, name: 'Espresso', price: 2.99, image: 'https://placehold.co/300x200?text=Espresso' },
+    { id: 2, name: 'Cappuccino', price: 3.99, image: 'https://placehold.co/300x200?text=Cappuccino' },
+    { id: 3, name: 'Latte', price: 4.99, image: 'https://placehold.co/300x200?text=Latte' },
   ];
 
-  const handleOpenDialog = () => {
-    setOpenDialog(true);
-    setEditingRow(null);
-    setFormData({ name: '', age: '', email: '' });
+  const addToCart = (product) => {
+    setCart([...cart, product]);
   };
 
-  const handleCloseDialog = () => {
-    setOpenDialog(false);
+  const removeFromCart = (productId) => {
+    setCart(cart.filter(item => item.id !== productId));
   };
 
-  const handleInputChange = (e) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
-  };
-
-  const handleSubmit = () => {
-    if (editingRow) {
-      setRows(rows.map((row) => (row.id === editingRow.id ? { ...row, ...formData } : row)));
-    } else {
-      const newRow = { id: rows.length + 1, ...formData };
-      setRows([...rows, newRow]);
-    }
-    handleCloseDialog();
-  };
-
-  const handleEdit = (row) => {
-    setEditingRow(row);
-    setFormData({ name: row.name, age: row.age, email: row.email });
-    setOpenDialog(true);
-  };
-
-  const handleDelete = (id) => {
-    setRows(rows.filter((row) => row.id !== id));
-  };
+  const handleOpenCart = () => setOpenCart(true);
+  const handleCloseCart = () => setOpenCart(false);
 
   return (
-    <ThemeProvider theme={theme}>
-      <Box sx={{ p: 4, backgroundColor: 'background.default', minHeight: '100vh' }}>
-        <Stack spacing={4}>
-          <Typography variant="h4" align="center" color="primary">
-            Data Grid Example
+    <Box sx={{ backgroundColor: '#FFF8E1', minHeight: '100vh' }}>
+      <AppBar position="static" sx={{ backgroundColor: '#8D6E63' }}>
+        <Toolbar>
+          <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
+            Cozy Coffee Corner
           </Typography>
-          <Button
-            variant="contained"
-            startIcon={<AddIcon />}
-            onClick={handleOpenDialog}
-            sx={{ alignSelf: 'flex-end' }}
-          >
-            Add New Record
-          </Button>
-          <DataGrid
-            rows={rows}
-            columns={columns}
-            pageSize={5}
-            rowsPerPageOptions={[5, 10, 20]}
-            checkboxSelection
-            disableSelectionOnClick
-            components={{
-              Toolbar: GridToolbar,
-            }}
-            sx={{
-              backgroundColor: 'background.paper',
-              boxShadow: 3,
-              border: 1,
-              borderColor: 'primary.light',
-              '& .MuiDataGrid-cell:hover': {
-                color: 'primary.main',
-              },
-            }}
-          />
-        </Stack>
+          <Button color="inherit" component={Link} href="#home">Home</Button>
+          <Button color="inherit" component={Link} href="#products">Products</Button>
+          <Button color="inherit" component={Link} href="#about">About</Button>
+          <IconButton color="inherit" onClick={handleOpenCart}>
+            <ShoppingCart />
+          </IconButton>
+        </Toolbar>
+      </AppBar>
 
-        <Dialog open={openDialog} onClose={handleCloseDialog}>
-          <DialogTitle color="primary">{editingRow ? 'Edit Record' : 'Add New Record'}</DialogTitle>
-          <DialogContent>
-            <TextField
-              autoFocus
-              margin="dense"
-              name="name"
-              label="Name"
-              type="text"
-              fullWidth
-              variant="outlined"
-              value={formData.name}
-              onChange={handleInputChange}
-            />
-            <TextField
-              margin="dense"
-              name="age"
-              label="Age"
-              type="number"
-              fullWidth
-              variant="outlined"
-              value={formData.age}
-              onChange={handleInputChange}
-            />
-            <TextField
-              margin="dense"
-              name="email"
-              label="Email"
-              type="email"
-              fullWidth
-              variant="outlined"
-              value={formData.email}
-              onChange={handleInputChange}
-            />
-          </DialogContent>
-          <DialogActions>
-            <Button onClick={handleCloseDialog} color="primary">
-              Cancel
-            </Button>
-            <Button onClick={handleSubmit} variant="contained" color="primary">
-              {editingRow ? 'Save' : 'Add'}
-            </Button>
-          </DialogActions>
-        </Dialog>
+      <Box id="home" sx={{ backgroundImage: 'url(https://placehold.co/1200x600?text=Coffee+Shop+Hero)', backgroundSize: 'cover', height: '60vh', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+        <Typography variant="h2" sx={{ color: '#FFFFFF', textAlign: 'center', textShadow: '2px 2px 4px rgba(0,0,0,0.5)' }}>
+          Welcome to Cozy Coffee Corner
+        </Typography>
       </Box>
-    </ThemeProvider>
+
+      <Container maxWidth="lg" sx={{ my: 4 }}>
+        <Typography variant="h4" gutterBottom>Our Philosophy</Typography>
+        <Typography variant="body1" paragraph>
+          At Cozy Coffee Corner, we believe in crafting the perfect cup of coffee with love and care. Our beans are ethically sourced and roasted to perfection, ensuring a rich and flavorful experience with every sip.
+        </Typography>
+
+        <Box id="products" sx={{ my: 4 }}>
+          <Typography variant="h4" gutterBottom>Our Products</Typography>
+          <Grid container spacing={3}>
+            {products.map((product) => (
+              <Grid item xs={12} sm={4} key={product.id}>
+                <Card>
+                  <CardMedia
+                    component="img"
+                    height="200"
+                    image={product.image}
+                    alt={product.name}
+                  />
+                  <CardContent>
+                    <Typography gutterBottom variant="h5" component="div">
+                      {product.name}
+                    </Typography>
+                    <Typography variant="body2" color="text.secondary">
+                      ${product.price.toFixed(2)}
+                    </Typography>
+                    <Button onClick={() => addToCart(product)} startIcon={<Add />} sx={{ mt: 2 }}>
+                      Add to Cart
+                    </Button>
+                  </CardContent>
+                </Card>
+              </Grid>
+            ))}
+          </Grid>
+        </Box>
+
+        <Box sx={{ my: 4, backgroundColor: '#D7CCC8', p: 3, borderRadius: 2 }}>
+          <Typography variant="h5" gutterBottom>Special Offer!</Typography>
+          <Typography variant="body1">
+            Buy any two drinks and get a free pastry of your choice. Limited time offer!
+          </Typography>
+        </Box>
+
+        <Box id="about" sx={{ my: 4 }}>
+          <Typography variant="h4" gutterBottom>About Us</Typography>
+          <Typography variant="body1" paragraph>
+            Cozy Coffee Corner has been serving the community for over a decade. Our passion for great coffee and warm hospitality keeps our customers coming back for more.
+          </Typography>
+        </Box>
+      </Container>
+
+      <Box component="footer" sx={{ backgroundColor: '#8D6E63', color: 'white', p: 4, mt: 4 }}>
+        <Container maxWidth="lg">
+          <Grid container spacing={4}>
+            <Grid item xs={12} sm={4}>
+              <Typography variant="h6" gutterBottom>Contact Us</Typography>
+              <Typography variant="body2">123 Coffee Street, Beantown, CT 12345</Typography>
+              <Typography variant="body2">Phone: (555) 123-4567</Typography>
+              <Typography variant="body2">Email: info@cozycoffeecorner.com</Typography>
+            </Grid>
+            <Grid item xs={12} sm={4}>
+              <Typography variant="h6" gutterBottom>Hours</Typography>
+              <Typography variant="body2">Monday - Friday: 6am - 8pm</Typography>
+              <Typography variant="body2">Saturday - Sunday: 7am - 9pm</Typography>
+            </Grid>
+            <Grid item xs={12} sm={4}>
+              <Typography variant="h6" gutterBottom>Policies</Typography>
+              <Link href="#" color="inherit">Privacy Policy</Link>
+              <br />
+              <Link href="#" color="inherit">Terms of Service</Link>
+            </Grid>
+          </Grid>
+          <Typography variant="body2" sx={{ mt: 2 }}>
+            © 2023 Cozy Coffee Corner. All rights reserved.
+          </Typography>
+        </Container>
+      </Box>
+
+      <Dialog open={openCart} onClose={handleCloseCart}>
+        <DialogTitle>Your Shopping Cart</DialogTitle>
+        <DialogContent>
+          {cart.length === 0 ? (
+            <Typography>Your cart is empty.</Typography>
+          ) : (
+            <List>
+              {cart.map((item, index) => (
+                <ListItem key={index} secondaryAction={
+                  <IconButton edge="end" aria-label="delete" onClick={() => removeFromCart(item.id)}>
+                    <Remove />
+                  </IconButton>
+                }>
+                  <ListItemText primary={item.name} secondary={`$${item.price.toFixed(2)}`} />
+                </ListItem>
+              ))}
+            </List>
+          )}
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleCloseCart} color="primary">
+            Close
+          </Button>
+        </DialogActions>
+      </Dialog>
+    </Box>
   );
 };
 
-export default PreviewPage;
+export default CoffeeShopPage;
