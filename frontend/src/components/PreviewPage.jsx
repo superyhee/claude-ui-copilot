@@ -1,5 +1,5 @@
-import React from 'react';
-import { Box, Typography, Button, AppBar, Toolbar, Container, Grid, Card, CardContent, Accordion, AccordionSummary, AccordionDetails, TextField } from '@mui/material';
+import React, { useState } from 'react';
+import { Box, Typography, Button, AppBar, Toolbar, Container, Grid, Card, CardContent, Accordion, AccordionSummary, AccordionDetails, TextField, Dialog, DialogTitle, DialogContent, DialogActions } from '@mui/material';
 import { styled } from '@mui/system';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import StarIcon from '@mui/icons-material/Star';
@@ -30,6 +30,24 @@ const faqs = [
 ];
 
 const LandingPage = () => {
+  const [openLogin, setOpenLogin] = useState(false);
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+
+  const handleOpenLogin = () => {
+    setOpenLogin(true);
+  };
+
+  const handleCloseLogin = () => {
+    setOpenLogin(false);
+  };
+
+  const handleLogin = () => {
+    // Mock login functionality
+    console.log('Login with:', email, password);
+    handleCloseLogin();
+  };
+
   return (
     <Box>
       <AppBar position="static" sx={{ backgroundColor: '#1565C0' }}>
@@ -41,8 +59,40 @@ const LandingPage = () => {
           <Button color="inherit">About</Button>
           <Button color="inherit">Services</Button>
           <Button color="inherit">Contact</Button>
+          <Button color="inherit" onClick={handleOpenLogin}>Login</Button>
         </Toolbar>
       </AppBar>
+
+      <Dialog open={openLogin} onClose={handleCloseLogin}>
+        <DialogTitle>Login</DialogTitle>
+        <DialogContent>
+          <TextField
+            autoFocus
+            margin="dense"
+            id="email"
+            label="Email Address"
+            type="email"
+            fullWidth
+            variant="outlined"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+          />
+          <TextField
+            margin="dense"
+            id="password"
+            label="Password"
+            type="password"
+            fullWidth
+            variant="outlined"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+          />
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleCloseLogin}>Cancel</Button>
+          <Button onClick={handleLogin}>Login</Button>
+        </DialogActions>
+      </Dialog>
 
       <GradientBackground>
         <Container>
