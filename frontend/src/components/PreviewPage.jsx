@@ -1,146 +1,189 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React from 'react';
+import { Box, Typography, Button, AppBar, Toolbar, Container, Grid, Card, CardContent, Accordion, AccordionSummary, AccordionDetails, TextField } from '@mui/material';
+import { styled } from '@mui/system';
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import StarIcon from '@mui/icons-material/Star';
+import PhoneIcon from '@mui/icons-material/Phone';
+import EmailIcon from '@mui/icons-material/Email';
+import LocationOnIcon from '@mui/icons-material/LocationOn';
 
-const GRID_SIZE = 20;
-const CELL_SIZE = 20;
-const INITIAL_SNAKE = [{ x: 10, y: 10 }];
-const INITIAL_DIRECTION = 'RIGHT';
-const INITIAL_FOOD = { x: 15, y: 15 };
+const GradientBackground = styled(Box)({
+  background: 'linear-gradient(45deg, #FE6B8B 30%, #FF8E53 90%)',
+  color: 'white',
+  padding: '4rem 0',
+});
 
-const App = () => {
-  const [snake, setSnake] = useState(INITIAL_SNAKE);
-  const [direction, setDirection] = useState(INITIAL_DIRECTION);
-  const [food, setFood] = useState(INITIAL_FOOD);
-  const [gameOver, setGameOver] = useState(false);
-  const [score, setScore] = useState(0);
+const FeatureIcon = styled(Box)({
+  fontSize: '3rem',
+  marginBottom: '1rem',
+});
 
-  const moveSnake = useCallback(() => {
-    const newSnake = [...snake];
-    const head = { ...newSnake[0] };
+const testimonials = [
+  { name: 'John Doe', text: 'Great service! Highly recommended.' },
+  { name: 'Jane Smith', text: 'Innovative solutions that really work.' },
+];
 
-    switch (direction) {
-      case 'UP':
-        head.y -= 1;
-        break;
-      case 'DOWN':
-        head.y += 1;
-        break;
-      case 'LEFT':
-        head.x -= 1;
-        break;
-      case 'RIGHT':
-        head.x += 1;
-        break;
-      default:
-        break;
-    }
+const faqs = [
+  { question: 'What services do you offer?', answer: 'We offer a range of innovative solutions for startups.' },
+  { question: 'How can I get started?', answer: 'Contact us for a free consultation to discuss your needs.' },
+];
 
-    newSnake.unshift(head);
-
-    if (head.x === food.x && head.y === food.y) {
-      setFood(generateFood());
-      setScore(prevScore => prevScore + 1);
-    } else {
-      newSnake.pop();
-    }
-
-    if (
-      head.x < 0 ||
-      head.x >= GRID_SIZE ||
-      head.y < 0 ||
-      head.y >= GRID_SIZE ||
-      newSnake.slice(1).some(segment => segment.x === head.x && segment.y === head.y)
-    ) {
-      setGameOver(true);
-    } else {
-      setSnake(newSnake);
-    }
-  }, [snake, direction, food]);
-
-  useEffect(() => {
-    if (!gameOver) {
-      const gameLoop = setInterval(moveSnake, 100);
-      return () => clearInterval(gameLoop);
-    }
-  }, [moveSnake, gameOver]);
-
-  useEffect(() => {
-    const handleKeyPress = (e) => {
-      switch (e.key) {
-        case 'ArrowUp':
-          setDirection('UP');
-          break;
-        case 'ArrowDown':
-          setDirection('DOWN');
-          break;
-        case 'ArrowLeft':
-          setDirection('LEFT');
-          break;
-        case 'ArrowRight':
-          setDirection('RIGHT');
-          break;
-        default:
-          break;
-      }
-    };
-
-    document.addEventListener('keydown', handleKeyPress);
-    return () => document.removeEventListener('keydown', handleKeyPress);
-  }, []);
-
-  const generateFood = () => {
-    const x = Math.floor(Math.random() * GRID_SIZE);
-    const y = Math.floor(Math.random() * GRID_SIZE);
-    return { x, y };
-  };
-
-  const resetGame = () => {
-    setSnake(INITIAL_SNAKE);
-    setDirection(INITIAL_DIRECTION);
-    setFood(INITIAL_FOOD);
-    setGameOver(false);
-    setScore(0);
-  };
-
+const LandingPage = () => {
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100">
-      <h1 className="text-4xl font-bold mb-4">Snake Game</h1>
-      <div className="relative bg-white border-2 border-gray-300 rounded-lg shadow-lg" style={{ width: GRID_SIZE * CELL_SIZE, height: GRID_SIZE * CELL_SIZE }}>
-        {snake.map((segment, index) => (
-          <div
-            key={index}
-            className="absolute bg-green-500 rounded-sm"
-            style={{
-              left: segment.x * CELL_SIZE,
-              top: segment.y * CELL_SIZE,
-              width: CELL_SIZE,
-              height: CELL_SIZE,
-            }}
-          />
+    <Box>
+      <AppBar position="static">
+        <Toolbar>
+          <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
+            StartupLogo
+          </Typography>
+          <Button color="inherit">Home</Button>
+          <Button color="inherit">About</Button>
+          <Button color="inherit">Services</Button>
+          <Button color="inherit">Contact</Button>
+        </Toolbar>
+      </AppBar>
+
+      <GradientBackground>
+        <Container>
+          <Typography variant="h2" gutterBottom>
+            Innovate. Grow. Succeed.
+          </Typography>
+          <Typography variant="h5" paragraph>
+            We help startups transform ideas into successful businesses.
+          </Typography>
+          <Button variant="contained" size="large">
+            Get Started
+          </Button>
+        </Container>
+      </GradientBackground>
+
+      <Container sx={{ my: 8 }}>
+        <Typography variant="h4" gutterBottom align="center">
+          Our Features
+        </Typography>
+        <Grid container spacing={4}>
+          {['Innovative Solutions', 'Expert Guidance', 'Scalable Technology'].map((feature, index) => (
+            <Grid item xs={12} md={4} key={index}>
+              <Card>
+                <CardContent>
+                  <FeatureIcon>
+                    <StarIcon fontSize="inherit" />
+                  </FeatureIcon>
+                  <Typography variant="h6" gutterBottom>
+                    {feature}
+                  </Typography>
+                  <Typography>
+                    Lorem ipsum dolor sit amet, consectetur adipiscing elit.
+                  </Typography>
+                </CardContent>
+              </Card>
+            </Grid>
+          ))}
+        </Grid>
+      </Container>
+
+      <Box sx={{ bgcolor: '#f5f5f5', py: 8 }}>
+        <Container>
+          <Typography variant="h4" gutterBottom align="center">
+            What Our Clients Say
+          </Typography>
+          <Grid container spacing={4}>
+            {testimonials.map((testimonial, index) => (
+              <Grid item xs={12} md={6} key={index}>
+                <Card>
+                  <CardContent>
+                    <Typography variant="body1" paragraph>
+                      "{testimonial.text}"
+                    </Typography>
+                    <Typography variant="subtitle1">- {testimonial.name}</Typography>
+                  </CardContent>
+                </Card>
+              </Grid>
+            ))}
+          </Grid>
+        </Container>
+      </Box>
+
+      <Container sx={{ my: 8 }}>
+        <Typography variant="h4" gutterBottom align="center">
+          Frequently Asked Questions
+        </Typography>
+        {faqs.map((faq, index) => (
+          <Accordion key={index}>
+            <AccordionSummary expandIcon={<ExpandMoreIcon />}>
+              <Typography variant="h6">{faq.question}</Typography>
+            </AccordionSummary>
+            <AccordionDetails>
+              <Typography>{faq.answer}</Typography>
+            </AccordionDetails>
+          </Accordion>
         ))}
-        <div
-          className="absolute bg-red-500 rounded-full"
-          style={{
-            left: food.x * CELL_SIZE,
-            top: food.y * CELL_SIZE,
-            width: CELL_SIZE,
-            height: CELL_SIZE,
-          }}
-        />
-      </div>
-      <div className="mt-4 text-xl font-semibold">Score: {score}</div>
-      {gameOver && (
-        <div className="mt-4 text-center">
-          <p className="text-2xl font-bold text-red-600 mb-2">Game Over!</p>
-          <button
-            className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 transition-colors"
-            onClick={resetGame}
-          >
-            Play Again
-          </button>
-        </div>
-      )}
-    </div>
+      </Container>
+
+      <GradientBackground>
+        <Container>
+          <Typography variant="h4" gutterBottom align="center">
+            Ready to Take Your Startup to the Next Level?
+          </Typography>
+          <Typography variant="h6" paragraph align="center">
+            Sign up now and get 30% off your first month!
+          </Typography>
+          <Box display="flex" justifyContent="center">
+            <Button variant="contained" size="large" sx={{ bgcolor: 'white', color: 'primary.main' }}>
+              Sign Up Now
+            </Button>
+          </Box>
+        </Container>
+      </GradientBackground>
+
+      <Box component="footer" sx={{ bgcolor: 'background.paper', py: 6 }}>
+        <Container maxWidth="lg">
+          <Grid container spacing={4}>
+            <Grid item xs={12} md={4}>
+              <Typography variant="h6" gutterBottom>
+                About Us
+              </Typography>
+              <Typography variant="body2">
+                We are a startup dedicated to helping other startups succeed.
+              </Typography>
+            </Grid>
+            <Grid item xs={12} md={4}>
+              <Typography variant="h6" gutterBottom>
+                Contact Us
+              </Typography>
+              <Typography variant="body2">
+                <PhoneIcon fontSize="small" /> +1 234 567 8900
+              </Typography>
+              <Typography variant="body2">
+                <EmailIcon fontSize="small" /> info@startuphub.com
+              </Typography>
+              <Typography variant="body2">
+                <LocationOnIcon fontSize="small" /> 123 Startup Street, SV 12345
+              </Typography>
+            </Grid>
+            <Grid item xs={12} md={4}>
+              <Typography variant="h6" gutterBottom>
+                Stay Connected
+              </Typography>
+              <TextField
+                fullWidth
+                label="Enter your email"
+                variant="outlined"
+                size="small"
+                sx={{ mb: 2 }}
+              />
+              <Button variant="contained">Subscribe</Button>
+            </Grid>
+          </Grid>
+          <Box mt={5}>
+            <Typography variant="body2" align="center">
+              © 2023 StartupHub. All rights reserved.
+            </Typography>
+          </Box>
+        </Container>
+      </Box>
+    </Box>
   );
 };
 
-export default App;
+export default LandingPage;
