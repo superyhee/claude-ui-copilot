@@ -4,7 +4,7 @@ import ZoomInIcon from '@mui/icons-material/ZoomIn';
 import ZoomOutIcon from '@mui/icons-material/ZoomOut';
 import mermaid from 'mermaid';
 
-const mermaidCode = "classDiagram\n    class User {\n        +String id\n        +String name\n        +String email\n        +String password\n        +register()\n        +login()\n        +updateProfile()\n    }\n    class Product {\n        +String id\n        +String name\n        +Number price\n        +String description\n        +String category\n        +addToCart()\n        +removeFromCart()\n    }\n    class Cart {\n        +String id\n        +User user\n        +List<Product> items\n        +Number total\n        +addItem()\n        +removeItem()\n        +updateQuantity()\n        +checkout()\n    }\n    class Order {\n        +String id\n        +User user\n        +List<Product> items\n        +Number total\n        +String status\n        +Date orderDate\n        +placeOrder()\n        +cancelOrder()\n        +trackOrder()\n    }\n    class Payment {\n        +String id\n        +Order order\n        +Number amount\n        +String paymentMethod\n        +String status\n        +processPayment()\n        +refundPayment()\n    }\n    User \"1\" -- \"*\" Order : places\n    User \"1\" -- \"1\" Cart : has\n    Cart \"1\" -- \"*\" Product : contains\n    Order \"1\" -- \"*\" Product : includes\n    Order \"1\" -- \"1\" Payment : has";
+const mermaidCode = "sequenceDiagram\n    participant Alice\n    participant Bob\n    participant CA (Certificate Authority)\n    Alice->>CA: Request certificate\n    CA-->>Alice: Issue certificate\n    Alice->>Bob: Send public key certificate\n    Bob->>CA: Verify certificate\n    CA-->>Bob: Confirm certificate validity\n    Bob->>Alice: Generate session key\n    Bob->>Alice: Encrypt session key with Alice's public key\n    Alice->>Alice: Decrypt session key with private key\n    Alice->>Bob: Acknowledge receipt of session key\n    Note over Alice,Bob: Secure communication begins";
 
 const PreviewPage = () => {
   const [scale, setScale] = useState(1.5);
@@ -37,13 +37,13 @@ const PreviewPage = () => {
 mermaid.initialize({
   startOnLoad: true,
   theme: 'neutral',
-  classDiagram: {
-    useMaxWidth: false,
-    diagramPadding: 20,
-    boxMargin: 10,
-    boxPadding: 10,
-    stroke: '#3080b5',
-    fill: '#f4f9fd'
+  sequence: {
+    diagramMarginX: 50,
+    diagramMarginY: 10,
+    boxTextMargin: 5,
+    noteMargin: 10,
+    messageMargin: 35,
+    mirrorActors: true
   }
 });
 
