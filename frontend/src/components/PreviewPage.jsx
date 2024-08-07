@@ -1,57 +1,98 @@
-import React, { useState } from 'react';
-import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
+import React from 'react';
+import Plot from 'react-plotly.js';
 
-const data = [
-  { name: 'Jan', value: 10 },
-  { name: 'Feb', value: 15 },
-  { name: 'Mar', value: 20 },
-  { name: 'Apr', value: 35 },
-  { name: 'May', value: 60 },
-];
+function App() {
+  const generateData = () => {
+    const x = [];
+    const y = [];
+    const z = [];
 
-const navItems = ['Dashboard', 'Analytics', 'Reports', 'Settings'];
+    for (let i = 0; i < 50; i++) {
+      x.push(i);
+      y.push(i);
+      const zRow = [];
+      for (let j = 0; j < 50; j++) {
+        zRow.push(Math.sin(Math.sqrt(i * i + j * j)));
+      }
+      z.push(zRow);
+    }
 
-export default function App() {
-  const [activeNav, setActiveNav] = useState('Dashboard');
+    return { x, y, z };
+  };
+
+  const { x, y, z } = generateData();
+
+  const data = [{
+    z: z,
+    x: x,
+    y: y,
+    type: 'surface',
+    colorscale: 'Viridis'
+  }];
+
+  const layout = {
+    title: '3D Surface Plot',
+    scene: {
+      xaxis: { title: 'X Axis' },
+      yaxis: { title: 'Y Axis' },
+      zaxis: { title: 'Z Axis' }
+    },
+    autosize: false,
+    width: 800,
+    height: 600,
+    margin: {
+      l: 65,
+      r: 50,
+      b: 65,
+      t: 90,
+    }
+  };
 
   return (
-    <div className="flex items-center justify-center min-h-screen bg-gradient-to-br from-green-100 to-blue-100">
-      <div className="w-11/12 h-5/6 bg-white shadow-2xl rounded-xl flex p-6 space-x-6">
-        <div className="w-1/4 bg-gray-50 rounded-lg shadow-inner p-4">
-          <div className="mb-8">
-            <img src="https://placehold.co/100x100" alt="User avatar" className="w-24 h-24 rounded-full mx-auto" />
-            <h2 className="text-center mt-2 text-xl font-semibold text-gray-700">John Doe</h2>
-          </div>
-          <nav>
-            {navItems.map((item) => (
-              <button
-                key={item}
-                className={`w-full text-left py-2 px-4 rounded-md mb-2 transition-colors ${
-                  activeNav === item ? 'bg-green-500 text-white' : 'text-gray-600 hover:bg-green-100'
-                }`}
-                onClick={() => setActiveNav(item)}
-              >
-                {item}
-              </button>
-            ))}
-          </nav>
-        </div>
-        <div className="w-3/4 rounded-lg flex flex-col">
-          <h1 className="text-3xl font-bold mb-6 text-gray-800">Sales Dashboard</h1>
-          <div className="flex-grow bg-white rounded-lg shadow-md p-6">
-            <ResponsiveContainer width="100%" height="100%">
-              <LineChart data={data}>
-                <CartesianGrid strokeDasharray="3 3" stroke="#f0f0f0" />
-                <XAxis dataKey="name" stroke="#888888" />
-                <YAxis stroke="#888888" />
-                <Tooltip />
-                <Legend />
-                <Line type="monotone" dataKey="value" stroke="#4ade80" strokeWidth={3} dot={{ r: 6 }} activeDot={{ r: 8 }} />
-              </LineChart>
-            </ResponsiveContainer>
-          </div>
-        </div>
+    <div style={{
+      display: 'flex',
+      flexDirection: 'column',
+      alignItems: 'center',
+      justifyContent: 'center',
+      minHeight: '100vh',
+      backgroundColor: '#f0f0f0',
+      padding: '20px'
+    }}>
+      <h1 style={{
+        color: '#333',
+        marginBottom: '20px',
+        fontFamily: 'Arial, sans-serif'
+      }}>
+        3D Surface Plot Visualization
+      </h1>
+      <div style={{
+        backgroundColor: 'white',
+        borderRadius: '10px',
+        boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)',
+        padding: '20px'
+      }}>
+        <Plot
+          data={data}
+          layout={layout}
+          config={{
+            responsive: true,
+            displayModeBar: true,
+            displaylogo: false,
+            modeBarButtonsToRemove: ['toImage', 'sendDataToCloud']
+          }}
+        />
       </div>
+      <p style={{
+        marginTop: '20px',
+        color: '#666',
+        textAlign: 'center',
+        maxWidth: '600px',
+        fontFamily: 'Arial, sans-serif'
+      }}>
+        This 3D surface plot demonstrates a mathematical function where the z-value is calculated as the sine of the square root of x^2 + y^2. The colorscale represents the z-values, providing a visually appealing representation of the data.
+      </p>
     </div>
   );
 }
+
+export default App;
