@@ -1,247 +1,190 @@
-import React, { useState, useEffect } from 'react';
-import {
-  Box,
-  Typography,
-  Stack,
-  Button,
-  TextField,
-  Dialog,
-  DialogTitle,
-  DialogContent,
-  DialogActions,
-  Table,
-  TableBody,
-  TableCell,
-  TableContainer,
-  TableHead,
-  TableRow,
-  Paper,
-  TablePagination,
-  IconButton,
-  ThemeProvider,
-  createTheme,
-  Select,
-  MenuItem,
-} from '@mui/material';
-import { Add as AddIcon, Edit as EditIcon, Delete as DeleteIcon, Search as SearchIcon, Language as LanguageIcon } from '@mui/icons-material';
+import React, { useState, useEffect, useCallback } from 'react';
 
-const theme = createTheme({
-  palette: {
-    primary: {
-      main: '#3f51b5',
-    },
-    secondary: {
-      main: '#f50057',
-    },
-    background: {
-      default: '#f0f2f5',
-      paper: '#ffffff',
-    },
-  },
-});
+const GRID_SIZE = 20;
+const CELL_SIZE = 30;
 
-const initialData = [
-  { id: 1, name: 'John Doe', email: 'john@example.com', role: 'Developer' },
-  { id: 2, name: 'Jane Smith', email: 'jane@example.com', role: 'Designer' },
-  { id: 3, name: 'Bob Johnson', email: 'bob@example.com', role: 'Manager' },
-];
-
-const translations = {
-  en: {
-    title: 'Employee Management System',
-    addEmployee: 'Add Employee',
-    search: 'Search...',
-    name: 'Name',
-    email: 'Email',
-    role: 'Role',
-    actions: 'Actions',
-    edit: 'Edit Employee',
-    cancel: 'Cancel',
-    update: 'Update',
-    add: 'Add',
-  },
-  zh: {
-    title: '员工管理系统',
-    addEmployee: '添加员工',
-    search: '搜索...',
-    name: '姓名',
-    email: '邮箱',
-    role: '职位',
-    actions: '操作',
-    edit: '编辑员工',
-    cancel: '取消',
-    update: '更新',
-    add: '添加',
-  },
+const Direction = {
+  UP: 'UP',
+  DOWN: 'DOWN',
+  LEFT: 'LEFT',
+  RIGHT: 'RIGHT',
 };
 
-const PreviewPage = () => {
-  const [data, setData] = useState(initialData);
-  const [open, setOpen] = useState(false);
-  const [editItem, setEditItem] = useState(null);
-  const [newItem, setNewItem] = useState({ name: '', email: '', role: '' });
-  const [page, setPage] = useState(0);
-  const [rowsPerPage, setRowsPerPage] = useState(5);
-  const [searchTerm, setSearchTerm] = useState('');
-  const [language, setLanguage] = useState('en');
-
-  const t = translations[language];
-
-  const handleOpen = () => setOpen(true);
-  const handleClose = () => {
-    setOpen(false);
-    setEditItem(null);
-    setNewItem({ name: '', email: '', role: '' });
+const Tank = ({ x, y, direction, isPlayer }) => {
+  const tankColor = isPlayer ? 'bg-blue-500' : 'bg-red-500';
+  const tankStyle = {
+    left: `${x * CELL_SIZE}px`,
+    top: `${y * CELL_SIZE}px`,
+    width: `${CELL_SIZE}px`,
+    height: `${CELL_SIZE}px`,
+    transform: `rotate(${
+      direction === Direction.UP ? 0 :
+      direction === Direction.RIGHT ? 90 :
+      direction === Direction.DOWN ? 180 :
+      270
+    }deg)`,
   };
-
-  const handleAdd = () => {
-    setData([...data, { ...newItem, id: data.length + 1 }]);
-    handleClose();
-  };
-
-  const handleEdit = (item) => {
-    setEditItem(item);
-    setNewItem(item);
-    handleOpen();
-  };
-
-  const handleUpdate = () => {
-    setData(data.map((item) => (item.id === editItem.id ? newItem : item)));
-    handleClose();
-  };
-
-  const handleDelete = (id) => {
-    setData(data.filter((item) => item.id !== id));
-  };
-
-  const handleChangePage = (event, newPage) => {
-    setPage(newPage);
-  };
-
-  const handleChangeRowsPerPage = (event) => {
-    setRowsPerPage(parseInt(event.target.value, 10));
-    setPage(0);
-  };
-
-  const filteredData = data.filter((item) =>
-    Object.values(item).some((value) =>
-      value.toString().toLowerCase().includes(searchTerm.toLowerCase())
-    )
-  );
-
-  const sortedData = filteredData.sort((a, b) => a.name.localeCompare(b.name));
-
-  const paginatedData = sortedData.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage);
 
   return (
-    <ThemeProvider theme={theme}>
-      <Box sx={{ p: 4, backgroundColor: 'background.default', minHeight: '100vh' }}>
-        <Stack spacing={4}>
-          <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-            <Typography variant="h4" color="primary">
-              {t.title}
-            </Typography>
-            <Select
-              value={language}
-              onChange={(e) => setLanguage(e.target.value)}
-              size="small"
-              sx={{ minWidth: 100 }}
-              startAdornment={<LanguageIcon sx={{ mr: 1 }} />}
-            >
-              <MenuItem value="en">English</MenuItem>
-              <MenuItem value="zh">中文</MenuItem>
-            </Select>
-          </Box>
-          <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-            <Button variant="contained" startIcon={<AddIcon />} onClick={handleOpen} color="secondary">
-              {t.addEmployee}
-            </Button>
-            <TextField
-              variant="outlined"
-              size="small"
-              placeholder={t.search}
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
-              InputProps={{
-                startAdornment: <SearchIcon color="action" />,
-              }}
-            />
-          </Box>
-          <TableContainer component={Paper} elevation={3}>
-            <Table>
-              <TableHead>
-                <TableRow>
-                  <TableCell sx={{ fontWeight: 'bold', backgroundColor: 'primary.light', color: 'primary.contrastText' }}>{t.name}</TableCell>
-                  <TableCell sx={{ fontWeight: 'bold', backgroundColor: 'primary.light', color: 'primary.contrastText' }}>{t.email}</TableCell>
-                  <TableCell sx={{ fontWeight: 'bold', backgroundColor: 'primary.light', color: 'primary.contrastText' }}>{t.role}</TableCell>
-                  <TableCell sx={{ fontWeight: 'bold', backgroundColor: 'primary.light', color: 'primary.contrastText' }}>{t.actions}</TableCell>
-                </TableRow>
-              </TableHead>
-              <TableBody>
-                {paginatedData.map((item) => (
-                  <TableRow key={item.id} hover>
-                    <TableCell>{item.name}</TableCell>
-                    <TableCell>{item.email}</TableCell>
-                    <TableCell>{item.role}</TableCell>
-                    <TableCell>
-                      <IconButton onClick={() => handleEdit(item)} color="primary">
-                        <EditIcon />
-                      </IconButton>
-                      <IconButton onClick={() => handleDelete(item.id)} color="error">
-                        <DeleteIcon />
-                      </IconButton>
-                    </TableCell>
-                  </TableRow>
-                ))}
-              </TableBody>
-            </Table>
-          </TableContainer>
-          <TablePagination
-            component="div"
-            count={filteredData.length}
-            page={page}
-            onPageChange={handleChangePage}
-            rowsPerPage={rowsPerPage}
-            onRowsPerPageChange={handleChangeRowsPerPage}
-            labelRowsPerPage={language === 'en' ? 'Rows per page:' : '每页行数:'}
-          />
-        </Stack>
-        <Dialog open={open} onClose={handleClose}>
-          <DialogTitle sx={{ backgroundColor: 'primary.main', color: 'primary.contrastText' }}>
-            {editItem ? t.edit : t.addEmployee}
-          </DialogTitle>
-          <DialogContent>
-            <Stack spacing={2} sx={{ pt: 2 }}>
-              <TextField
-                label={t.name}
-                value={newItem.name}
-                onChange={(e) => setNewItem({ ...newItem, name: e.target.value })}
-                fullWidth
-              />
-              <TextField
-                label={t.email}
-                value={newItem.email}
-                onChange={(e) => setNewItem({ ...newItem, email: e.target.value })}
-                fullWidth
-              />
-              <TextField
-                label={t.role}
-                value={newItem.role}
-                onChange={(e) => setNewItem({ ...newItem, role: e.target.value })}
-                fullWidth
-              />
-            </Stack>
-          </DialogContent>
-          <DialogActions>
-            <Button onClick={handleClose}>{t.cancel}</Button>
-            <Button onClick={editItem ? handleUpdate : handleAdd} variant="contained" color="secondary">
-              {editItem ? t.update : t.add}
-            </Button>
-          </DialogActions>
-        </Dialog>
-      </Box>
-    </ThemeProvider>
+    <div className={`absolute ${tankColor} transition-all duration-200`} style={tankStyle}>
+      <div className="w-3/4 h-1/2 bg-gray-700 absolute top-1/4 left-1/8"></div>
+      <div className="w-1/4 h-3/4 bg-gray-700 absolute top-1/8 left-3/8"></div>
+    </div>
   );
 };
 
-export default PreviewPage;
+const Bullet = ({ x, y }) => {
+  const bulletStyle = {
+    left: `${x * CELL_SIZE + CELL_SIZE / 2}px`,
+    top: `${y * CELL_SIZE + CELL_SIZE / 2}px`,
+  };
+
+  return (
+    <div className="absolute w-2 h-2 bg-yellow-400 rounded-full" style={bulletStyle}></div>
+  );
+};
+
+const TankGame = () => {
+  const [playerTank, setPlayerTank] = useState({ x: 0, y: 0, direction: Direction.RIGHT });
+  const [enemyTank, setEnemyTank] = useState({ x: GRID_SIZE - 1, y: GRID_SIZE - 1, direction: Direction.LEFT });
+  const [bullets, setBullets] = useState([]);
+  const [gameOver, setGameOver] = useState(false);
+
+  const moveTank = useCallback((tank, direction) => {
+    let newX = tank.x;
+    let newY = tank.y;
+
+    switch (direction) {
+      case Direction.UP:
+        newY = Math.max(0, tank.y - 1);
+        break;
+      case Direction.DOWN:
+        newY = Math.min(GRID_SIZE - 1, tank.y + 1);
+        break;
+      case Direction.LEFT:
+        newX = Math.max(0, tank.x - 1);
+        break;
+      case Direction.RIGHT:
+        newX = Math.min(GRID_SIZE - 1, tank.x + 1);
+        break;
+    }
+
+    return { ...tank, x: newX, y: newY, direction };
+  }, []);
+
+  const handleKeyPress = useCallback((e) => {
+    if (gameOver) return;
+
+    switch (e.key) {
+      case 'ArrowUp':
+        setPlayerTank((prev) => moveTank(prev, Direction.UP));
+        break;
+      case 'ArrowDown':
+        setPlayerTank((prev) => moveTank(prev, Direction.DOWN));
+        break;
+      case 'ArrowLeft':
+        setPlayerTank((prev) => moveTank(prev, Direction.LEFT));
+        break;
+      case 'ArrowRight':
+        setPlayerTank((prev) => moveTank(prev, Direction.RIGHT));
+        break;
+      case ' ':
+        fireBullet(playerTank);
+        break;
+    }
+  }, [gameOver, moveTank, playerTank]);
+
+  useEffect(() => {
+    window.addEventListener('keydown', handleKeyPress);
+    return () => {
+      window.removeEventListener('keydown', handleKeyPress);
+    };
+  }, [handleKeyPress]);
+
+  useEffect(() => {
+    if (gameOver) return;
+
+    const enemyMove = setInterval(() => {
+      const directions = [Direction.UP, Direction.DOWN, Direction.LEFT, Direction.RIGHT];
+      const randomDirection = directions[Math.floor(Math.random() * directions.length)];
+      setEnemyTank((prev) => moveTank(prev, randomDirection));
+    }, 1000);
+
+    return () => clearInterval(enemyMove);
+  }, [gameOver, moveTank]);
+
+  const fireBullet = (tank) => {
+    const newBullet = { x: tank.x, y: tank.y, direction: tank.direction };
+    setBullets((prev) => [...prev, newBullet]);
+  };
+
+  useEffect(() => {
+    if (gameOver) return;
+
+    const bulletInterval = setInterval(() => {
+      setBullets((prevBullets) => {
+        const newBullets = prevBullets.map((bullet) => {
+          let newX = bullet.x;
+          let newY = bullet.y;
+
+          switch (bullet.direction) {
+            case Direction.UP:
+              newY--;
+              break;
+            case Direction.DOWN:
+              newY++;
+              break;
+            case Direction.LEFT:
+              newX--;
+              break;
+            case Direction.RIGHT:
+              newX++;
+              break;
+          }
+
+          return { ...bullet, x: newX, y: newY };
+        }).filter((bullet) => 
+          bullet.x >= 0 && bullet.x < GRID_SIZE && bullet.y >= 0 && bullet.y < GRID_SIZE
+        );
+
+        // Check for collisions
+        newBullets.forEach((bullet) => {
+          if (bullet.x === enemyTank.x && bullet.y === enemyTank.y) {
+            setGameOver(true);
+          }
+          if (bullet.x === playerTank.x && bullet.y === playerTank.y) {
+            setGameOver(true);
+          }
+        });
+
+        return newBullets;
+      });
+    }, 100);
+
+    return () => clearInterval(bulletInterval);
+  }, [gameOver, enemyTank, playerTank]);
+
+  return (
+    <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100">
+      <h1 className="text-4xl font-bold mb-4">Tank Battle</h1>
+      <div 
+        className="relative bg-green-200 border-4 border-green-600"
+        style={{ width: `${GRID_SIZE * CELL_SIZE}px`, height: `${GRID_SIZE * CELL_SIZE}px` }}
+      >
+        <Tank {...playerTank} isPlayer={true} />
+        <Tank {...enemyTank} isPlayer={false} />
+        {bullets.map((bullet, index) => (
+          <Bullet key={index} {...bullet} />
+        ))}
+      </div>
+      {gameOver && (
+        <div className="mt-4 text-2xl font-bold text-red-600">Game Over!</div>
+      )}
+      <div className="mt-4">
+        <p>Use arrow keys to move and spacebar to shoot</p>
+      </div>
+    </div>
+  );
+};
+
+export default TankGame;
