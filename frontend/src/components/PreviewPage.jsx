@@ -2,14 +2,12 @@ import React, { useState, useEffect } from 'react';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faEdit, faTrash, faSearch, faSort } from '@fortawesome/free-solid-svg-icons';
 
-const mockData = [
-  { id: 1, name: 'John Doe', email: 'john@example.com', role: 'Developer' },
-  { id: 2, name: 'Jane Smith', email: 'jane@example.com', role: 'Designer' },
-  { id: 3, name: 'Bob Johnson', email: 'bob@example.com', role: 'Manager' },
-];
-
 const DataGrid = () => {
-  const [data, setData] = useState(mockData);
+  const [data, setData] = useState([
+    { id: 1, name: 'John Doe', email: 'john@example.com', role: 'Developer' },
+    { id: 2, name: 'Jane Smith', email: 'jane@example.com', role: 'Designer' },
+    { id: 3, name: 'Bob Johnson', email: 'bob@example.com', role: 'Manager' },
+  ]);
   const [currentPage, setCurrentPage] = useState(1);
   const [itemsPerPage] = useState(5);
   const [sortColumn, setSortColumn] = useState(null);
