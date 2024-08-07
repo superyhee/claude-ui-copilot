@@ -1,124 +1,158 @@
-import React from 'react';
-import { Box, Typography, Stack, TextField, Button, IconButton, Slider } from '@mui/material';
-import ZoomInIcon from '@mui/icons-material/ZoomIn';
-import ZoomOutIcon from '@mui/icons-material/ZoomOut';
-import InfoOutlinedIcon from '@mui/icons-material/InfoOutlined';
-import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import React, { useState, useEffect } from 'react';
+import { Box, Typography, Stack, Button, TextField, Dialog, DialogTitle, DialogContent, DialogActions, IconButton } from '@mui/material';
+import { DataGrid, GridToolbar } from '@mui/x-data-grid';
+import AddIcon from '@mui/icons-material/Add';
+import EditIcon from '@mui/icons-material/Edit';
+import DeleteIcon from '@mui/icons-material/Delete';
 
 const PreviewPage = () => {
-  return (
-    <Box sx={{ p: 4, backgroundColor: '#ffffff', height: '100vh', display: 'flex', flexDirection: 'column' }}>
-      <Stack direction="row" justifyContent="space-between" alignItems="center" mb={2}>
-        <Typography variant="h6" sx={{ display: 'flex', alignItems: 'center' }}>
-          <Box component="img" src="https://placehold.co/20x20" alt="Amazon logo" sx={{ mr: 1 }} />
-          Titan Image Generator G1 v1 | ODT
-        </Typography>
-        <Typography variant="body2" color="primary" sx={{ cursor: 'pointer' }}>
-          更改
-        </Typography>
-      </Stack>
+  const [rows, setRows] = useState([]);
+  const [openDialog, setOpenDialog] = useState(false);
+  const [editingRow, setEditingRow] = useState(null);
+  const [formData, setFormData] = useState({ name: '', age: '', email: '' });
 
-      <Stack direction="row" spacing={2} sx={{ flexGrow: 1 }}>
-        <Box sx={{ flexGrow: 1, display: 'flex', flexDirection: 'column' }}>
-          <Stack direction="row" justifyContent="flex-end" spacing={1} mb={2}>
-            <IconButton size="small"><ZoomOutIcon /></IconButton>
-            <IconButton size="small"><ZoomInIcon /></IconButton>
-          </Stack>
-          <Box sx={{ flexGrow: 1, border: '1px solid #e0e0e0', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-            <img src="https://placehold.co/300x300" alt="Preview of a blue backpack" style={{ maxWidth: '100%', maxHeight: '100%' }} />
-          </Box>
-        </Box>
+  useEffect(() => {
+    // Mock data
+    const mockData = [
+      { id: 1, name: 'John Doe', age: 30, email: 'john@example.com' },
+      { id: 2, name: 'Jane Smith', age: 28, email: 'jane@example.com' },
+      { id: 3, name: 'Bob Johnson', age: 35, email: 'bob@example.com' },
+    ];
+    setRows(mockData);
+  }, []);
 
-        <Stack spacing={2} sx={{ width: 300 }}>
-          <Box sx={{ backgroundColor: '#f5f5f5', p: 2, borderRadius: 1 }}>
-            <Typography variant="subtitle1" sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 1 }}>
-              配置
-              <IconButton size="small"><InfoOutlinedIcon fontSize="small" /></IconButton>
-            </Typography>
-            <Typography variant="body2" color="text.secondary" mb={1}>
-              重置
-            </Typography>
-            <Typography variant="subtitle2" mb={1}>
-              Action
-            </Typography>
-            <TextField
-              select
-              fullWidth
-              size="small"
-              defaultValue="Replace object"
-              SelectProps={{
-                native: true,
-                IconComponent: ExpandMoreIcon
-              }}
-            >
-              <option>Replace object</option>
-            </TextField>
-          </Box>
-
-          <Box sx={{ backgroundColor: '#f5f5f5', p: 2, borderRadius: 1 }}>
-            <Typography variant="subtitle2" sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 1 }}>
-              Mask tools
-              <InfoOutlinedIcon fontSize="small" color="disabled" />
-            </Typography>
-          </Box>
-
-          <Box sx={{ backgroundColor: '#f5f5f5', p: 2, borderRadius: 1 }}>
-            <Typography variant="subtitle2" sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 1 }}>
-              否定提示
-              <InfoOutlinedIcon fontSize="small" color="disabled" />
-            </Typography>
-            <TextField
-              multiline
-              rows={2}
-              fullWidth
-              placeholder="Add negative prompt"
-              variant="outlined"
-              size="small"
-            />
-          </Box>
-
-          <Box sx={{ backgroundColor: '#f5f5f5', p: 2, borderRadius: 1 }}>
-            <Typography variant="subtitle2" sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 1 }}>
-              推理图像
-              <InfoOutlinedIcon fontSize="small" color="disabled" />
-            </Typography>
-            <Box sx={{ border: '1px solid #e0e0e0', borderRadius: 1, p: 1, display: 'flex', alignItems: 'center' }}>
-              <img src="https://placehold.co/40x40" alt="Thumbnail of a blue backpack" style={{ marginRight: 8 }} />
-              <Typography variant="body2">Blue backpack</Typography>
-            </Box>
-          </Box>
-
-          <Box sx={{ backgroundColor: '#f5f5f5', p: 2, borderRadius: 1 }}>
-            <Typography variant="subtitle2" sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 1 }}>
-              高级配置
-              <InfoOutlinedIcon fontSize="small" color="disabled" />
-            </Typography>
-            <Typography variant="body2" mb={1}>提示强度</Typography>
-            <Stack direction="row" spacing={2} alignItems="center">
-              <Slider defaultValue={8} min={0} max={10} valueLabelDisplay="auto" />
-              <Typography variant="body2">8</Typography>
-            </Stack>
-            <Typography variant="body2" mt={2} mb={1}>种子</Typography>
-            <Stack direction="row" spacing={2} alignItems="center">
-              <Slider defaultValue={0} min={0} max={10} valueLabelDisplay="auto" />
-              <Typography variant="body2">0</Typography>
-            </Stack>
-          </Box>
+  const columns = [
+    { field: 'id', headerName: 'ID', width: 70 },
+    { field: 'name', headerName: 'Name', width: 200, editable: true },
+    { field: 'age', headerName: 'Age', type: 'number', width: 100, editable: true },
+    { field: 'email', headerName: 'Email', width: 230, editable: true },
+    {
+      field: 'actions',
+      headerName: 'Actions',
+      width: 120,
+      renderCell: (params) => (
+        <Stack direction="row">
+          <IconButton onClick={() => handleEdit(params.row)}>
+            <EditIcon />
+          </IconButton>
+          <IconButton onClick={() => handleDelete(params.row.id)}>
+            <DeleteIcon />
+          </IconButton>
         </Stack>
+      ),
+    },
+  ];
+
+  const handleOpenDialog = () => {
+    setOpenDialog(true);
+    setEditingRow(null);
+    setFormData({ name: '', age: '', email: '' });
+  };
+
+  const handleCloseDialog = () => {
+    setOpenDialog(false);
+  };
+
+  const handleInputChange = (e) => {
+    setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
+
+  const handleSubmit = () => {
+    if (editingRow) {
+      setRows(rows.map((row) => (row.id === editingRow.id ? { ...row, ...formData } : row)));
+    } else {
+      const newRow = { id: rows.length + 1, ...formData };
+      setRows([...rows, newRow]);
+    }
+    handleCloseDialog();
+  };
+
+  const handleEdit = (row) => {
+    setEditingRow(row);
+    setFormData({ name: row.name, age: row.age, email: row.email });
+    setOpenDialog(true);
+  };
+
+  const handleDelete = (id) => {
+    setRows(rows.filter((row) => row.id !== id));
+  };
+
+  return (
+    <Box sx={{ p: 4, backgroundColor: '#f5f5f5', height: '100%' }}>
+      <Stack spacing={4}>
+        <Typography variant="h4" align="center">Data Grid Example</Typography>
+        <Button
+          variant="contained"
+          startIcon={<AddIcon />}
+          onClick={handleOpenDialog}
+          sx={{ alignSelf: 'flex-end' }}
+        >
+          Add New Record
+        </Button>
+        <DataGrid
+          rows={rows}
+          columns={columns}
+          pageSize={5}
+          rowsPerPageOptions={[5, 10, 20]}
+          checkboxSelection
+          disableSelectionOnClick
+          components={{
+            Toolbar: GridToolbar,
+          }}
+          sx={{
+            backgroundColor: 'white',
+            boxShadow: 2,
+            border: 2,
+            borderColor: 'primary.light',
+            '& .MuiDataGrid-cell:hover': {
+              color: 'primary.main',
+            },
+          }}
+        />
       </Stack>
 
-      <Box sx={{ mt: 2, display: 'flex', alignItems: 'center' }}>
-        <TextField
-          fullWidth
-          variant="outlined"
-          size="small"
-          placeholder="Change flowers to orange"
-          sx={{ mr: 2 }}
-        />
-        <Button variant="contained" color="warning" sx={{ minWidth: 100 }}>
-          运行
-        </Button>
-      </Box>
+      <Dialog open={openDialog} onClose={handleCloseDialog}>
+        <DialogTitle>{editingRow ? 'Edit Record' : 'Add New Record'}</DialogTitle>
+        <DialogContent>
+          <TextField
+            autoFocus
+            margin="dense"
+            name="name"
+            label="Name"
+            type="text"
+            fullWidth
+            variant="outlined"
+            value={formData.name}
+            onChange={handleInputChange}
+          />
+          <TextField
+            margin="dense"
+            name="age"
+            label="Age"
+            type="number"
+            fullWidth
+            variant="outlined"
+            value={formData.age}
+            onChange={handleInputChange}
+          />
+          <TextField
+            margin="dense"
+            name="email"
+            label="Email"
+            type="email"
+            fullWidth
+            variant="outlined"
+            value={formData.email}
+            onChange={handleInputChange}
+          />
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleCloseDialog}>Cancel</Button>
+          <Button onClick={handleSubmit} variant="contained">
+            {editingRow ? 'Save' : 'Add'}
+          </Button>
+        </DialogActions>
+      </Dialog>
     </Box>
   );
 };
