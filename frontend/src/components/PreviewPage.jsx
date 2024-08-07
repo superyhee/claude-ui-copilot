@@ -21,7 +21,7 @@ const LandingPage = () => {
 
   return (
     <Box sx={{ flexGrow: 1 }}>
-      <AppBar position="static">
+      <AppBar position="static" sx={{ backgroundColor: '#2c3e50' }}>
         <Toolbar>
           <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
             StartupLogo
@@ -34,7 +34,7 @@ const LandingPage = () => {
       </AppBar>
 
       <Box sx={{ 
-        background: 'linear-gradient(45deg, #FE6B8B 30%, #FF8E53 90%)',
+        background: 'linear-gradient(45deg, #3498db 30%, #2980b9 90%)',
         color: 'white',
         padding: '4rem',
         textAlign: 'center'
@@ -45,24 +45,24 @@ const LandingPage = () => {
         <Typography variant="h5">
           Our startup provides cutting-edge solutions to streamline your operations
         </Typography>
-        <Button variant="contained" sx={{ mt: 4, backgroundColor: 'white', color: '#FE6B8B' }}>
+        <Button variant="contained" sx={{ mt: 4, backgroundColor: '#e74c3c', color: 'white', '&:hover': { backgroundColor: '#c0392b' } }}>
           Get Started
         </Button>
       </Box>
 
-      <Box sx={{ py: 8 }}>
+      <Box sx={{ py: 8, backgroundColor: '#ecf0f1' }}>
         <Typography variant="h4" align="center" gutterBottom>
           Key Features
         </Typography>
         <Grid container spacing={4} justifyContent="center">
           {features.map((feature, index) => (
             <Grid item key={index} xs={12} sm={4}>
-              <Card>
+              <Card sx={{ backgroundColor: '#fff', transition: '0.3s', '&:hover': { transform: 'translateY(-5px)', boxShadow: 3 } }}>
                 <CardContent>
-                  <Typography variant="h6" gutterBottom>
+                  <Typography variant="h6" gutterBottom sx={{ color: '#2c3e50' }}>
                     {feature.icon} {feature.title}
                   </Typography>
-                  <Typography variant="body2">
+                  <Typography variant="body2" sx={{ color: '#7f8c8d' }}>
                     {feature.description}
                   </Typography>
                 </CardContent>
@@ -72,19 +72,19 @@ const LandingPage = () => {
         </Grid>
       </Box>
 
-      <Box sx={{ bgcolor: '#f5f5f5', py: 8 }}>
-        <Typography variant="h4" align="center" gutterBottom>
+      <Box sx={{ bgcolor: '#34495e', py: 8 }}>
+        <Typography variant="h4" align="center" gutterBottom sx={{ color: 'white' }}>
           What Our Customers Say
         </Typography>
         <Grid container spacing={4} justifyContent="center">
           {testimonials.map((testimonial, index) => (
             <Grid item key={index} xs={12} sm={6} md={4}>
-              <Card>
+              <Card sx={{ backgroundColor: '#fff', transition: '0.3s', '&:hover': { transform: 'translateY(-5px)', boxShadow: 3 } }}>
                 <CardContent>
-                  <Typography variant="body1" paragraph>
+                  <Typography variant="body1" paragraph sx={{ color: '#2c3e50' }}>
                     "{testimonial.comment}"
                   </Typography>
-                  <Typography variant="subtitle2" align="right">
+                  <Typography variant="subtitle2" align="right" sx={{ color: '#7f8c8d' }}>
                     - {testimonial.name}
                   </Typography>
                 </CardContent>
@@ -94,24 +94,24 @@ const LandingPage = () => {
         </Grid>
       </Box>
 
-      <Box sx={{ py: 8 }}>
-        <Typography variant="h4" align="center" gutterBottom>
+      <Box sx={{ py: 8, backgroundColor: '#ecf0f1' }}>
+        <Typography variant="h4" align="center" gutterBottom sx={{ color: '#2c3e50' }}>
           Frequently Asked Questions
         </Typography>
         {faqs.map((faq, index) => (
-          <Accordion key={index}>
+          <Accordion key={index} sx={{ backgroundColor: '#fff', '&:hover': { backgroundColor: '#f7f9f9' } }}>
             <AccordionSummary expandIcon={<ExpandMore />}>
-              <Typography variant="h6">{faq.question}</Typography>
+              <Typography variant="h6" sx={{ color: '#2c3e50' }}>{faq.question}</Typography>
             </AccordionSummary>
             <AccordionDetails>
-              <Typography>{faq.answer}</Typography>
+              <Typography sx={{ color: '#7f8c8d' }}>{faq.answer}</Typography>
             </AccordionDetails>
           </Accordion>
         ))}
       </Box>
 
       <Box sx={{ 
-        bgcolor: '#3f51b5', 
+        bgcolor: '#e74c3c', 
         color: 'white', 
         py: 4,
         textAlign: 'center'
@@ -122,16 +122,16 @@ const LandingPage = () => {
         <Typography variant="body1" paragraph>
           Sign up now and get 3 months free on any plan
         </Typography>
-        <Button variant="contained" color="secondary">
+        <Button variant="contained" sx={{ backgroundColor: '#2c3e50', '&:hover': { backgroundColor: '#34495e' } }}>
           Claim Offer
         </Button>
       </Box>
 
-      <Box component="footer" sx={{ bgcolor: 'background.paper', py: 6 }}>
-        <Typography variant="body2" color="text.secondary" align="center">
+      <Box component="footer" sx={{ bgcolor: '#2c3e50', py: 6 }}>
+        <Typography variant="body2" color="white" align="center">
           © 2023 StartupName. All rights reserved.
         </Typography>
-        <Typography variant="body2" color="text.secondary" align="center">
+        <Typography variant="body2" color="white" align="center">
           Privacy Policy | Terms of Service | Contact Us
         </Typography>
       </Box>
