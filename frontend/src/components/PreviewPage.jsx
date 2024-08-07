@@ -1,190 +1,170 @@
-import React from 'react';
-import { FaRocket, FaLightbulb, FaChartLine } from 'react-icons/fa';
+import React, { useState } from 'react';
 
-const Header = () => (
-  <header className="bg-white shadow-md py-4 px-8 flex justify-between items-center">
-    <div className="flex items-center">
-      <img src="https://placehold.co/50x50" alt="Startup Logo" className="h-10 w-10 mr-2" />
-      <span className="text-xl font-bold text-indigo-600">StartupName</span>
-    </div>
-    <nav>
-      <ul className="flex space-x-6">
-        <li><a href="#" className="text-gray-600 hover:text-indigo-600">Home</a></li>
-        <li><a href="#" className="text-gray-600 hover:text-indigo-600">Features</a></li>
-        <li><a href="#" className="text-gray-600 hover:text-indigo-600">Pricing</a></li>
-        <li><a href="#" className="text-gray-600 hover:text-indigo-600">Contact</a></li>
+const products = [
+  { id: 1, name: 'Classic Espresso', price: 3.99, image: 'https://placehold.co/200x200?text=Espresso' },
+  { id: 2, name: 'Creamy Latte', price: 4.99, image: 'https://placehold.co/200x200?text=Latte' },
+  { id: 3, name: 'Rich Mocha', price: 5.99, image: 'https://placehold.co/200x200?text=Mocha' },
+];
+
+const Header = ({ cartItems, setShowCart }) => (
+  <header className="bg-amber-800 text-white p-4">
+    <nav className="container mx-auto flex justify-between items-center">
+      <h1 className="text-2xl font-bold">Cozy Coffee Shop</h1>
+      <ul className="flex space-x-4">
+        <li><a href="#home" className="hover:text-amber-200">Home</a></li>
+        <li><a href="#products" className="hover:text-amber-200">Products</a></li>
+        <li><a href="#about" className="hover:text-amber-200">About</a></li>
+        <li>
+          <button onClick={() => setShowCart(true)} className="flex items-center">
+            <span className="mr-2">Cart ({cartItems.length})</span>
+            <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2.293 2.293c-.63.63-.184 1.707.707 1.707H17m0 0a2 2 0 100 4 2 2 0 000-4zm-8 2a2 2 0 11-4 0 2 2 0 014 0z" />
+            </svg>
+          </button>
+        </li>
       </ul>
     </nav>
   </header>
 );
 
 const Hero = () => (
-  <section className="bg-gradient-to-r from-indigo-500 to-purple-600 text-white py-20 px-8">
-    <div className="max-w-4xl mx-auto text-center">
-      <h1 className="text-4xl md:text-6xl font-bold mb-6">Revolutionize Your Business</h1>
-      <p className="text-xl mb-8">Empower your team with our cutting-edge SaaS solution</p>
-      <button className="bg-white text-indigo-600 font-bold py-3 px-8 rounded-full hover:bg-indigo-100 transition duration-300">Get Started</button>
-    </div>
-  </section>
-);
-
-const Feature = ({ icon, title, description }) => (
-  <div className="flex flex-col items-center text-center p-6">
-    {icon}
-    <h3 className="text-xl font-semibold mt-4 mb-2">{title}</h3>
-    <p className="text-gray-600">{description}</p>
-  </div>
-);
-
-const Features = () => (
-  <section className="py-20 px-8 bg-gray-100">
-    <div className="max-w-6xl mx-auto">
-      <h2 className="text-3xl font-bold text-center mb-12">Key Features</h2>
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-        <Feature
-          icon={<FaRocket className="text-5xl text-indigo-600" />}
-          title="Lightning Fast"
-          description="Boost your productivity with our high-performance platform"
-        />
-        <Feature
-          icon={<FaLightbulb className="text-5xl text-indigo-600" />}
-          title="Intuitive Design"
-          description="User-friendly interface that anyone can master quickly"
-        />
-        <Feature
-          icon={<FaChartLine className="text-5xl text-indigo-600" />}
-          title="Powerful Analytics"
-          description="Gain valuable insights with our advanced reporting tools"
-        />
+  <section id="home" className="bg-amber-100 py-20">
+    <div className="container mx-auto flex items-center">
+      <div className="w-1/2 pr-8">
+        <h2 className="text-4xl font-bold text-amber-800 mb-4">Experience the Art of Coffee</h2>
+        <p className="text-amber-700 mb-6">At Cozy Coffee Shop, we believe in crafting the perfect cup with passion and precision. Our beans are ethically sourced and roasted to perfection, ensuring a rich and flavorful experience with every sip.</p>
+        <a href="#products" className="bg-amber-600 text-white py-2 px-4 rounded hover:bg-amber-700 transition duration-300">Explore Our Menu</a>
+      </div>
+      <div className="w-1/2">
+        <img src="https://placehold.co/600x400?text=Cozy+Coffee+Shop" alt="Cozy Coffee Shop interior with warm lighting and comfortable seating" className="rounded-lg shadow-lg" />
       </div>
     </div>
   </section>
 );
 
-const Testimonial = ({ quote, author, role }) => (
-  <div className="bg-white p-6 rounded-lg shadow-md">
-    <p className="text-gray-600 italic mb-4">{quote}</p>
-    <div className="font-semibold">{author}</div>
-    <div className="text-gray-500 text-sm">{role}</div>
+const ProductCard = ({ product, addToCart }) => (
+  <div className="bg-white rounded-lg shadow-md p-6">
+    <img src={product.image} alt={product.name} className="w-full h-48 object-cover mb-4 rounded" />
+    <h3 className="text-xl font-semibold text-amber-800 mb-2">{product.name}</h3>
+    <p className="text-amber-600 mb-4">${product.price.toFixed(2)}</p>
+    <button onClick={() => addToCart(product)} className="bg-amber-500 text-white py-2 px-4 rounded hover:bg-amber-600 transition duration-300">Add to Cart</button>
   </div>
 );
 
-const SocialProof = () => (
-  <section className="py-20 px-8">
-    <div className="max-w-6xl mx-auto">
-      <h2 className="text-3xl font-bold text-center mb-12">What Our Clients Say</h2>
+const Products = ({ addToCart }) => (
+  <section id="products" className="py-20 bg-amber-50">
+    <div className="container mx-auto">
+      <h2 className="text-3xl font-bold text-amber-800 mb-10 text-center">Our Signature Drinks</h2>
       <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-        <Testimonial
-          quote="This platform has completely transformed how we operate. It's a game-changer!"
-          author="John Doe"
-          role="CEO, TechCorp"
-        />
-        <Testimonial
-          quote="The intuitive design and powerful features have significantly boosted our productivity."
-          author="Jane Smith"
-          role="CTO, InnovateCo"
-        />
-        <Testimonial
-          quote="Outstanding customer support and constant improvements make this a top-notch solution."
-          author="Mike Johnson"
-          role="Director, FutureTech"
-        />
-      </div>
-    </div>
-  </section>
-);
-
-const FAQ = () => (
-  <section className="py-20 px-8 bg-gray-100">
-    <div className="max-w-4xl mx-auto">
-      <h2 className="text-3xl font-bold text-center mb-12">Frequently Asked Questions</h2>
-      <div className="space-y-6">
-        <details className="bg-white p-6 rounded-lg shadow-md">
-          <summary className="font-semibold cursor-pointer">How does the pricing work?</summary>
-          <p className="mt-2 text-gray-600">We offer flexible pricing plans tailored to your business needs. Contact our sales team for a custom quote.</p>
-        </details>
-        <details className="bg-white p-6 rounded-lg shadow-md">
-          <summary className="font-semibold cursor-pointer">Is there a free trial available?</summary>
-          <p className="mt-2 text-gray-600">Yes, we offer a 14-day free trial with full access to all features. No credit card required.</p>
-        </details>
-        <details className="bg-white p-6 rounded-lg shadow-md">
-          <summary className="font-semibold cursor-pointer">How secure is your platform?</summary>
-          <p className="mt-2 text-gray-600">We use industry-standard encryption and security protocols to ensure your data is always protected.</p>
-        </details>
+        {products.map(product => (
+          <ProductCard key={product.id} product={product} addToCart={addToCart} />
+        ))}
       </div>
     </div>
   </section>
 );
 
 const Banner = () => (
-  <section className="bg-indigo-600 text-white py-16 px-8">
-    <div className="max-w-4xl mx-auto text-center">
-      <h2 className="text-3xl font-bold mb-4">Ready to get started?</h2>
-      <p className="text-xl mb-8">Sign up now and get 20% off your first 3 months!</p>
-      <button className="bg-white text-indigo-600 font-bold py-3 px-8 rounded-full hover:bg-indigo-100 transition duration-300">Claim Offer</button>
+  <section className="bg-amber-600 text-white py-16">
+    <div className="container mx-auto text-center">
+      <h2 className="text-3xl font-bold mb-4">Discover Our Coffee Club</h2>
+      <p className="mb-8">Join today and enjoy exclusive discounts, early access to seasonal blends, and free shipping on all orders!</p>
+      <a href="#" className="bg-white text-amber-600 py-2 px-6 rounded-full text-lg font-semibold hover:bg-amber-100 transition duration-300">Sign Up Now</a>
     </div>
   </section>
 );
 
 const Footer = () => (
-  <footer className="bg-gray-800 text-white py-12 px-8">
-    <div className="max-w-6xl mx-auto grid grid-cols-1 md:grid-cols-4 gap-8">
+  <footer className="bg-amber-900 text-amber-200 py-10">
+    <div className="container mx-auto grid grid-cols-1 md:grid-cols-3 gap-8">
       <div>
-        <h3 className="text-lg font-semibold mb-4">About Us</h3>
-        <p className="text-gray-400">Empowering businesses with innovative SaaS solutions since 2020.</p>
+        <h3 className="text-xl font-semibold mb-4">Contact Us</h3>
+        <p>123 Coffee Lane, Brewville, CB 12345</p>
+        <p>Phone: (555) 123-4567</p>
+        <p>Email: info@cozycoffeeshop.com</p>
       </div>
       <div>
-        <h3 className="text-lg font-semibold mb-4">Contact</h3>
-        <p className="text-gray-400">Email: info@startupname.com</p>
-        <p className="text-gray-400">Phone: (123) 456-7890</p>
+        <h3 className="text-xl font-semibold mb-4">Hours</h3>
+        <p>Monday - Friday: 6am - 8pm</p>
+        <p>Saturday - Sunday: 7am - 9pm</p>
       </div>
       <div>
-        <h3 className="text-lg font-semibold mb-4">Legal</h3>
-        <ul className="text-gray-400">
-          <li><a href="#" className="hover:text-white">Terms of Service</a></li>
+        <h3 className="text-xl font-semibold mb-4">Policies</h3>
+        <ul>
           <li><a href="#" className="hover:text-white">Privacy Policy</a></li>
+          <li><a href="#" className="hover:text-white">Terms of Service</a></li>
+          <li><a href="#" className="hover:text-white">Refund Policy</a></li>
         </ul>
       </div>
-      <div>
-        <h3 className="text-lg font-semibold mb-4">Follow Us</h3>
-        <div className="flex space-x-4">
-          <a href="#" className="text-gray-400 hover:text-white">
-            <span className="sr-only">Facebook</span>
-            <svg className="h-6 w-6" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-              <path fillRule="evenodd" d="M22 12c0-5.523-4.477-10-10-10S2 6.477 2 12c0 4.991 3.657 9.128 8.438 9.878v-6.987h-2.54V12h2.54V9.797c0-2.506 1.492-3.89 3.777-3.89 1.094 0 2.238.195 2.238.195v2.46h-1.26c-1.243 0-1.63.771-1.63 1.562V12h2.773l-.443 2.89h-2.33v6.988C18.343 21.128 22 16.991 22 12z" clipRule="evenodd" />
-            </svg>
-          </a>
-          <a href="#" className="text-gray-400 hover:text-white">
-            <span className="sr-only">Twitter</span>
-            <svg className="h-6 w-6" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-              <path d="M8.29 20.251c7.547 0 11.675-6.253 11.675-11.675 0-.178 0-.355-.012-.53A8.348 8.348 0 0022 5.92a8.19 8.19 0 01-2.357.646 4.118 4.118 0 001.804-2.27 8.224 8.224 0 01-2.605.996 4.107 4.107 0 00-6.993 3.743 11.65 11.65 0 01-8.457-4.287 4.106 4.106 0 001.27 5.477A4.072 4.072 0 012.8 9.713v.052a4.105 4.105 0 003.292 4.022 4.095 4.095 0 01-1.853.07 4.108 4.108 0 003.834 2.85A8.233 8.233 0 012 18.407a11.616 11.616 0 006.29 1.84" />
-            </svg>
-          </a>
-          <a href="#" className="text-gray-400 hover:text-white">
-            <span className="sr-only">LinkedIn</span>
-            <svg className="h-6 w-6" fill="currentColor" viewBox="0 0 24 24" aria-hidden="true">
-              <path fillRule="evenodd" d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.79-1.75-1.764s.784-1.764 1.75-1.764 1.75.79 1.75 1.764-.783 1.764-1.75 1.764zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z" clipRule="evenodd" />
-            </svg>
-          </a>
-        </div>
-      </div>
     </div>
-    <div className="mt-8 text-center text-gray-400">
-      <p>&copy; 2023 StartupName. All rights reserved.</p>
+    <div className="text-center mt-8">
+      <p>&copy; 2023 Cozy Coffee Shop. All rights reserved.</p>
     </div>
   </footer>
 );
 
+const CartDialog = ({ cartItems, removeFromCart, setShowCart }) => (
+  <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
+    <div className="bg-white p-8 rounded-lg max-w-md w-full">
+      <h2 className="text-2xl font-bold mb-4">Your Cart</h2>
+      {cartItems.length === 0 ? (
+        <p>Your cart is empty.</p>
+      ) : (
+        <ul>
+          {cartItems.map((item, index) => (
+            <li key={index} className="flex justify-between items-center mb-2">
+              <span>{item.name} - ${item.price.toFixed(2)}</span>
+              <button onClick={() => removeFromCart(index)} className="text-red-500 hover:text-red-700">
+                Remove
+              </button>
+            </li>
+          ))}
+        </ul>
+      )}
+      <div className="mt-4 flex justify-between">
+        <button onClick={() => setShowCart(false)} className="bg-gray-200 text-gray-800 py-2 px-4 rounded hover:bg-gray-300 transition duration-300">
+          Close
+        </button>
+        {cartItems.length > 0 && (
+          <button className="bg-amber-500 text-white py-2 px-4 rounded hover:bg-amber-600 transition duration-300">
+            Checkout
+          </button>
+        )}
+      </div>
+    </div>
+  </div>
+);
+
 export default function App() {
+  const [cartItems, setCartItems] = useState([]);
+  const [showCart, setShowCart] = useState(false);
+
+  const addToCart = (product) => {
+    setCartItems([...cartItems, product]);
+  };
+
+  const removeFromCart = (index) => {
+    const newCartItems = [...cartItems];
+    newCartItems.splice(index, 1);
+    setCartItems(newCartItems);
+  };
+
   return (
-    <div className="font-sans">
-      <Header />
-      <Hero />
-      <Features />
-      <SocialProof />
-      <FAQ />
-      <Banner />
+    <div className="min-h-screen flex flex-col">
+      <Header cartItems={cartItems} setShowCart={setShowCart} />
+      <main className="flex-grow">
+        <Hero />
+        <Products addToCart={addToCart} />
+        <Banner />
+      </main>
       <Footer />
+      {showCart && (
+        <CartDialog
+          cartItems={cartItems}
+          removeFromCart={removeFromCart}
+          setShowCart={setShowCart}
+        />
+      )}
     </div>
   );
 }
