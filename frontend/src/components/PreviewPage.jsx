@@ -1,64 +1,39 @@
 import React from 'react';
-import { AppBar, Toolbar, Typography, Button, Box, Container, IconButton } from '@mui/material';
-import SearchIcon from '@mui/icons-material/Search';
+import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
 
-const PreviewPage = () => {
+const data = [
+  { name: 'Jan', value: 400 },
+  { name: 'Feb', value: 300 },
+  { name: 'Mar', value: 200 },
+  { name: 'Apr', value: 278 },
+  { name: 'May', value: 189 },
+  { name: 'Jun', value: 239 },
+  { name: 'Jul', value: 349 },
+  { name: 'Aug', value: 430 },
+  { name: 'Sep', value: 601 },
+];
+
+export default function App() {
   return (
-    <Box sx={{ flexGrow: 1 }}>
-      <AppBar position="static" color="transparent" elevation={0}>
-        <Toolbar>
-          <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-            <img src="https://placehold.co/30x30" alt="Company logo" style={{ verticalAlign: 'middle' }} />
-          </Typography>
-          <Button color="inherit">Research</Button>
-          <Button color="inherit">Products</Button>
-          <Button color="inherit">Safety</Button>
-          <Button color="inherit">Company</Button>
-          <IconButton color="inherit">
-            <SearchIcon />
-          </IconButton>
-        </Toolbar>
-      </AppBar>
-      <Container maxWidth={false} disableGutters>
-        <Box
-          sx={{
-            height: '80vh',
-            background: 'linear-gradient(45deg, #e6f2ff 0%, #ffe6f2 100%)',
-            display: 'flex',
-            flexDirection: 'column',
-            justifyContent: 'center',
-            alignItems: 'center',
-            textAlign: 'center',
-            padding: 4,
-          }}
-        >
-          <Typography variant="h2" component="h1" gutterBottom sx={{ fontWeight: 'bold', color: 'white' }}>
-            ChatGPT on your desktop
-          </Typography>
-          <Typography variant="h5" gutterBottom sx={{ color: 'white', maxWidth: '600px', mb: 4 }}>
-            Chat about email, screenshots, files, and anything on your screen.
-          </Typography>
-          <Button variant="contained" sx={{ backgroundColor: 'white', color: 'black', '&:hover': { backgroundColor: '#f0f0f0' } }}>
-            Learn more
-          </Button>
-        </Box>
-      </Container>
-      <Box sx={{ display: 'flex', justifyContent: 'center', mt: 2 }}>
-        {[0, 1, 2, 3, 4].map((index) => (
-          <Box
-            key={index}
-            sx={{
-              width: 10,
-              height: 10,
-              borderRadius: '50%',
-              backgroundColor: index === 0 ? 'black' : '#ccc',
-              mx: 0.5,
-            }}
-          />
-        ))}
-      </Box>
-    </Box>
+    <div className="flex h-screen bg-green-100 p-4">
+      <div className="flex w-full bg-white rounded-lg shadow-lg overflow-hidden">
+        <div className="w-1/4 border-r border-gray-200 p-4">
+          <h2 className="text-xl font-semibold mb-4">navigator</h2>
+        </div>
+        <div className="w-3/4 p-4">
+          <h2 className="text-xl font-semibold mb-4">Chart</h2>
+          <ResponsiveContainer width="100%" height={400}>
+            <LineChart data={data}>
+              <CartesianGrid strokeDasharray="3 3" />
+              <XAxis dataKey="name" />
+              <YAxis />
+              <Tooltip />
+              <Legend />
+              <Line type="monotone" dataKey="value" stroke="#000000" strokeWidth={2} />
+            </LineChart>
+          </ResponsiveContainer>
+        </div>
+      </div>
+    </div>
   );
-};
-
-export default PreviewPage;
+}
