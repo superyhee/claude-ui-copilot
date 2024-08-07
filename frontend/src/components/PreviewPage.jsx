@@ -1,34 +1,37 @@
 import React from 'react';
-import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
+import { Box, Typography } from '@mui/material';
+import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
 
 const data = [
-  { year: 2018, budget: 300000 },
-  { year: 2019, budget: 100000 },
-  { year: 2020, budget: 350000 },
-  { year: 2021, budget: 380000 },
-  { year: 2022, budget: 400000 },
+  { name: 'Jan', value: 400 },
+  { name: 'Feb', value: 300 },
+  { name: 'Mar', value: 200 },
+  { name: 'Apr', value: 278 },
+  { name: 'May', value: 189 },
+  { name: 'Jun', value: 239 },
+  { name: 'Jul', value: 349 },
 ];
 
-export default function App() {
+const PreviewPage = () => {
   return (
-    <div className="text-black p-4 flex flex-col items-center justify-center min-h-screen bg-gray-100">
-      <h1 className="text-3xl font-bold mb-8 text-blue-600">Company Budget Over Years</h1>
-      <div className="w-full max-w-4xl bg-white p-6 rounded-lg shadow-lg">
-        <ResponsiveContainer width="100%" height={400}>
-          <LineChart data={data} margin={{ top: 5, right: 30, left: 20, bottom: 5 }}>
+    <Box sx={{ display: 'flex', height: '100vh', bgcolor: '#000', color: '#fff', p: 2 }}>
+      <Box sx={{ width: '20%', border: '1px solid #fff', mr: 2, p: 2 }}>
+        <Typography variant="h6">navigator</Typography>
+      </Box>
+      <Box sx={{ width: '80%', border: '1px solid #fff', p: 2 }}>
+        <Typography variant="h6" sx={{ mb: 2 }}>Chart</Typography>
+        <ResponsiveContainer width="100%" height="90%">
+          <LineChart data={data}>
             <CartesianGrid strokeDasharray="3 3" />
-            <XAxis dataKey="year" />
+            <XAxis dataKey="name" />
             <YAxis />
             <Tooltip />
-            <Legend />
-            <Line type="monotone" dataKey="budget" stroke="#8884d8" activeDot={{ r: 8 }} />
+            <Line type="monotone" dataKey="value" stroke="#fff" />
           </LineChart>
         </ResponsiveContainer>
-      </div>
-      <p className="mt-4 text-gray-600 text-center max-w-2xl">
-        This chart displays the company's total yearly budget from 2018 to 2022. 
-        We can observe the budget trends and fluctuations over this five-year period.
-      </p>
-    </div>
+      </Box>
+    </Box>
   );
-}
+};
+
+export default PreviewPage;
