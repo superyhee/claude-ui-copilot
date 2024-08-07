@@ -18,8 +18,25 @@ import {
   Paper,
   TablePagination,
   IconButton,
+  ThemeProvider,
+  createTheme,
 } from '@mui/material';
 import { Add as AddIcon, Edit as EditIcon, Delete as DeleteIcon, Search as SearchIcon } from '@mui/icons-material';
+
+const theme = createTheme({
+  palette: {
+    primary: {
+      main: '#3f51b5',
+    },
+    secondary: {
+      main: '#f50057',
+    },
+    background: {
+      default: '#f0f2f5',
+      paper: '#ffffff',
+    },
+  },
+});
 
 const initialData = [
   { id: 1, name: 'John Doe', email: 'john@example.com', role: 'Developer' },
@@ -83,96 +100,100 @@ const PreviewPage = () => {
   const paginatedData = sortedData.slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage);
 
   return (
-    <Box sx={{ p: 4, backgroundColor: '#f5f5f5', minHeight: '100vh' }}>
-      <Stack spacing={4}>
-        <Typography variant="h4" align="center" gutterBottom>
-          Employee Management System
-        </Typography>
-        <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-          <Button variant="contained" startIcon={<AddIcon />} onClick={handleOpen}>
-            Add Employee
-          </Button>
-          <TextField
-            variant="outlined"
-            size="small"
-            placeholder="Search..."
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-            InputProps={{
-              startAdornment: <SearchIcon color="action" />,
-            }}
-          />
-        </Box>
-        <TableContainer component={Paper}>
-          <Table>
-            <TableHead>
-              <TableRow>
-                <TableCell>Name</TableCell>
-                <TableCell>Email</TableCell>
-                <TableCell>Role</TableCell>
-                <TableCell>Actions</TableCell>
-              </TableRow>
-            </TableHead>
-            <TableBody>
-              {paginatedData.map((item) => (
-                <TableRow key={item.id}>
-                  <TableCell>{item.name}</TableCell>
-                  <TableCell>{item.email}</TableCell>
-                  <TableCell>{item.role}</TableCell>
-                  <TableCell>
-                    <IconButton onClick={() => handleEdit(item)} color="primary">
-                      <EditIcon />
-                    </IconButton>
-                    <IconButton onClick={() => handleDelete(item.id)} color="error">
-                      <DeleteIcon />
-                    </IconButton>
-                  </TableCell>
+    <ThemeProvider theme={theme}>
+      <Box sx={{ p: 4, backgroundColor: 'background.default', minHeight: '100vh' }}>
+        <Stack spacing={4}>
+          <Typography variant="h4" align="center" gutterBottom color="primary">
+            Employee Management System
+          </Typography>
+          <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+            <Button variant="contained" startIcon={<AddIcon />} onClick={handleOpen} color="secondary">
+              Add Employee
+            </Button>
+            <TextField
+              variant="outlined"
+              size="small"
+              placeholder="Search..."
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              InputProps={{
+                startAdornment: <SearchIcon color="action" />,
+              }}
+            />
+          </Box>
+          <TableContainer component={Paper} elevation={3}>
+            <Table>
+              <TableHead>
+                <TableRow>
+                  <TableCell sx={{ fontWeight: 'bold', backgroundColor: 'primary.light', color: 'primary.contrastText' }}>Name</TableCell>
+                  <TableCell sx={{ fontWeight: 'bold', backgroundColor: 'primary.light', color: 'primary.contrastText' }}>Email</TableCell>
+                  <TableCell sx={{ fontWeight: 'bold', backgroundColor: 'primary.light', color: 'primary.contrastText' }}>Role</TableCell>
+                  <TableCell sx={{ fontWeight: 'bold', backgroundColor: 'primary.light', color: 'primary.contrastText' }}>Actions</TableCell>
                 </TableRow>
-              ))}
-            </TableBody>
-          </Table>
-        </TableContainer>
-        <TablePagination
-          component="div"
-          count={filteredData.length}
-          page={page}
-          onPageChange={handleChangePage}
-          rowsPerPage={rowsPerPage}
-          onRowsPerPageChange={handleChangeRowsPerPage}
-        />
-      </Stack>
-      <Dialog open={open} onClose={handleClose}>
-        <DialogTitle>{editItem ? 'Edit Employee' : 'Add Employee'}</DialogTitle>
-        <DialogContent>
-          <Stack spacing={2} sx={{ pt: 2 }}>
-            <TextField
-              label="Name"
-              value={newItem.name}
-              onChange={(e) => setNewItem({ ...newItem, name: e.target.value })}
-              fullWidth
-            />
-            <TextField
-              label="Email"
-              value={newItem.email}
-              onChange={(e) => setNewItem({ ...newItem, email: e.target.value })}
-              fullWidth
-            />
-            <TextField
-              label="Role"
-              value={newItem.role}
-              onChange={(e) => setNewItem({ ...newItem, role: e.target.value })}
-              fullWidth
-            />
-          </Stack>
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={handleClose}>Cancel</Button>
-          <Button onClick={editItem ? handleUpdate : handleAdd} variant="contained">
-            {editItem ? 'Update' : 'Add'}
-          </Button>
-        </DialogActions>
-      </Dialog>
-    </Box>
+              </TableHead>
+              <TableBody>
+                {paginatedData.map((item) => (
+                  <TableRow key={item.id} hover>
+                    <TableCell>{item.name}</TableCell>
+                    <TableCell>{item.email}</TableCell>
+                    <TableCell>{item.role}</TableCell>
+                    <TableCell>
+                      <IconButton onClick={() => handleEdit(item)} color="primary">
+                        <EditIcon />
+                      </IconButton>
+                      <IconButton onClick={() => handleDelete(item.id)} color="error">
+                        <DeleteIcon />
+                      </IconButton>
+                    </TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </TableContainer>
+          <TablePagination
+            component="div"
+            count={filteredData.length}
+            page={page}
+            onPageChange={handleChangePage}
+            rowsPerPage={rowsPerPage}
+            onRowsPerPageChange={handleChangeRowsPerPage}
+          />
+        </Stack>
+        <Dialog open={open} onClose={handleClose}>
+          <DialogTitle sx={{ backgroundColor: 'primary.main', color: 'primary.contrastText' }}>
+            {editItem ? 'Edit Employee' : 'Add Employee'}
+          </DialogTitle>
+          <DialogContent>
+            <Stack spacing={2} sx={{ pt: 2 }}>
+              <TextField
+                label="Name"
+                value={newItem.name}
+                onChange={(e) => setNewItem({ ...newItem, name: e.target.value })}
+                fullWidth
+              />
+              <TextField
+                label="Email"
+                value={newItem.email}
+                onChange={(e) => setNewItem({ ...newItem, email: e.target.value })}
+                fullWidth
+              />
+              <TextField
+                label="Role"
+                value={newItem.role}
+                onChange={(e) => setNewItem({ ...newItem, role: e.target.value })}
+                fullWidth
+              />
+            </Stack>
+          </DialogContent>
+          <DialogActions>
+            <Button onClick={handleClose}>Cancel</Button>
+            <Button onClick={editItem ? handleUpdate : handleAdd} variant="contained" color="secondary">
+              {editItem ? 'Update' : 'Add'}
+            </Button>
+          </DialogActions>
+        </Dialog>
+      </Box>
+    </ThemeProvider>
   );
 };
 
