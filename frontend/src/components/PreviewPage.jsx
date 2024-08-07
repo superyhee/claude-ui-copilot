@@ -8,7 +8,7 @@ import EmailIcon from '@mui/icons-material/Email';
 import LocationOnIcon from '@mui/icons-material/LocationOn';
 
 const GradientBackground = styled(Box)({
-  background: 'linear-gradient(45deg, #FE6B8B 30%, #FF8E53 90%)',
+  background: 'linear-gradient(45deg, #2196F3 30%, #21CBF3 90%)',
   color: 'white',
   padding: '4rem 0',
 });
@@ -16,6 +16,7 @@ const GradientBackground = styled(Box)({
 const FeatureIcon = styled(Box)({
   fontSize: '3rem',
   marginBottom: '1rem',
+  color: '#2196F3',
 });
 
 const testimonials = [
@@ -31,7 +32,7 @@ const faqs = [
 const LandingPage = () => {
   return (
     <Box>
-      <AppBar position="static">
+      <AppBar position="static" sx={{ backgroundColor: '#1565C0' }}>
         <Toolbar>
           <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
             StartupLogo
@@ -51,25 +52,25 @@ const LandingPage = () => {
           <Typography variant="h5" paragraph>
             We help startups transform ideas into successful businesses.
           </Typography>
-          <Button variant="contained" size="large">
+          <Button variant="contained" size="large" sx={{ backgroundColor: '#FFFFFF', color: '#2196F3' }}>
             Get Started
           </Button>
         </Container>
       </GradientBackground>
 
       <Container sx={{ my: 8 }}>
-        <Typography variant="h4" gutterBottom align="center">
+        <Typography variant="h4" gutterBottom align="center" sx={{ color: '#1565C0' }}>
           Our Features
         </Typography>
         <Grid container spacing={4}>
           {['Innovative Solutions', 'Expert Guidance', 'Scalable Technology'].map((feature, index) => (
             <Grid item xs={12} md={4} key={index}>
-              <Card>
+              <Card sx={{ height: '100%', display: 'flex', flexDirection: 'column', boxShadow: 3 }}>
                 <CardContent>
                   <FeatureIcon>
                     <StarIcon fontSize="inherit" />
                   </FeatureIcon>
-                  <Typography variant="h6" gutterBottom>
+                  <Typography variant="h6" gutterBottom sx={{ color: '#1565C0' }}>
                     {feature}
                   </Typography>
                   <Typography>
@@ -82,20 +83,20 @@ const LandingPage = () => {
         </Grid>
       </Container>
 
-      <Box sx={{ bgcolor: '#f5f5f5', py: 8 }}>
+      <Box sx={{ bgcolor: '#E3F2FD', py: 8 }}>
         <Container>
-          <Typography variant="h4" gutterBottom align="center">
+          <Typography variant="h4" gutterBottom align="center" sx={{ color: '#1565C0' }}>
             What Our Clients Say
           </Typography>
           <Grid container spacing={4}>
             {testimonials.map((testimonial, index) => (
               <Grid item xs={12} md={6} key={index}>
-                <Card>
+                <Card sx={{ height: '100%', display: 'flex', flexDirection: 'column', boxShadow: 3 }}>
                   <CardContent>
                     <Typography variant="body1" paragraph>
                       "{testimonial.text}"
                     </Typography>
-                    <Typography variant="subtitle1">- {testimonial.name}</Typography>
+                    <Typography variant="subtitle1" sx={{ color: '#1565C0' }}>- {testimonial.name}</Typography>
                   </CardContent>
                 </Card>
               </Grid>
@@ -105,13 +106,13 @@ const LandingPage = () => {
       </Box>
 
       <Container sx={{ my: 8 }}>
-        <Typography variant="h4" gutterBottom align="center">
+        <Typography variant="h4" gutterBottom align="center" sx={{ color: '#1565C0' }}>
           Frequently Asked Questions
         </Typography>
         {faqs.map((faq, index) => (
           <Accordion key={index}>
             <AccordionSummary expandIcon={<ExpandMoreIcon />}>
-              <Typography variant="h6">{faq.question}</Typography>
+              <Typography variant="h6" sx={{ color: '#1565C0' }}>{faq.question}</Typography>
             </AccordionSummary>
             <AccordionDetails>
               <Typography>{faq.answer}</Typography>
@@ -129,14 +130,14 @@ const LandingPage = () => {
             Sign up now and get 30% off your first month!
           </Typography>
           <Box display="flex" justifyContent="center">
-            <Button variant="contained" size="large" sx={{ bgcolor: 'white', color: 'primary.main' }}>
+            <Button variant="contained" size="large" sx={{ bgcolor: 'white', color: '#2196F3' }}>
               Sign Up Now
             </Button>
           </Box>
         </Container>
       </GradientBackground>
 
-      <Box component="footer" sx={{ bgcolor: 'background.paper', py: 6 }}>
+      <Box component="footer" sx={{ bgcolor: '#1565C0', color: 'white', py: 6 }}>
         <Container maxWidth="lg">
           <Grid container spacing={4}>
             <Grid item xs={12} md={4}>
@@ -170,9 +171,9 @@ const LandingPage = () => {
                 label="Enter your email"
                 variant="outlined"
                 size="small"
-                sx={{ mb: 2 }}
+                sx={{ mb: 2, backgroundColor: 'white' }}
               />
-              <Button variant="contained">Subscribe</Button>
+              <Button variant="contained" sx={{ backgroundColor: '#FFFFFF', color: '#2196F3' }}>Subscribe</Button>
             </Grid>
           </Grid>
           <Box mt={5}>
