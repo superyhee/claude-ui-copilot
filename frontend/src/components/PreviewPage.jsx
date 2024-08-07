@@ -5,32 +5,34 @@ import ZoomOutIcon from '@mui/icons-material/ZoomOut';
 import mermaid from 'mermaid';
 
 const mermaidCode = `
-mindmap
-  root((AI))
-    Machine Learning
-      Supervised Learning
-      Unsupervised Learning
-      Reinforcement Learning
-    Deep Learning
-      Neural Networks
-      Convolutional Neural Networks
-      Recurrent Neural Networks
-    Natural Language Processing
-      Text Analysis
-      Speech Recognition
-      Machine Translation
-    Computer Vision
-      Image Recognition
-      Object Detection
-      Facial Recognition
-    Robotics
-      Autonomous Vehicles
-      Drones
-      Industrial Robots
-    Ethics and AI
-      Bias in AI
-      AI Safety
-      AI Governance
+erDiagram
+    CUSTOMER ||--o{ ORDER : places
+    CUSTOMER {
+        string customerID PK
+        string name
+        string email
+        string address
+    }
+    ORDER ||--|{ ORDER_ITEM : contains
+    ORDER {
+        string orderID PK
+        string customerID FK
+        date orderDate
+        string status
+    }
+    PRODUCT ||--o{ ORDER_ITEM : includes
+    PRODUCT {
+        string productID PK
+        string name
+        number price
+        string description
+    }
+    ORDER_ITEM {
+        string orderItemID PK
+        string orderID FK
+        string productID FK
+        number quantity
+    }
 `;
 
 const PreviewPage = () => {
@@ -43,17 +45,17 @@ const PreviewPage = () => {
   };
 
   return (
-    <Box sx={{ width: '100%', height: '90vh', display: 'flex', justifyContent: 'center', alignItems: 'center', backgroundColor: '#f5f5f5' }}>
-      <Box sx={{ flex: 1, display: 'flex', height: '100%', alignItems: 'center', justifyContent: 'center', overflow: 'auto', border: '1px solid #e0e0e0', borderRadius: '8px', backgroundColor: '#ffffff' }}>
+    <Box sx={{ width: '100%', height: '90vh', display: 'flex', justifyContent: 'center', alignItems: 'center', backgroundColor: '#f0f4f8' }}>
+      <Box sx={{ flex: 1, display: 'flex', height: '100%', alignItems: 'center', justifyContent: 'center', overflow: 'auto', border: '1px solid #d0d9e6', borderRadius: '12px', backgroundColor: '#ffffff', boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)' }}>
         <Box sx={{ transform: `scale(${scale})`, margin: 2 }}>
           <Mermaid chart={mermaidCode} />
         </Box>
       </Box>
       <Box sx={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', marginLeft: 2 }}>
-        <IconButton onClick={handleZoomOut} disabled={scale <= 0.5} sx={{ backgroundColor: '#e0e0e0', marginBottom: 1 }}>
+        <IconButton onClick={handleZoomOut} disabled={scale <= 0.5} sx={{ backgroundColor: '#e0e0e0', marginBottom: 1, '&:hover': { backgroundColor: '#d0d0d0' } }}>
           <ZoomOutIcon />
         </IconButton>
-        <IconButton onClick={handleZoomIn} sx={{ backgroundColor: '#e0e0e0' }}>
+        <IconButton onClick={handleZoomIn} sx={{ backgroundColor: '#e0e0e0', '&:hover': { backgroundColor: '#d0d0d0' } }}>
           <ZoomInIcon />
         </IconButton>
       </Box>
@@ -64,8 +66,12 @@ const PreviewPage = () => {
 mermaid.initialize({
   startOnLoad: true,
   theme: 'neutral',
-  flowchart: {
-    curve: 'basis'
+  er: {
+    useMaxWidth: false,
+    layoutDirection: 'TB',
+    entityPadding: 15,
+    stroke: '#3080b5',
+    fill: '#f4f9fd'
   }
 });
 
