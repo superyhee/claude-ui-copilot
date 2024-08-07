@@ -4,36 +4,7 @@ import ZoomInIcon from '@mui/icons-material/ZoomIn';
 import ZoomOutIcon from '@mui/icons-material/ZoomOut';
 import mermaid from 'mermaid';
 
-const mermaidCode = `
-erDiagram
-    CUSTOMER ||--o{ ORDER : places
-    CUSTOMER {
-        string customerID PK
-        string name
-        string email
-        string address
-    }
-    ORDER ||--|{ ORDER_ITEM : contains
-    ORDER {
-        string orderID PK
-        string customerID FK
-        date orderDate
-        string status
-    }
-    PRODUCT ||--o{ ORDER_ITEM : includes
-    PRODUCT {
-        string productID PK
-        string name
-        number price
-        string description
-    }
-    ORDER_ITEM {
-        string orderItemID PK
-        string orderID FK
-        string productID FK
-        number quantity
-    }
-`;
+const mermaidCode = "classDiagram\n    class User {\n        +String id\n        +String name\n        +String email\n        +String password\n        +register()\n        +login()\n        +updateProfile()\n    }\n    class Product {\n        +String id\n        +String name\n        +Number price\n        +String description\n        +String category\n        +addToCart()\n        +removeFromCart()\n    }\n    class Cart {\n        +String id\n        +User user\n        +List<Product> items\n        +Number total\n        +addItem()\n        +removeItem()\n        +updateQuantity()\n        +checkout()\n    }\n    class Order {\n        +String id\n        +User user\n        +List<Product> items\n        +Number total\n        +String status\n        +Date orderDate\n        +placeOrder()\n        +cancelOrder()\n        +trackOrder()\n    }\n    class Payment {\n        +String id\n        +Order order\n        +Number amount\n        +String paymentMethod\n        +String status\n        +processPayment()\n        +refundPayment()\n    }\n    User \"1\" -- \"*\" Order : places\n    User \"1\" -- \"1\" Cart : has\n    Cart \"1\" -- \"*\" Product : contains\n    Order \"1\" -- \"*\" Product : includes\n    Order \"1\" -- \"1\" Payment : has";
 
 const PreviewPage = () => {
   const [scale, setScale] = useState(1.5);
@@ -66,10 +37,11 @@ const PreviewPage = () => {
 mermaid.initialize({
   startOnLoad: true,
   theme: 'neutral',
-  er: {
+  classDiagram: {
     useMaxWidth: false,
-    layoutDirection: 'TB',
-    entityPadding: 15,
+    diagramPadding: 20,
+    boxMargin: 10,
+    boxPadding: 10,
     stroke: '#3080b5',
     fill: '#f4f9fd'
   }
