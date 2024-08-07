@@ -1,82 +1,80 @@
-import React from 'react';
-import Plot from 'react-plotly.js';
+import React, { useState } from 'react';
+import { Box, IconButton } from '@mui/material';
+import ZoomInIcon from '@mui/icons-material/ZoomIn';
+import ZoomOutIcon from '@mui/icons-material/ZoomOut';
+import mermaid from 'mermaid';
 
-function App() {
-  const data = [{
-    type: 'scatter3d',
-    mode: 'markers',
-    x: Array.from({length: 100}, () => Math.random() * 10),
-    y: Array.from({length: 100}, () => Math.random() * 10),
-    z: Array.from({length: 100}, () => Math.random() * 10),
-    marker: {
-      size: 5,
-      color: Array.from({length: 100}, () => Math.random() * 10),
-      colorscale: 'Viridis',
-      opacity: 0.8
-    }
-  }];
+const mermaidCode = `
+mindmap
+  root((AI))
+    Machine Learning
+      Supervised Learning
+      Unsupervised Learning
+      Reinforcement Learning
+    Deep Learning
+      Neural Networks
+      Convolutional Neural Networks
+      Recurrent Neural Networks
+    Natural Language Processing
+      Text Analysis
+      Speech Recognition
+      Machine Translation
+    Computer Vision
+      Image Recognition
+      Object Detection
+      Facial Recognition
+    Robotics
+      Autonomous Vehicles
+      Drones
+      Industrial Robots
+    Ethics and AI
+      Bias in AI
+      AI Safety
+      AI Governance
+`;
 
-  const layout = {
-    title: '3D Scatter Plot',
-    autosize: false,
-    width: 800,
-    height: 600,
-    scene: {
-      xaxis: { title: 'X Axis' },
-      yaxis: { title: 'Y Axis' },
-      zaxis: { title: 'Z Axis' }
-    },
-    margin: {
-      l: 0,
-      r: 0,
-      b: 0,
-      t: 40
-    }
+const PreviewPage = () => {
+  const [scale, setScale] = useState(1.5);
+  const handleZoomIn = () => {
+    setScale(scale + 0.1);
+  };
+  const handleZoomOut = () => {
+    setScale(Math.max(scale - 0.1, 0.5));
   };
 
   return (
-    <div style={{
-      display: 'flex',
-      flexDirection: 'column',
-      alignItems: 'center',
-      justifyContent: 'center',
-      minHeight: '100vh',
-      backgroundColor: '#f0f0f0',
-      padding: '20px'
-    }}>
-      <h1 style={{
-        color: '#333',
-        marginBottom: '20px',
-        fontFamily: 'Arial, sans-serif'
-      }}>
-        3D Scatter Plot Visualization
-      </h1>
-      <div style={{
-        backgroundColor: 'white',
-        borderRadius: '10px',
-        boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)',
-        padding: '20px'
-      }}>
-        <Plot
-          data={data}
-          layout={layout}
-          config={{
-            responsive: true,
-            displayModeBar: true
-          }}
-        />
-      </div>
-      <p style={{
-        marginTop: '20px',
-        color: '#666',
-        textAlign: 'center',
-        maxWidth: '800px',
-        fontFamily: 'Arial, sans-serif'
-      }}>
-        This 3D scatter plot visualizes random data points in a three-dimensional space. Each point's position is determined by its X, Y, and Z coordinates, while its color represents an additional dimension of data.
-      </p>
-    </div>
+    <Box sx={{ width: '100%', height: '90vh', display: 'flex', justifyContent: 'center', alignItems: 'center', backgroundColor: '#f5f5f5' }}>
+      <Box sx={{ flex: 1, display: 'flex', height: '100%', alignItems: 'center', justifyContent: 'center', overflow: 'auto', border: '1px solid #e0e0e0', borderRadius: '8px', backgroundColor: '#ffffff' }}>
+        <Box sx={{ transform: `scale(${scale})`, margin: 2 }}>
+          <Mermaid chart={mermaidCode} />
+        </Box>
+      </Box>
+      <Box sx={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', marginLeft: 2 }}>
+        <IconButton onClick={handleZoomOut} disabled={scale <= 0.5} sx={{ backgroundColor: '#e0e0e0', marginBottom: 1 }}>
+          <ZoomOutIcon />
+        </IconButton>
+        <IconButton onClick={handleZoomIn} sx={{ backgroundColor: '#e0e0e0' }}>
+          <ZoomInIcon />
+        </IconButton>
+      </Box>
+    </Box>
   );
-}
+};
 
-export default App;
+mermaid.initialize({
+  startOnLoad: true,
+  theme: 'neutral',
+  flowchart: {
+    curve: 'basis'
+  }
+});
+
+const Mermaid = ({ chart }) => {
+  React.useEffect(() => {
+    mermaid.contentLoaded();
+  }, []);
+
+  return <div className="mermaid">{chart}</div>;
+};
+
+export default PreviewPage;
