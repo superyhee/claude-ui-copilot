@@ -1,143 +1,108 @@
-import React, { useState } from 'react';
-import { Box, Typography, Stack, Button, Slider, IconButton, TextField, Menu, MenuItem } from '@mui/material';
-import { Crop, Rotate90DegreesCcw, Brightness6, Contrast, Colorize, Tune, Flip, Save } from '@mui/icons-material';
+import React, { useState, useCallback } from 'react';
+import { Tree } from 'react-d3-tree';
 
-const ImageEditor = () => {
-  const [image, setImage] = useState('https://placehold.co/600x400');
-  const [brightness, setBrightness] = useState(100);
-  const [contrast, setContrast] = useState(100);
-  const [rotation, setRotation] = useState(0);
-  const [saturation, setSaturation] = useState(100);
-  const [hue, setHue] = useState(0);
-  const [blur, setBlur] = useState(0);
-  const [flipX, setFlipX] = useState(1);
-  const [flipY, setFlipY] = useState(1);
-  const [anchorEl, setAnchorEl] = useState(null);
-
-  const handleImageUpload = (event) => {
-    const file = event.target.files[0];
-    const reader = new FileReader();
-    reader.onload = (e) => setImage(e.target.result);
-    reader.readAsDataURL(file);
-  };
-
-  const applyFilters = () => {
-    return {
-      filter: `brightness(${brightness}%) contrast(${contrast}%) saturate(${saturation}%) hue-rotate(${hue}deg) blur(${blur}px)`,
-      transform: `rotate(${rotation}deg) scaleX(${flipX}) scaleY(${flipY})`,
-    };
-  };
-
-  const handleMenuOpen = (event) => {
-    setAnchorEl(event.currentTarget);
-  };
-
-  const handleMenuClose = () => {
-    setAnchorEl(null);
-  };
-
-  const handleSave = () => {
-    // Mock save functionality
-    console.log('Image saved');
-    handleMenuClose();
-  };
-
-  return (
-    <Box sx={{ p: 4, backgroundColor: '#f5f5f5', height: '100%' }}>
-      <Stack alignItems="center" spacing={3}>
-        <Typography variant="h4">Advanced Image Editor</Typography>
-        <Button variant="contained" component="label">
-          Upload Image
-          <input type="file" hidden onChange={handleImageUpload} accept="image/*" />
-        </Button>
-        <Box sx={{ maxWidth: '100%', maxHeight: '60vh', overflow: 'hidden' }}>
-          <img
-            src={image}
-            alt="Image being edited"
-            style={{ maxWidth: '100%', maxHeight: '100%', ...applyFilters() }}
-          />
-        </Box>
-        <Stack direction="row" spacing={2} alignItems="center">
-          <IconButton onClick={() => setRotation((prev) => (prev + 90) % 360)}>
-            <Rotate90DegreesCcw />
-          </IconButton>
-          <IconButton onClick={() => setFlipX((prev) => prev * -1)}>
-            <Flip />
-          </IconButton>
-          <IconButton onClick={() => setFlipY((prev) => prev * -1)}>
-            <Flip sx={{ transform: 'rotate(90deg)' }} />
-          </IconButton>
-          <IconButton>
-            <Crop />
-          </IconButton>
-          <IconButton onClick={handleMenuOpen}>
-            <Save />
-          </IconButton>
-        </Stack>
-        <Menu
-          anchorEl={anchorEl}
-          open={Boolean(anchorEl)}
-          onClose={handleMenuClose}
-        >
-          <MenuItem onClick={handleSave}>Save as JPG</MenuItem>
-          <MenuItem onClick={handleSave}>Save as PNG</MenuItem>
-        </Menu>
-        <Stack spacing={2} sx={{ width: '100%', maxWidth: 300 }}>
-          <Typography gutterBottom>Brightness</Typography>
-          <Stack direction="row" spacing={2} alignItems="center">
-            <Brightness6 />
-            <Slider
-              value={brightness}
-              onChange={(e, newValue) => setBrightness(newValue)}
-              min={0}
-              max={200}
-            />
-          </Stack>
-          <Typography gutterBottom>Contrast</Typography>
-          <Stack direction="row" spacing={2} alignItems="center">
-            <Contrast />
-            <Slider
-              value={contrast}
-              onChange={(e, newValue) => setContrast(newValue)}
-              min={0}
-              max={200}
-            />
-          </Stack>
-          <Typography gutterBottom>Saturation</Typography>
-          <Stack direction="row" spacing={2} alignItems="center">
-            <Colorize />
-            <Slider
-              value={saturation}
-              onChange={(e, newValue) => setSaturation(newValue)}
-              min={0}
-              max={200}
-            />
-          </Stack>
-          <Typography gutterBottom>Hue</Typography>
-          <Stack direction="row" spacing={2} alignItems="center">
-            <Tune />
-            <Slider
-              value={hue}
-              onChange={(e, newValue) => setHue(newValue)}
-              min={0}
-              max={360}
-            />
-          </Stack>
-          <Typography gutterBottom>Blur</Typography>
-          <Stack direction="row" spacing={2} alignItems="center">
-            <Tune />
-            <Slider
-              value={blur}
-              onChange={(e, newValue) => setBlur(newValue)}
-              min={0}
-              max={10}
-              step={0.1}
-            />
-          </Stack>
-        </Stack>
-      </Stack>
-    </Box>
-  );
+const initData = {
+  name: '人工智能',
+  children: [
+    {
+      name: '机器学习',
+      children: [
+        { name: '监督学习' },
+        { name: '无监督学习' },
+        { name: '强化学习' },
+      ],
+    },
+    {
+      name: '深度学习',
+      children: [
+        { name: '神经网络' },
+        { name: '卷积神经网络' },
+        { name: '循环神经网络' },
+      ],
+    },
+    {
+      name: '自然语言处理',
+      children: [
+        { name: '语音识别' },
+        { name: '机器翻译' },
+        { name: '文本分析' },
+      ],
+    },
+    {
+      name: '计算机视觉',
+      children: [
+        { name: '图像识别' },
+        { name: '物体检测' },
+        { name: '人脸识别' },
+      ],
+    },
+  ],
 };
 
-export default ImageEditor;
+const renderForeignObjectNode = ({
+  nodeDatum,
+  toggleNode,
+  foreignObjectProps
+}) => (
+  <g>
+    <circle r={15}></circle>
+    <foreignObject {...foreignObjectProps}>
+      <div className="nodeName bg-white p-2 rounded shadow cursor-move">
+        <h3 className="text-sm font-semibold">{nodeDatum.name}</h3>
+        {nodeDatum.children && (
+          <button className="text-xs text-blue-500" onClick={toggleNode}>
+            {nodeDatum.__rd3t.collapsed ? 'Expand' : 'Collapse'}
+          </button>
+        )}
+      </div>
+    </foreignObject>
+  </g>
+);
+
+export default function App() {
+  const [translate, setTranslate] = useState({ x: 0, y: 0 });
+  const [treeData, setTreeData] = useState(initData);
+
+  const onNodeMove = useCallback((node, data) => {
+    const newData = JSON.parse(JSON.stringify(treeData));
+    const updateNode = (currentNode) => {
+      if (currentNode.name === node.data.name) {
+        currentNode.x = data.x;
+        currentNode.y = data.y;
+        return true;
+      }
+      if (currentNode.children) {
+        return currentNode.children.some(updateNode);
+      }
+      return false;
+    };
+    updateNode(newData);
+    setTreeData(newData);
+  }, [treeData]);
+
+  return (
+    <div className="w-full h-screen bg-gray-100 p-4 flex flex-col items-center">
+      <h1 className="text-3xl font-bold mb-6 text-gray-800">人工智能发展脑图</h1>
+      <div className="w-full h-5/6 border border-gray-300 rounded-lg shadow-lg bg-white overflow-hidden">
+        <Tree
+          data={treeData}
+          translate={translate}
+          orientation="vertical"
+          renderCustomNodeElement={(rd3tProps) =>
+            renderForeignObjectNode({ ...rd3tProps, foreignObjectProps: { width: 120, height: 60, x: -60, y: -30 } })
+          }
+          onUpdate={(newData) => setTreeData(newData)}
+          onNodeMove={onNodeMove}
+          enableLegacyTransitions={true}
+          separation={{ siblings: 2, nonSiblings: 2 }}
+          zoomable={true}
+          draggable={true}
+          collapsible={true}
+        />
+      </div>
+      <div className="mt-4 text-sm text-gray-600">
+        提示：可以拖拽节点移动位置，点击节点可以展开/收起子节点
+      </div>
+    </div>
+  );
+}
