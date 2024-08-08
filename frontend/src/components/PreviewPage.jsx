@@ -1,128 +1,120 @@
-import React, { useState, useEffect } from 'react';
-import { Box, Typography, Stack, Grid, Button, Card, CardContent, CardActions, CardMedia, TextField, AppBar, Toolbar, IconButton, Badge, Drawer, List, ListItem, ListItemText } from '@mui/material';
-import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
-import MenuIcon from '@mui/icons-material/Menu';
+import React from 'react';
+import { Box, Typography, AppBar, Toolbar, Button, Container, Grid, Card, CardContent, CardMedia, TextField } from '@mui/material';
+import { styled } from '@mui/system';
 
-const ProductCard = ({ product, addToCart }) => (
-  <Card>
-    <CardMedia
-      component="img"
-      height="140"
-      image={`https://placehold.co/300x200?text=${product.name}`}
-      alt={product.name}
-    />
-    <CardContent>
-      <Typography gutterBottom variant="h6" component="div">
-        {product.name}
-      </Typography>
-      <Typography variant="body2" color="text.secondary">
-        ${product.price.toFixed(2)}
-      </Typography>
-    </CardContent>
-    <CardActions>
-      <Button size="small" onClick={() => addToCart(product)}>Add to Cart</Button>
-    </CardActions>
-  </Card>
-);
+const StyledAppBar = styled(AppBar)({
+  background: 'linear-gradient(45deg, #FE6B8B 30%, #FF8E53 90%)',
+});
 
-const ECommerceWebsite = () => {
-  const [products, setProducts] = useState([]);
-  const [cart, setCart] = useState([]);
-  const [isCartOpen, setIsCartOpen] = useState(false);
-  const [isMenuOpen, setIsMenuOpen] = useState(false);
+const HeroSection = styled(Box)({
+  backgroundImage: 'url(https://placehold.co/1200x600?text=AI+Technology)',
+  backgroundSize: 'cover',
+  backgroundPosition: 'center',
+  height: '60vh',
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'center',
+  color: 'white',
+  textAlign: 'center',
+});
 
-  useEffect(() => {
-    // Mock fetching products
-    const mockProducts = [
-      { id: 1, name: 'Product 1', price: 19.99 },
-      { id: 2, name: 'Product 2', price: 29.99 },
-      { id: 3, name: 'Product 3', price: 39.99 },
-      { id: 4, name: 'Product 4', price: 49.99 },
-    ];
-    setProducts(mockProducts);
-  }, []);
+const FeatureCard = styled(Card)({
+  height: '100%',
+  display: 'flex',
+  flexDirection: 'column',
+  transition: '0.3s',
+  '&:hover': {
+    transform: 'translateY(-5px)',
+    boxShadow: '0 4px 20px 0 rgba(0,0,0,0.12)',
+  },
+});
 
-  const addToCart = (product) => {
-    setCart([...cart, product]);
-  };
-
-  const removeFromCart = (productId) => {
-    setCart(cart.filter(item => item.id !== productId));
-  };
-
-  const totalPrice = cart.reduce((sum, item) => sum + item.price, 0);
-
+const PreviewPage = () => {
   return (
-    <Box sx={{ flexGrow: 1 }}>
-      <AppBar position="static">
+    <Box>
+      <StyledAppBar position="static">
         <Toolbar>
-          <IconButton
-            size="large"
-            edge="start"
-            color="inherit"
-            aria-label="menu"
-            sx={{ mr: 2 }}
-            onClick={() => setIsMenuOpen(true)}
-          >
-            <MenuIcon />
-          </IconButton>
           <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-            E-Commerce Store
+            AI SaaS Co.
           </Typography>
-          <IconButton color="inherit" onClick={() => setIsCartOpen(true)}>
-            <Badge badgeContent={cart.length} color="secondary">
-              <ShoppingCartIcon />
-            </Badge>
-          </IconButton>
+          <Button color="inherit">Home</Button>
+          <Button color="inherit">Features</Button>
+          <Button color="inherit">Pricing</Button>
+          <Button color="inherit">Contact</Button>
         </Toolbar>
-      </AppBar>
+      </StyledAppBar>
 
-      <Box sx={{ p: 4 }}>
-        <Grid container spacing={4}>
-          {products.map(product => (
-            <Grid item xs={12} sm={6} md={4} key={product.id}>
-              <ProductCard product={product} addToCart={addToCart} />
+      <HeroSection>
+        <Container>
+          <Typography variant="h2" gutterBottom>
+            Revolutionize Your Business with AI
+          </Typography>
+          <Typography variant="h5" paragraph>
+            Harness the power of artificial intelligence to drive growth and innovation
+          </Typography>
+          <Button variant="contained" size="large" sx={{ mt: 2 }}>
+            Get Started
+          </Button>
+        </Container>
+      </HeroSection>
+
+      <Container sx={{ my: 8 }}>
+        <Typography variant="h3" align="center" gutterBottom>
+          Our Features
+        </Typography>
+        <Grid container spacing={4} sx={{ mt: 4 }}>
+          {[
+            { title: 'Smart Analytics', description: 'Gain insights from your data with our AI-powered analytics', image: 'https://placehold.co/300x200?text=Analytics' },
+            { title: 'Predictive Modeling', description: 'Forecast trends and make data-driven decisions', image: 'https://placehold.co/300x200?text=Predictive+Modeling' },
+            { title: 'Natural Language Processing', description: 'Understand and generate human-like text', image: 'https://placehold.co/300x200?text=NLP' },
+          ].map((feature, index) => (
+            <Grid item xs={12} md={4} key={index}>
+              <FeatureCard>
+                <CardMedia
+                  component="img"
+                  height="140"
+                  image={feature.image}
+                  alt={feature.title}
+                />
+                <CardContent>
+                  <Typography gutterBottom variant="h5" component="div">
+                    {feature.title}
+                  </Typography>
+                  <Typography variant="body2" color="text.secondary">
+                    {feature.description}
+                  </Typography>
+                </CardContent>
+              </FeatureCard>
             </Grid>
           ))}
         </Grid>
+      </Container>
+
+      <Box sx={{ bgcolor: 'background.paper', py: 8 }}>
+        <Container maxWidth="sm">
+          <Typography variant="h3" align="center" gutterBottom>
+            Contact Us
+          </Typography>
+          <form noValidate autoComplete="off">
+            <TextField fullWidth label="Name" margin="normal" />
+            <TextField fullWidth label="Email" margin="normal" />
+            <TextField fullWidth label="Message" margin="normal" multiline rows={4} />
+            <Button variant="contained" color="primary" fullWidth size="large" sx={{ mt: 2 }}>
+              Send Message
+            </Button>
+          </form>
+        </Container>
       </Box>
 
-      <Drawer anchor="right" open={isCartOpen} onClose={() => setIsCartOpen(false)}>
-        <Box sx={{ width: 300, p: 2 }}>
-          <Typography variant="h6" gutterBottom>
-            Shopping Cart
+      <Box component="footer" sx={{ bgcolor: 'background.paper', py: 6 }}>
+        <Container maxWidth="lg">
+          <Typography variant="body2" color="text.secondary" align="center">
+            © 2023 AI SaaS Co. All rights reserved.
           </Typography>
-          <List>
-            {cart.map((item, index) => (
-              <ListItem key={index} secondaryAction={
-                <Button onClick={() => removeFromCart(item.id)}>Remove</Button>
-              }>
-                <ListItemText primary={item.name} secondary={`$${item.price.toFixed(2)}`} />
-              </ListItem>
-            ))}
-          </List>
-          <Typography variant="h6">
-            Total: ${totalPrice.toFixed(2)}
-          </Typography>
-          <Button variant="contained" color="primary" fullWidth sx={{ mt: 2 }}>
-            Checkout
-          </Button>
-        </Box>
-      </Drawer>
-
-      <Drawer anchor="left" open={isMenuOpen} onClose={() => setIsMenuOpen(false)}>
-        <Box sx={{ width: 250, p: 2 }}>
-          <List>
-            {['Home', 'Products', 'About', 'Contact'].map((text) => (
-              <ListItem button key={text}>
-                <ListItemText primary={text} />
-              </ListItem>
-            ))}
-          </List>
-        </Box>
-      </Drawer>
+        </Container>
+      </Box>
     </Box>
   );
 };
 
-export default ECommerceWebsite;
+export default PreviewPage;
