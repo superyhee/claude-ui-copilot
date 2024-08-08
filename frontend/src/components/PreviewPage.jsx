@@ -1,86 +1,62 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
+import { Box, Typography, Paper } from '@mui/material';
+import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
 
-const Piano = () => {
-  const [activeKey, setActiveKey] = useState(null);
+const data = [
+  { name: 'Marketing', value2023: 2, value2024: 19 },
+  { name: 'Product design/R&D', value2023: 3, value2024: 19 },
+  { name: 'ESG/sustainability*', value2023: 0, value2024: 22 },
+  { name: 'Human resources*', value2023: 0, value2024: 24 },
+  { name: 'Finance', value2023: 5, value2024: 25 },
+  { name: 'Sales/customer operations', value2023: 4, value2024: 25 },
+  { name: 'Logistics', value2023: 2, value2024: 26 },
+  { name: 'Risk management', value2023: 4, value2024: 26 },
+  { name: 'IT', value2023: 4, value2024: 27 },
+];
 
-  const keys = [
-    { note: 'C', color: 'white', frequency: 261.63 },
-    { note: 'C#', color: 'black', frequency: 277.18 },
-    { note: 'D', color: 'white', frequency: 293.66 },
-    { note: 'D#', color: 'black', frequency: 311.13 },
-    { note: 'E', color: 'white', frequency: 329.63 },
-    { note: 'F', color: 'white', frequency: 349.23 },
-    { note: 'F#', color: 'black', frequency: 369.99 },
-    { note: 'G', color: 'white', frequency: 392.00 },
-    { note: 'G#', color: 'black', frequency: 415.30 },
-    { note: 'A', color: 'white', frequency: 440.00 },
-    { note: 'A#', color: 'black', frequency: 466.16 },
-    { note: 'B', color: 'white', frequency: 493.88 },
-  ];
-
-  const playNote = (note, frequency) => {
-    setActiveKey(note);
-    const audioContext = new (window.AudioContext || window.webkitAudioContext)();
-    const oscillator = audioContext.createOscillator();
-    oscillator.type = 'sine';
-    oscillator.frequency.setValueAtTime(frequency, audioContext.currentTime);
-    oscillator.connect(audioContext.destination);
-    oscillator.start();
-    oscillator.stop(audioContext.currentTime + 0.3);
-    setTimeout(() => setActiveKey(null), 300);
-  };
-
-  useEffect(() => {
-    const handleKeyDown = (e) => {
-      const keyMap = {
-        a: 'C', w: 'C#', s: 'D', e: 'D#', d: 'E', f: 'F',
-        t: 'F#', g: 'G', y: 'G#', h: 'A', u: 'A#', j: 'B'
-      };
-      if (keyMap[e.key]) {
-        const key = keys.find(k => k.note === keyMap[e.key]);
-        if (key) {
-          playNote(key.note, key.frequency);
-        }
-      }
-    };
-
-    window.addEventListener('keydown', handleKeyDown);
-    return () => {
-      window.removeEventListener('keydown', handleKeyDown);
-    };
-  }, []);
-
+const PreviewPage = () => {
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen bg-gradient-to-r from-blue-500 to-purple-600">
-      <h1 className="text-4xl font-bold text-white mb-8">Virtual Piano</h1>
-      <div className="relative">
-        {keys.map((key, index) => (
-          <button
-            key={index}
-            className={`${
-              key.color === 'white'
-                ? 'bg-white hover:bg-gray-100 w-16 h-60'
-                : 'bg-black hover:bg-gray-800 w-10 h-40 absolute'
-            } ${
-              activeKey === key.note ? 'opacity-70' : ''
-            } border border-gray-300 focus:outline-none transition-all duration-150 ease-in-out`}
-            style={{
-              left: key.color === 'black' ? `${index * 4}rem - 1.25rem` : `${index * 4}rem`,
-              zIndex: key.color === 'black' ? 1 : 0,
-            }}
-            onClick={() => playNote(key.note, key.frequency)}
+    <Box sx={{ p: 4, backgroundColor: '#ffffff', height: '100vh' }}>
+      <Paper elevation={3} sx={{ p: 3, maxWidth: 800, margin: 'auto' }}>
+        <Typography variant="h4" align="center" gutterBottom sx={{ fontWeight: 'bold', mb: 2 }}>
+          Top 9 Use Cases for Generative AI
+        </Typography>
+        <Typography variant="subtitle1" align="center" gutterBottom sx={{ mb: 3 }}>
+          % of organizations implementing generative AI use cases, by function
+        </Typography>
+        <ResponsiveContainer width="100%" height={400}>
+          <BarChart
+            data={data}
+            layout="vertical"
+            margin={{ top: 5, right: 30, left: 100, bottom: 5 }}
           >
-            <span className={`absolute bottom-2 left-2 ${key.color === 'white' ? 'text-black' : 'text-white'}`}>
-              {key.note}
-            </span>
-          </button>
-        ))}
-      </div>
-      <p className="mt-8 text-white text-lg">
-        Use your keyboard (A-J and W-U) or click the keys to play!
-      </p>
-    </div>
+            <CartesianGrid strokeDasharray="3 3" />
+            <XAxis type="number" />
+            <YAxis dataKey="name" type="category" />
+            <Tooltip />
+            <Legend />
+            <Bar dataKey="value2023" name="2023" fill="#00B7C2" />
+            <Bar dataKey="value2024" name="2024" fill="#0070AD" />
+          </BarChart>
+        </ResponsiveContainer>
+        <Typography variant="caption" display="block" align="right" sx={{ mt: 2 }}>
+          Copyright © 2024 Capgemini. All rights reserved.
+        </Typography>
+        <Typography variant="caption" display="block" sx={{ mt: 1 }}>
+          Source:Capgemini Research Institute, Generative AI executive survey, April 2023, N = 800 organizations; Generative AI executive survey, May–June 2024, N = 1,016 organizations that are at least exploring generative AI capabilities; N varies per functional use case, ranging from 499 to 716.
+        </Typography>
+        <Typography variant="caption" display="block" sx={{ mt: 1 }}>
+          *ESG/sustainability and human resources were excluded from the 2023 research.
+        </Typography>
+        <Typography variant="caption" display="block" sx={{ mt: 1 }}>
+          ** "Implementation" refers to organizations that have partially scaled the functional use case in question.
+        </Typography>
+        <Typography variant="caption" display="block" sx={{ mt: 1 }}>
+          ***In the 2024 averages, respondents from the public sector and India are excluded, as they were not included in the 2023 research.
+        </Typography>
+      </Paper>
+    </Box>
   );
 };
 
-export default Piano;
+export default PreviewPage;
