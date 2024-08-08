@@ -4,24 +4,29 @@ const Piano = () => {
   const [activeKey, setActiveKey] = useState(null);
 
   const keys = [
-    { note: 'C', color: 'white' },
-    { note: 'C#', color: 'black' },
-    { note: 'D', color: 'white' },
-    { note: 'D#', color: 'black' },
-    { note: 'E', color: 'white' },
-    { note: 'F', color: 'white' },
-    { note: 'F#', color: 'black' },
-    { note: 'G', color: 'white' },
-    { note: 'G#', color: 'black' },
-    { note: 'A', color: 'white' },
-    { note: 'A#', color: 'black' },
-    { note: 'B', color: 'white' },
+    { note: 'C', color: 'white', frequency: 261.63 },
+    { note: 'C#', color: 'black', frequency: 277.18 },
+    { note: 'D', color: 'white', frequency: 293.66 },
+    { note: 'D#', color: 'black', frequency: 311.13 },
+    { note: 'E', color: 'white', frequency: 329.63 },
+    { note: 'F', color: 'white', frequency: 349.23 },
+    { note: 'F#', color: 'black', frequency: 369.99 },
+    { note: 'G', color: 'white', frequency: 392.00 },
+    { note: 'G#', color: 'black', frequency: 415.30 },
+    { note: 'A', color: 'white', frequency: 440.00 },
+    { note: 'A#', color: 'black', frequency: 466.16 },
+    { note: 'B', color: 'white', frequency: 493.88 },
   ];
 
-  const playNote = (note) => {
+  const playNote = (note, frequency) => {
     setActiveKey(note);
-    // Here we would typically play the actual sound
-    // For this example, we'll just simulate it with a timeout
+    const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+    const oscillator = audioContext.createOscillator();
+    oscillator.type = 'sine';
+    oscillator.frequency.setValueAtTime(frequency, audioContext.currentTime);
+    oscillator.connect(audioContext.destination);
+    oscillator.start();
+    oscillator.stop(audioContext.currentTime + 0.3);
     setTimeout(() => setActiveKey(null), 300);
   };
 
@@ -32,7 +37,10 @@ const Piano = () => {
         t: 'F#', g: 'G', y: 'G#', h: 'A', u: 'A#', j: 'B'
       };
       if (keyMap[e.key]) {
-        playNote(keyMap[e.key]);
+        const key = keys.find(k => k.note === keyMap[e.key]);
+        if (key) {
+          playNote(key.note, key.frequency);
+        }
       }
     };
 
@@ -60,7 +68,7 @@ const Piano = () => {
               left: key.color === 'black' ? `${index * 4}rem - 1.25rem` : `${index * 4}rem`,
               zIndex: key.color === 'black' ? 1 : 0,
             }}
-            onClick={() => playNote(key.note)}
+            onClick={() => playNote(key.note, key.frequency)}
           >
             <span className={`absolute bottom-2 left-2 ${key.color === 'white' ? 'text-black' : 'text-white'}`}>
               {key.note}
