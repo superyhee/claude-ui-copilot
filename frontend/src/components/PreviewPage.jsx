@@ -1,22 +1,15 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
+import { Box, Typography, Stack, TextField, Button, List, ListItem, ListItemText, ListItemSecondaryAction, IconButton, Checkbox, Select, MenuItem, FormControl, InputLabel } from '@mui/material';
+import DeleteIcon from '@mui/icons-material/Delete';
+import EditIcon from '@mui/icons-material/Edit';
 
-const TodoApp = () => {
+const TodoList = () => {
   const [tasks, setTasks] = useState([]);
   const [newTask, setNewTask] = useState('');
-  const [filter, setFilter] = useState('all');
   const [editingTask, setEditingTask] = useState(null);
+  const [filter, setFilter] = useState('all');
 
-  useEffect(() => {
-    const storedTasks = JSON.parse(localStorage.getItem('tasks')) || [];
-    setTasks(storedTasks);
-  }, []);
-
-  useEffect(() => {
-    localStorage.setItem('tasks', JSON.stringify(tasks));
-  }, [tasks]);
-
-  const addTask = (e) => {
-    e.preventDefault();
+  const addTask = () => {
     if (newTask.trim() !== '') {
       setTasks([...tasks, { id: Date.now(), text: newTask, completed: false }]);
       setNewTask('');
@@ -35,13 +28,15 @@ const TodoApp = () => {
 
   const startEditing = (task) => {
     setEditingTask(task);
+    setNewTask(task.text);
   };
 
-  const saveEdit = (id, newText) => {
+  const saveEdit = () => {
     setTasks(tasks.map(task =>
-      task.id === id ? { ...task, text: newText } : task
+      task.id === editingTask.id ? { ...task, text: newTask } : task
     ));
     setEditingTask(null);
+    setNewTask('');
   };
 
   const filteredTasks = tasks.filter(task => {
@@ -51,85 +46,75 @@ const TodoApp = () => {
   });
 
   return (
-    <div className="min-h-screen bg-gradient-to-r from-blue-400 to-purple-500 flex items-center justify-center px-4">
-      <div className="bg-white rounded-lg shadow-xl p-8 w-full max-w-md">
-        <h1 className="text-3xl font-bold text-center mb-6 text-gray-800">Todo List</h1>
+    <Box sx={{ p: 4, backgroundColor: '#f5f5f5', height: '100%', minHeight: '100vh' }}>
+      <Stack alignItems="center" spacing={3}>
+        <Typography variant="h4" color="primary">Todo List</Typography>
         
-        <form onSubmit={addTask} className="mb-6">
-          <div className="flex">
-            <input
-              type="text"
-              value={newTask}
-              onChange={(e) => setNewTask(e.target.value)}
-              placeholder="Add a new task"
-              className="flex-grow px-4 py-2 text-gray-700 bg-gray-200 rounded-l-lg focus:outline-none focus:ring-2 focus:ring-blue-400"
-            />
-            <button type="submit" className="bg-blue-500 text-white px-6 py-2 rounded-r-lg hover:bg-blue-600 transition duration-300">
-              Add
-            </button>
-          </div>
-        </form>
+        <Box sx={{ width: '100%', maxWidth: 500 }}>
+          <TextField
+            fullWidth
+            variant="outlined"
+            value={newTask}
+            onChange={(e) => setNewTask(e.target.value)}
+            placeholder="Add a new task"
+            InputProps={{
+              endAdornment: (
+                <Button
+                  variant="contained"
+                  color="primary"
+                  onClick={editingTask ? saveEdit : addTask}
+                >
+                  {editingTask ? 'Save' : 'Add'}
+                </Button>
+              ),
+            }}
+          />
+        </Box>
 
-        <div className="flex justify-center space-x-4 mb-6">
-          <button
-            onClick={() => setFilter('all')}
-            className={`px-4 py-2 rounded ${filter === 'all' ? 'bg-blue-500 text-white' : 'bg-gray-200 text-gray-700'}`}
+        <FormControl sx={{ m: 1, minWidth: 120 }}>
+          <InputLabel id="filter-label">Filter</InputLabel>
+          <Select
+            labelId="filter-label"
+            value={filter}
+            label="Filter"
+            onChange={(e) => setFilter(e.target.value)}
           >
-            All
-          </button>
-          <button
-            onClick={() => setFilter('active')}
-            className={`px-4 py-2 rounded ${filter === 'active' ? 'bg-blue-500 text-white' : 'bg-gray-200 text-gray-700'}`}
-          >
-            Active
-          </button>
-          <button
-            onClick={() => setFilter('completed')}
-            className={`px-4 py-2 rounded ${filter === 'completed' ? 'bg-blue-500 text-white' : 'bg-gray-200 text-gray-700'}`}
-          >
-            Completed
-          </button>
-        </div>
+            <MenuItem value="all">All</MenuItem>
+            <MenuItem value="active">Active</MenuItem>
+            <MenuItem value="completed">Completed</MenuItem>
+          </Select>
+        </FormControl>
 
-        <ul className="space-y-3">
-          {filteredTasks.map(task => (
-            <li key={task.id} className="flex items-center bg-gray-100 p-3 rounded-lg">
-              <input
-                type="checkbox"
+        <List sx={{ width: '100%', maxWidth: 500, bgcolor: 'background.paper' }}>
+          {filteredTasks.map((task) => (
+            <ListItem
+              key={task.id}
+              secondaryAction={
+                <Stack direction="row" spacing={1}>
+                  <IconButton edge="end" aria-label="edit" onClick={() => startEditing(task)}>
+                    <EditIcon />
+                  </IconButton>
+                  <IconButton edge="end" aria-label="delete" onClick={() => deleteTask(task.id)}>
+                    <DeleteIcon />
+                  </IconButton>
+                </Stack>
+              }
+            >
+              <Checkbox
+                edge="start"
                 checked={task.completed}
                 onChange={() => toggleComplete(task.id)}
-                className="mr-3 form-checkbox h-5 w-5 text-blue-500"
               />
-              {editingTask && editingTask.id === task.id ? (
-                <input
-                  type="text"
-                  value={editingTask.text}
-                  onChange={(e) => setEditingTask({...editingTask, text: e.target.value})}
-                  onBlur={() => saveEdit(task.id, editingTask.text)}
-                  className="flex-grow px-2 py-1 mr-2 text-gray-700 bg-white rounded focus:outline-none focus:ring-2 focus:ring-blue-400"
-                />
-              ) : (
-                <span
-                  className={`flex-grow mr-2 ${task.completed ? 'line-through text-gray-500' : 'text-gray-700'}`}
-                  onClick={() => startEditing(task)}
-                >
-                  {task.text}
-                </span>
-              )}
-              <button
-                onClick={() => deleteTask(task.id)}
-                className="text-red-500 hover:text-red-700"
-              >
-                <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
-                  <path fillRule="evenodd" d="M9 2a1 1 0 00-.894.553L7.382 4H4a1 1 0 000 2v10a2 2 0 002 2h8a2 2 0 002-2V6a1 1 0 100-2h-3.382l-.724-1.447A1 1 0 0011 2H9zM7 8a1 1 0 012 0v6a1 1 0 11-2 0V8zm5-1a1 1 0 00-1 1v6a1 1 0 102 0V8a1 1 0 00-1-1z" clipRule="evenodd" />
-                </svg>
-              </button>
-            </li>
+              <ListItemText
+                primary={task.text}
+                sx={{ textDecoration: task.completed ? 'line-through' : 'none' }}
+              />
+            </ListItem>
           ))}
-        </ul>
-      </div>
-    </div>
+        </List>
+      </Stack>
+    </Box>
   );
 };
 
-export default TodoApp;
+export default TodoList;
