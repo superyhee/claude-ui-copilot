@@ -41,6 +41,7 @@ const PreviewPage = () => {
   const [currentPosition, setCurrentPosition] = useState({ x: 0, y: 0 });
   const [gameOver, setGameOver] = useState(false);
   const [score, setScore] = useState(0);
+  const [explodingCells, setExplodingCells] = useState([]);
 
   const getRandomShape = () => {
     const randomIndex = Math.floor(Math.random() * SHAPES.length);
@@ -107,6 +108,18 @@ const PreviewPage = () => {
       }
       return true;
     });
+    
+    if (linesCleared > 0) {
+      const explodingCells = [];
+      for (let y = BOARD_HEIGHT - 1; y >= BOARD_HEIGHT - linesCleared; y--) {
+        for (let x = 0; x < BOARD_WIDTH; x++) {
+          explodingCells.push({ x, y });
+        }
+      }
+      setExplodingCells(explodingCells);
+      setTimeout(() => setExplodingCells([]), 300);
+    }
+    
     while (newBoard.length < BOARD_HEIGHT) {
       newBoard.unshift(Array(BOARD_WIDTH).fill(0));
     }
@@ -194,6 +207,9 @@ const PreviewPage = () => {
               border: '1px solid #2A2A3C',
               backgroundColor: cell === 1 ? '#4ECDC4' : cell === 2 ? COLORS[SHAPES.indexOf(currentShape)] : '#16213E',
               boxShadow: cell !== 0 ? '0 0 5px rgba(255, 255, 255, 0.5)' : 'none',
+              transition: 'all 0.3s',
+              transform: explodingCells.some(ec => ec.x === x && ec.y === y) ? 'scale(1.5)' : 'scale(1)',
+              opacity: explodingCells.some(ec => ec.x === x && ec.y === y) ? 0 : 1,
             }}
           />
         ))}
