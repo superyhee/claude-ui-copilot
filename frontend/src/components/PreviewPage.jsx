@@ -1,107 +1,89 @@
-import React, { useState, useCallback } from 'react';
-import { Tree } from 'react-d3-tree';
+import React, { useState } from 'react';
+import { ChevronLeftIcon, ChevronRightIcon } from '@heroicons/react/24/solid';
 
-const initData = {
-  name: '人工智能',
-  children: [
-    {
-      name: '机器学习',
-      children: [
-        { name: '监督学习' },
-        { name: '无监督学习' },
-        { name: '强化学习' },
-      ],
-    },
-    {
-      name: '深度学习',
-      children: [
-        { name: '神经网络' },
-        { name: '卷积神经网络' },
-        { name: '循环神经网络' },
-      ],
-    },
-    {
-      name: '自然语言处理',
-      children: [
-        { name: '语音识别' },
-        { name: '机器翻译' },
-        { name: '文本分析' },
-      ],
-    },
-    {
-      name: '计算机视觉',
-      children: [
-        { name: '图像识别' },
-        { name: '物体检测' },
-        { name: '人脸识别' },
-      ],
-    },
-  ],
-};
-
-const renderForeignObjectNode = ({
-  nodeDatum,
-  toggleNode,
-  foreignObjectProps
-}) => (
-  <g>
-    <circle r={15}></circle>
-    <foreignObject {...foreignObjectProps}>
-      <div className="nodeName bg-white p-2 rounded shadow cursor-move">
-        <h3 className="text-sm font-semibold">{nodeDatum.name}</h3>
-        {nodeDatum.children && (
-          <button className="text-xs text-blue-500" onClick={toggleNode}>
-            {nodeDatum.__rd3t.collapsed ? 'Expand' : 'Collapse'}
-          </button>
-        )}
-      </div>
-    </foreignObject>
-  </g>
-);
+const slides = [
+  {
+    title: "The Birth of Large Language Models",
+    content: "Large Language Models (LLMs) emerged from decades of research in natural language processing and artificial intelligence.",
+    year: "1950s-2010s"
+  },
+  {
+    title: "GPT-1: The Pioneer",
+    content: "OpenAI introduced GPT-1 in 2018, marking a significant milestone in the development of transformer-based language models.",
+    year: "2018"
+  },
+  {
+    title: "GPT-2: Scaling Up",
+    content: "GPT-2, released in 2019, demonstrated the potential of larger models with 1.5 billion parameters.",
+    year: "2019"
+  },
+  {
+    title: "GPT-3: A Quantum Leap",
+    content: "GPT-3, unveiled in 2020, with its 175 billion parameters, showcased unprecedented language understanding and generation capabilities.",
+    year: "2020"
+  },
+  {
+    title: "The Era of Specialized Models",
+    content: "Post GPT-3, various specialized models like DALL-E, Codex, and InstructGPT emerged, focusing on specific tasks.",
+    year: "2021-2022"
+  },
+  {
+    title: "GPT-4 and Beyond",
+    content: "GPT-4's release in 2023 pushed the boundaries further, with multimodal capabilities and improved performance across various tasks.",
+    year: "2023-Present"
+  }
+];
 
 export default function App() {
-  const [translate, setTranslate] = useState({ x: 0, y: 0 });
-  const [treeData, setTreeData] = useState(initData);
+  const [currentSlide, setCurrentSlide] = useState(0);
 
-  const onNodeMove = useCallback((node, data) => {
-    const newData = JSON.parse(JSON.stringify(treeData));
-    const updateNode = (currentNode) => {
-      if (currentNode.name === node.data.name) {
-        currentNode.x = data.x;
-        currentNode.y = data.y;
-        return true;
-      }
-      if (currentNode.children) {
-        return currentNode.children.some(updateNode);
-      }
-      return false;
-    };
-    updateNode(newData);
-    setTreeData(newData);
-  }, [treeData]);
+  const nextSlide = () => {
+    setCurrentSlide((prev) => (prev + 1) % slides.length);
+  };
+
+  const prevSlide = () => {
+    setCurrentSlide((prev) => (prev - 1 + slides.length) % slides.length);
+  };
 
   return (
-    <div className="w-full h-screen bg-gray-100 p-4 flex flex-col items-center">
-      <h1 className="text-3xl font-bold mb-6 text-gray-800">人工智能发展脑图</h1>
-      <div className="w-full h-5/6 border border-gray-300 rounded-lg shadow-lg bg-white overflow-hidden">
-        <Tree
-          data={treeData}
-          translate={translate}
-          orientation="vertical"
-          renderCustomNodeElement={(rd3tProps) =>
-            renderForeignObjectNode({ ...rd3tProps, foreignObjectProps: { width: 120, height: 60, x: -60, y: -30 } })
-          }
-          onUpdate={(newData) => setTreeData(newData)}
-          onNodeMove={onNodeMove}
-          enableLegacyTransitions={true}
-          separation={{ siblings: 2, nonSiblings: 2 }}
-          zoomable={true}
-          draggable={true}
-          collapsible={true}
-        />
-      </div>
-      <div className="mt-4 text-sm text-gray-600">
-        提示：可以拖拽节点移动位置，点击节点可以展开/收起子节点
+    <div className="min-h-screen bg-gray-100 flex items-center justify-center">
+      <div className="max-w-4xl w-full bg-white rounded-xl shadow-2xl overflow-hidden">
+        <div className="p-8">
+          <h1 className="text-3xl font-bold text-center mb-8 text-blue-600">
+            Large Language Models: A Historical Journey
+          </h1>
+          <div className="relative">
+            <div className="mb-6">
+              <h2 className="text-2xl font-semibold mb-2">{slides[currentSlide].title}</h2>
+              <p className="text-gray-600 mb-4">{slides[currentSlide].content}</p>
+              <p className="text-lg font-medium text-blue-500">{slides[currentSlide].year}</p>
+            </div>
+            <div className="flex justify-between items-center mt-8">
+              <button
+                onClick={prevSlide}
+                className="bg-blue-500 text-white p-2 rounded-full hover:bg-blue-600 transition duration-300"
+              >
+                <ChevronLeftIcon className="h-6 w-6" />
+              </button>
+              <div className="text-gray-500">
+                {currentSlide + 1} / {slides.length}
+              </div>
+              <button
+                onClick={nextSlide}
+                className="bg-blue-500 text-white p-2 rounded-full hover:bg-blue-600 transition duration-300"
+              >
+                <ChevronRightIcon className="h-6 w-6" />
+              </button>
+            </div>
+          </div>
+        </div>
+        <div className="bg-blue-50 p-6">
+          <img
+            src="https://placehold.co/600x400/png?text=LLM+Timeline"
+            alt="Timeline illustration of Large Language Models development"
+            className="w-full rounded-lg shadow-md"
+          />
+        </div>
       </div>
     </div>
   );
