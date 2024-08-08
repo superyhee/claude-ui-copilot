@@ -1,127 +1,215 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useCallback } from 'react';
+import { Box, Typography, Button, Grid } from '@mui/material';
 
-const MAZE_SIZE = 10;
-const PLAYER = 'P';
-const WALL = '#';
-const EXIT = 'E';
-const EMPTY = ' ';
+const BOARD_WIDTH = 10;
+const BOARD_HEIGHT = 20;
+const BLOCK_SIZE = 30;
 
-const generateMaze = () => {
-  const maze = Array(MAZE_SIZE).fill().map(() => Array(MAZE_SIZE).fill(EMPTY));
-  
-  // Add walls
-  for (let i = 0; i < MAZE_SIZE; i++) {
-    maze[0][i] = WALL;
-    maze[MAZE_SIZE - 1][i] = WALL;
-    maze[i][0] = WALL;
-    maze[i][MAZE_SIZE - 1] = WALL;
-  }
+const SHAPES = [
+  [[1, 1, 1, 1]],
+  [[1, 1], [1, 1]],
+  [[1, 1, 1], [0, 1, 0]],
+  [[1, 1, 1], [1, 0, 0]],
+  [[1, 1, 1], [0, 0, 1]],
+  [[1, 1, 0], [0, 1, 1]],
+  [[0, 1, 1], [1, 1, 0]]
+];
 
-  // Add random walls
-  for (let i = 1; i < MAZE_SIZE - 1; i++) {
-    for (let j = 1; j < MAZE_SIZE - 1; j++) {
-      if (Math.random() < 0.3) {
-        maze[i][j] = WALL;
-      }
-    }
-  }
+const COLORS = ['#FF0000', '#00FF00', '#0000FF', '#FFFF00', '#FF00FF', '#00FFFF', '#FFA500'];
 
-  // Set player start position
-  maze[1][1] = PLAYER;
+const PreviewPage = () => {
+  const [board, setBoard] = useState(createEmptyBoard());
+  const [currentShape, setCurrentShape] = useState(null);
+  const [currentPosition, setCurrentPosition] = useState({ x: 0, y: 0 });
+  const [gameOver, setGameOver] = useState(false);
+  const [score, setScore] = useState(0);
 
-  // Set exit
-  maze[MAZE_SIZE - 2][MAZE_SIZE - 2] = EXIT;
+  const createEmptyBoard = () => {
+    return Array(BOARD_HEIGHT).fill().map(() => Array(BOARD_WIDTH).fill(0));
+  };
 
-  return maze;
-};
+  const getRandomShape = () => {
+    const randomIndex = Math.floor(Math.random() * SHAPES.length);
+    return SHAPES[randomIndex];
+  };
 
-export default function App() {
-  const [maze, setMaze] = useState(generateMaze());
-  const [playerPos, setPlayerPos] = useState({ x: 1, y: 1 });
-  const [gameWon, setGameWon] = useState(false);
-
-  useEffect(() => {
-    const handleKeyPress = (e) => {
-      if (gameWon) return;
-
-      const newPos = { ...playerPos };
-
-      switch (e.key) {
-        case 'ArrowUp':
-          newPos.y--;
-          break;
-        case 'ArrowDown':
-          newPos.y++;
-          break;
-        case 'ArrowLeft':
-          newPos.x--;
-          break;
-        case 'ArrowRight':
-          newPos.x++;
-          break;
-        default:
-          return;
-      }
-
-      if (maze[newPos.y][newPos.x] !== WALL) {
-        const newMaze = maze.map(row => [...row]);
-        newMaze[playerPos.y][playerPos.x] = EMPTY;
-        newMaze[newPos.y][newPos.x] = PLAYER;
-        setMaze(newMaze);
-        setPlayerPos(newPos);
-
-        if (maze[newPos.y][newPos.x] === EXIT) {
-          setGameWon(true);
+  const isValidMove = (shape, position) => {
+    for (let y = 0; y < shape.length; y++) {
+      for (let x = 0; x < shape[y].length; x++) {
+        if (shape[y][x]) {
+          const newX = x + position.x;
+          const newY = y + position.y;
+          if (newX < 0 || newX >= BOARD_WIDTH || newY >= BOARD_HEIGHT || (newY >= 0 && board[newY][newX])) {
+            return false;
+          }
         }
       }
+    }
+    return true;
+  };
+
+  const placeShape = useCallback(() => {
+    const newBoard = [...board];
+    for (let y = 0; y < currentShape.length; y++) {
+      for (let x = 0; x < currentShape[y].length; x++) {
+        if (currentShape[y][x]) {
+          const boardY = y + currentPosition.y;
+          const boardX = x + currentPosition.x;
+          if (boardY >= 0) {
+            newBoard[boardY][boardX] = 1;
+          }
+        }
+      }
+    }
+    setBoard(newBoard);
+    checkLines();
+    spawnNewShape();
+  }, [board, currentShape, currentPosition]);
+
+  const moveShape = (dx, dy) => {
+    const newPosition = { x: currentPosition.x + dx, y: currentPosition.y + dy };
+    if (isValidMove(currentShape, newPosition)) {
+      setCurrentPosition(newPosition);
+    } else if (dy > 0) {
+      placeShape();
+    }
+  };
+
+  const rotateShape = () => {
+    const rotatedShape = currentShape[0].map((_, index) =>
+      currentShape.map(row => row[index]).reverse()
+    );
+    if (isValidMove(rotatedShape, currentPosition)) {
+      setCurrentShape(rotatedShape);
+    }
+  };
+
+  const checkLines = () => {
+    let linesCleared = 0;
+    const newBoard = board.filter(row => {
+      if (row.every(cell => cell === 1)) {
+        linesCleared++;
+        return false;
+      }
+      return true;
+    });
+    while (newBoard.length < BOARD_HEIGHT) {
+      newBoard.unshift(Array(BOARD_WIDTH).fill(0));
+    }
+    setBoard(newBoard);
+    setScore(prevScore => prevScore + linesCleared * 100);
+  };
+
+  const spawnNewShape = () => {
+    const newShape = getRandomShape();
+    const newPosition = { x: Math.floor(BOARD_WIDTH / 2) - Math.floor(newShape[0].length / 2), y: -newShape.length };
+    if (isValidMove(newShape, newPosition)) {
+      setCurrentShape(newShape);
+      setCurrentPosition(newPosition);
+    } else {
+      setGameOver(true);
+    }
+  };
+
+  const handleKeyDown = useCallback((e) => {
+    if (!gameOver) {
+      switch (e.key) {
+        case 'ArrowLeft':
+          moveShape(-1, 0);
+          break;
+        case 'ArrowRight':
+          moveShape(1, 0);
+          break;
+        case 'ArrowDown':
+          moveShape(0, 1);
+          break;
+        case 'ArrowUp':
+          rotateShape();
+          break;
+        default:
+          break;
+      }
+    }
+  }, [gameOver, moveShape, rotateShape]);
+
+  useEffect(() => {
+    window.addEventListener('keydown', handleKeyDown);
+    return () => {
+      window.removeEventListener('keydown', handleKeyDown);
     };
+  }, [handleKeyDown]);
 
-    window.addEventListener('keydown', handleKeyPress);
-    return () => window.removeEventListener('keydown', handleKeyPress);
-  }, [maze, playerPos, gameWon]);
+  useEffect(() => {
+    if (!gameOver) {
+      const timer = setInterval(() => {
+        moveShape(0, 1);
+      }, 1000);
+      return () => clearInterval(timer);
+    }
+  }, [gameOver, moveShape]);
 
-  const resetGame = () => {
-    setMaze(generateMaze());
-    setPlayerPos({ x: 1, y: 1 });
-    setGameWon(false);
+  useEffect(() => {
+    if (!currentShape) {
+      spawnNewShape();
+    }
+  }, [currentShape]);
+
+  const renderBoard = () => {
+    const boardWithShape = [...board.map(row => [...row])];
+    if (currentShape) {
+      for (let y = 0; y < currentShape.length; y++) {
+        for (let x = 0; x < currentShape[y].length; x++) {
+          if (currentShape[y][x]) {
+            const boardY = y + currentPosition.y;
+            const boardX = x + currentPosition.x;
+            if (boardY >= 0 && boardY < BOARD_HEIGHT && boardX >= 0 && boardX < BOARD_WIDTH) {
+              boardWithShape[boardY][boardX] = 2;
+            }
+          }
+        }
+      }
+    }
+    return boardWithShape.map((row, y) => (
+      <Grid container key={y} justifyContent="center">
+        {row.map((cell, x) => (
+          <Box
+            key={`${x}-${y}`}
+            sx={{
+              width: BLOCK_SIZE,
+              height: BLOCK_SIZE,
+              border: '1px solid #ccc',
+              backgroundColor: cell === 1 ? '#333' : cell === 2 ? COLORS[SHAPES.indexOf(currentShape)] : 'white',
+            }}
+          />
+        ))}
+      </Grid>
+    ));
+  };
+
+  const restartGame = () => {
+    setBoard(createEmptyBoard());
+    setCurrentShape(null);
+    setCurrentPosition({ x: 0, y: 0 });
+    setGameOver(false);
+    setScore(0);
+    spawnNewShape();
   };
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100">
-      <h1 className="text-4xl font-bold mb-8 text-blue-600">Maze Game</h1>
-      <div className="bg-white p-8 rounded-lg shadow-lg">
-        {maze.map((row, i) => (
-          <div key={i} className="flex">
-            {row.map((cell, j) => (
-              <div
-                key={`${i}-${j}`}
-                className={`w-8 h-8 flex items-center justify-center border border-gray-300
-                  ${cell === WALL ? 'bg-gray-800' : ''}
-                  ${cell === EXIT ? 'bg-green-500' : ''}
-                  ${cell === PLAYER ? 'bg-blue-500' : ''}
-                `}
-              >
-                {cell === PLAYER && <div className="w-4 h-4 rounded-full bg-yellow-400"></div>}
-                {cell === EXIT && 'Exit'}
-              </div>
-            ))}
-          </div>
-        ))}
-      </div>
-      {gameWon && (
-        <div className="mt-8 text-2xl font-bold text-green-600">
-          Congratulations! You've reached the exit!
-        </div>
+    <Box sx={{ p: 4, backgroundColor: '#f5f5f5', height: '100%', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+      <Typography variant="h4" gutterBottom>Tetris</Typography>
+      <Box sx={{ border: '2px solid #333', mb: 2 }}>
+        {renderBoard()}
+      </Box>
+      <Typography variant="h6" gutterBottom>Score: {score}</Typography>
+      {gameOver && (
+        <Box sx={{ mt: 2, textAlign: 'center' }}>
+          <Typography variant="h5" gutterBottom>Game Over</Typography>
+          <Button variant="contained" onClick={restartGame}>Restart</Button>
+        </Box>
       )}
-      <button
-        onClick={resetGame}
-        className="mt-8 px-6 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 transition duration-200"
-      >
-        Reset Game
-      </button>
-      <div className="mt-4 text-gray-600">
-        Use arrow keys to move the player (yellow dot) to the exit.
-      </div>
-    </div>
+    </Box>
   );
-}
+};
+
+export default PreviewPage;
