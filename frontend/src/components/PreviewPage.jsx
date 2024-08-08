@@ -11,6 +11,7 @@ const App = () => {
   const [direction, setDirection] = useState(INITIAL_DIRECTION);
   const [food, setFood] = useState(INITIAL_FOOD);
   const [gameOver, setGameOver] = useState(false);
+  const [score, setScore] = useState(0);
 
   const moveSnake = useCallback(() => {
     const newSnake = [...snake];
@@ -37,6 +38,7 @@ const App = () => {
 
     if (head.x === food.x && head.y === food.y) {
       setFood(generateFood());
+      setScore(prevScore => prevScore + 1);
     } else {
       newSnake.pop();
     }
@@ -104,16 +106,17 @@ const App = () => {
     setDirection(INITIAL_DIRECTION);
     setFood(INITIAL_FOOD);
     setGameOver(false);
+    setScore(0);
   };
 
   return (
-    <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100">
-      <h1 className="text-4xl font-bold mb-4">Snake Game</h1>
-      <div className="relative w-[400px] h-[400px] bg-white border-2 border-gray-300">
+    <div className="flex flex-col items-center justify-center min-h-screen bg-gradient-to-b from-indigo-500 to-purple-600">
+      <h1 className="text-5xl font-bold mb-6 text-white text-shadow-lg">Snake Game</h1>
+      <div className="relative w-[400px] h-[400px] bg-gray-800 border-4 border-gray-300 rounded-lg shadow-lg">
         {snake.map((segment, index) => (
           <div
             key={index}
-            className="absolute bg-green-500 transition-all duration-200 ease-linear"
+            className="absolute bg-gradient-to-r from-green-400 to-green-600 rounded-full transition-all duration-200 ease-linear"
             style={{
               left: segment.x * CELL_SIZE,
               top: segment.y * CELL_SIZE,
@@ -123,7 +126,7 @@ const App = () => {
           />
         ))}
         <div
-          className="absolute bg-red-500"
+          className="absolute bg-gradient-to-r from-red-400 to-red-600 rounded-full"
           style={{
             left: food.x * CELL_SIZE,
             top: food.y * CELL_SIZE,
@@ -132,11 +135,12 @@ const App = () => {
           }}
         />
       </div>
+      <div className="mt-4 text-white text-2xl font-semibold">Score: {score}</div>
       {gameOver && (
-        <div className="mt-4">
-          <p className="text-2xl font-bold mb-2">Game Over!</p>
+        <div className="mt-6 text-center">
+          <p className="text-3xl font-bold mb-4 text-white">Game Over!</p>
           <button
-            className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
+            className="px-6 py-3 bg-gradient-to-r from-yellow-400 to-yellow-600 text-white text-xl font-bold rounded-full hover:from-yellow-500 hover:to-yellow-700 transition-all duration-300 shadow-lg"
             onClick={resetGame}
           >
             Play Again
