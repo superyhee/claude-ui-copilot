@@ -1,153 +1,127 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect } from 'react';
 
-const GAME_WIDTH = 800;
-const GAME_HEIGHT = 600;
-const PLAYER_SIZE = 40;
-const ENEMY_SIZE = 30;
-const ENEMY_SPEED = 2;
+const MAZE_SIZE = 10;
+const PLAYER = 'P';
+const WALL = '#';
+const EXIT = 'E';
+const EMPTY = ' ';
+
+const generateMaze = () => {
+  const maze = Array(MAZE_SIZE).fill().map(() => Array(MAZE_SIZE).fill(EMPTY));
+  
+  // Add walls
+  for (let i = 0; i < MAZE_SIZE; i++) {
+    maze[0][i] = WALL;
+    maze[MAZE_SIZE - 1][i] = WALL;
+    maze[i][0] = WALL;
+    maze[i][MAZE_SIZE - 1] = WALL;
+  }
+
+  // Add random walls
+  for (let i = 1; i < MAZE_SIZE - 1; i++) {
+    for (let j = 1; j < MAZE_SIZE - 1; j++) {
+      if (Math.random() < 0.3) {
+        maze[i][j] = WALL;
+      }
+    }
+  }
+
+  // Set player start position
+  maze[1][1] = PLAYER;
+
+  // Set exit
+  maze[MAZE_SIZE - 2][MAZE_SIZE - 2] = EXIT;
+
+  return maze;
+};
 
 export default function App() {
-  const [playerPosition, setPlayerPosition] = useState({ x: GAME_WIDTH / 2, y: GAME_HEIGHT / 2 });
-  const [enemies, setEnemies] = useState([]);
-  const [score, setScore] = useState(0);
-  const [gameOver, setGameOver] = useState(false);
-
-  const movePlayer = useCallback((e) => {
-    if (gameOver) return;
-    const { clientX, clientY } = e;
-    const gameContainer = e.currentTarget.getBoundingClientRect();
-    const newX = Math.max(0, Math.min(clientX - gameContainer.left, GAME_WIDTH - PLAYER_SIZE));
-    const newY = Math.max(0, Math.min(clientY - gameContainer.top, GAME_HEIGHT - PLAYER_SIZE));
-    setPlayerPosition({ x: newX, y: newY });
-  }, [gameOver]);
-
-  const spawnEnemy = useCallback(() => {
-    const side = Math.floor(Math.random() * 4);
-    let x, y;
-    switch (side) {
-      case 0: // Top
-        x = Math.random() * GAME_WIDTH;
-        y = -ENEMY_SIZE;
-        break;
-      case 1: // Right
-        x = GAME_WIDTH;
-        y = Math.random() * GAME_HEIGHT;
-        break;
-      case 2: // Bottom
-        x = Math.random() * GAME_WIDTH;
-        y = GAME_HEIGHT;
-        break;
-      case 3: // Left
-        x = -ENEMY_SIZE;
-        y = Math.random() * GAME_HEIGHT;
-        break;
-    }
-    return { x, y, direction: Math.atan2(playerPosition.y - y, playerPosition.x - x) };
-  }, [playerPosition]);
+  const [maze, setMaze] = useState(generateMaze());
+  const [playerPos, setPlayerPos] = useState({ x: 1, y: 1 });
+  const [gameWon, setGameWon] = useState(false);
 
   useEffect(() => {
-    if (gameOver) return;
+    const handleKeyPress = (e) => {
+      if (gameWon) return;
 
-    const enemyInterval = setInterval(() => {
-      setEnemies(prevEnemies => [...prevEnemies, spawnEnemy()]);
-    }, 2000);
+      const newPos = { ...playerPos };
 
-    const gameLoop = setInterval(() => {
-      setEnemies(prevEnemies => {
-        return prevEnemies.filter(enemy => {
-          const dx = playerPosition.x - enemy.x;
-          const dy = playerPosition.y - enemy.y;
-          const distance = Math.sqrt(dx * dx + dy * dy);
+      switch (e.key) {
+        case 'ArrowUp':
+          newPos.y--;
+          break;
+        case 'ArrowDown':
+          newPos.y++;
+          break;
+        case 'ArrowLeft':
+          newPos.x--;
+          break;
+        case 'ArrowRight':
+          newPos.x++;
+          break;
+        default:
+          return;
+      }
 
-          if (distance < (PLAYER_SIZE + ENEMY_SIZE) / 2) {
-            if (PLAYER_SIZE > ENEMY_SIZE) {
-              setScore(prevScore => prevScore + 1);
-              return false;
-            } else {
-              setGameOver(true);
-              return true;
-            }
-          }
+      if (maze[newPos.y][newPos.x] !== WALL) {
+        const newMaze = maze.map(row => [...row]);
+        newMaze[playerPos.y][playerPos.x] = EMPTY;
+        newMaze[newPos.y][newPos.x] = PLAYER;
+        setMaze(newMaze);
+        setPlayerPos(newPos);
 
-          const newX = enemy.x + Math.cos(enemy.direction) * ENEMY_SPEED;
-          const newY = enemy.y + Math.sin(enemy.direction) * ENEMY_SPEED;
-
-          if (newX < -ENEMY_SIZE || newX > GAME_WIDTH || newY < -ENEMY_SIZE || newY > GAME_HEIGHT) {
-            return false;
-          }
-
-          return { ...enemy, x: newX, y: newY };
-        });
-      });
-    }, 1000 / 60);
-
-    return () => {
-      clearInterval(enemyInterval);
-      clearInterval(gameLoop);
+        if (maze[newPos.y][newPos.x] === EXIT) {
+          setGameWon(true);
+        }
+      }
     };
-  }, [gameOver, playerPosition, spawnEnemy]);
 
-  const restartGame = () => {
-    setPlayerPosition({ x: GAME_WIDTH / 2, y: GAME_HEIGHT / 2 });
-    setEnemies([]);
-    setScore(0);
-    setGameOver(false);
+    window.addEventListener('keydown', handleKeyPress);
+    return () => window.removeEventListener('keydown', handleKeyPress);
+  }, [maze, playerPos, gameWon]);
+
+  const resetGame = () => {
+    setMaze(generateMaze());
+    setPlayerPos({ x: 1, y: 1 });
+    setGameWon(false);
   };
 
   return (
     <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100">
-      <h1 className="text-4xl font-bold mb-4">Big Fish Eat Small Fish</h1>
-      <div
-        className="relative bg-blue-200 cursor-none"
-        style={{ width: GAME_WIDTH, height: GAME_HEIGHT }}
-        onMouseMove={movePlayer}
-      >
-        {!gameOver && (
-          <img
-            src="https://placehold.co/40x40"
-            alt="Orange player fish"
-            className="absolute"
-            style={{
-              width: PLAYER_SIZE,
-              height: PLAYER_SIZE,
-              left: playerPosition.x,
-              top: playerPosition.y,
-              transform: 'translate(-50%, -50%) rotate(90deg)',
-              transition: 'left 0.1s, top 0.1s',
-            }}
-          />
-        )}
-        {enemies.map((enemy, index) => (
-          <img
-            key={index}
-            src="https://placehold.co/30x30"
-            alt="Green enemy fish"
-            className="absolute"
-            style={{
-              width: ENEMY_SIZE,
-              height: ENEMY_SIZE,
-              left: enemy.x,
-              top: enemy.y,
-              transform: `translate(-50%, -50%) rotate(${enemy.direction * (180 / Math.PI)}deg)`,
-            }}
-          />
-        ))}
-        {gameOver && (
-          <div className="absolute inset-0 bg-black bg-opacity-50 flex items-center justify-center">
-            <div className="bg-white p-8 rounded-lg text-center">
-              <h2 className="text-2xl font-bold mb-4">Game Over</h2>
-              <p className="text-xl mb-4">Your Score: {score}</p>
-              <button
-                className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded"
-                onClick={restartGame}
+      <h1 className="text-4xl font-bold mb-8 text-blue-600">Maze Game</h1>
+      <div className="bg-white p-8 rounded-lg shadow-lg">
+        {maze.map((row, i) => (
+          <div key={i} className="flex">
+            {row.map((cell, j) => (
+              <div
+                key={`${i}-${j}`}
+                className={`w-8 h-8 flex items-center justify-center border border-gray-300
+                  ${cell === WALL ? 'bg-gray-800' : ''}
+                  ${cell === EXIT ? 'bg-green-500' : ''}
+                  ${cell === PLAYER ? 'bg-blue-500' : ''}
+                `}
               >
-                Play Again
-              </button>
-            </div>
+                {cell === PLAYER && <div className="w-4 h-4 rounded-full bg-yellow-400"></div>}
+                {cell === EXIT && 'Exit'}
+              </div>
+            ))}
           </div>
-        )}
+        ))}
       </div>
-      <div className="mt-4 text-xl font-bold">Score: {score}</div>
+      {gameWon && (
+        <div className="mt-8 text-2xl font-bold text-green-600">
+          Congratulations! You've reached the exit!
+        </div>
+      )}
+      <button
+        onClick={resetGame}
+        className="mt-8 px-6 py-2 bg-blue-500 text-white rounded hover:bg-blue-600 transition duration-200"
+      >
+        Reset Game
+      </button>
+      <div className="mt-4 text-gray-600">
+        Use arrow keys to move the player (yellow dot) to the exit.
+      </div>
     </div>
   );
 }
