@@ -19,10 +19,17 @@ const Bullet = ({ position }) => (
   <div className="absolute bg-yellow-400 w-2 h-4 rounded" style={{ left: position.x, bottom: position.y }} />
 );
 
+const Explosion = ({ position }) => (
+  <div className="absolute" style={{ left: position.x - 15, top: position.y - 15 }}>
+    <img src="https://placehold.co/60x60" alt="Explosion effect" className="w-15 h-15" />
+  </div>
+);
+
 export default function App() {
   const [playerPosition, setPlayerPosition] = useState({ x: GAME_WIDTH / 2 - 20 });
   const [enemies, setEnemies] = useState([]);
   const [bullets, setBullets] = useState([]);
+  const [explosions, setExplosions] = useState([]);
   const [score, setScore] = useState(0);
   const [gameOver, setGameOver] = useState(false);
 
@@ -76,6 +83,7 @@ export default function App() {
 
           if (hitByBullet) {
             newScore += 10;
+            setExplosions((prev) => [...prev, { x: enemy.x, y: enemy.y, id: Date.now() }]);
             return false;
           }
           return true;
@@ -94,6 +102,10 @@ export default function App() {
         ))
       );
 
+      setExplosions((prevExplosions) =>
+        prevExplosions.filter((explosion) => Date.now() - explosion.id < 500)
+      );
+
       if (enemies.some((enemy) =>
         enemy.x < playerPosition.x + 40 &&
         enemy.x + 30 > playerPosition.x &&
@@ -110,6 +122,7 @@ export default function App() {
     setPlayerPosition({ x: GAME_WIDTH / 2 - 20 });
     setEnemies([]);
     setBullets([]);
+    setExplosions([]);
     setScore(0);
     setGameOver(false);
   };
@@ -129,6 +142,9 @@ export default function App() {
             ))}
             {bullets.map((bullet, index) => (
               <Bullet key={index} position={bullet} />
+            ))}
+            {explosions.map((explosion) => (
+              <Explosion key={explosion.id} position={explosion} />
             ))}
             <div className="absolute top-2 left-2 text-lg font-semibold">
               Score: {score}
