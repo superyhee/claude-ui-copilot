@@ -13,6 +13,21 @@ const App = () => {
   const [gameOver, setGameOver] = useState(false);
   const [score, setScore] = useState(0);
 
+  const playSound = (soundType) => {
+    const audio = new Audio();
+    switch (soundType) {
+      case 'eat':
+        audio.src = 'https://example.com/eat-sound.mp3';
+        break;
+      case 'gameOver':
+        audio.src = 'https://example.com/game-over-sound.mp3';
+        break;
+      default:
+        return;
+    }
+    audio.play().catch(error => console.error('Error playing sound:', error));
+  };
+
   const moveSnake = useCallback(() => {
     const newSnake = [...snake];
     const head = { ...newSnake[0] };
@@ -39,6 +54,7 @@ const App = () => {
     if (head.x === food.x && head.y === food.y) {
       setFood(generateFood());
       setScore(prevScore => prevScore + 1);
+      playSound('eat');
     } else {
       newSnake.pop();
     }
@@ -51,6 +67,7 @@ const App = () => {
       newSnake.slice(1).some(segment => segment.x === head.x && segment.y === head.y)
     ) {
       setGameOver(true);
+      playSound('gameOver');
     } else {
       setSnake(newSnake);
     }
