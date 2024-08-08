@@ -1,90 +1,120 @@
 import React, { useState } from 'react';
-import { ChevronLeftIcon, ChevronRightIcon } from '@heroicons/react/24/solid';
+import { Box, Typography, Stack, Button, Paper, Stepper, Step, StepLabel } from '@mui/material';
+import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend } from 'recharts';
 
-const slides = [
-  {
-    title: "The Birth of Large Language Models",
-    content: "Large Language Models (LLMs) emerged from decades of research in natural language processing and artificial intelligence.",
-    year: "1950s-2010s"
-  },
-  {
-    title: "GPT-1: The Pioneer",
-    content: "OpenAI introduced GPT-1 in 2018, marking a significant milestone in the development of transformer-based language models.",
-    year: "2018"
-  },
-  {
-    title: "GPT-2: Scaling Up",
-    content: "GPT-2, released in 2019, demonstrated the potential of larger models with 1.5 billion parameters.",
-    year: "2019"
-  },
-  {
-    title: "GPT-3: A Quantum Leap",
-    content: "GPT-3, unveiled in 2020, with its 175 billion parameters, showcased unprecedented language understanding and generation capabilities.",
-    year: "2020"
-  },
-  {
-    title: "The Era of Specialized Models",
-    content: "Post GPT-3, various specialized models like DALL-E, Codex, and InstructGPT emerged, focusing on specific tasks.",
-    year: "2021-2022"
-  },
-  {
-    title: "GPT-4 and Beyond",
-    content: "GPT-4's release in 2023 pushed the boundaries further, with multimodal capabilities and improved performance across various tasks.",
-    year: "2023-Present"
-  }
+const mockData = [
+  { year: '2017', models: 2 },
+  { year: '2018', models: 5 },
+  { year: '2019', models: 10 },
+  { year: '2020', models: 20 },
+  { year: '2021', models: 50 },
+  { year: '2022', models: 100 },
 ];
 
-export default function App() {
-  const [currentSlide, setCurrentSlide] = useState(0);
+const steps = ['Introduction', 'Timeline', 'Key Developments', 'Impact'];
 
-  const nextSlide = () => {
-    setCurrentSlide((prev) => (prev + 1) % slides.length);
+const PreviewPage = () => {
+  const [activeStep, setActiveStep] = useState(0);
+
+  const handleNext = () => {
+    setActiveStep((prevActiveStep) => prevActiveStep + 1);
   };
 
-  const prevSlide = () => {
-    setCurrentSlide((prev) => (prev - 1 + slides.length) % slides.length);
+  const handleBack = () => {
+    setActiveStep((prevActiveStep) => prevActiveStep - 1);
+  };
+
+  const renderStepContent = (step) => {
+    switch (step) {
+      case 0:
+        return (
+          <Stack spacing={2}>
+            <Typography variant="h4">Introduction to Large Language Models</Typography>
+            <Typography variant="body1">
+              Large Language Models (LLMs) have revolutionized natural language processing and AI capabilities.
+            </Typography>
+            <img src="https://placehold.co/600x400" alt="Conceptual image of AI and language processing" style={{ maxWidth: '100%', height: 'auto' }} />
+          </Stack>
+        );
+      case 1:
+        return (
+          <Stack spacing={2}>
+            <Typography variant="h4">Timeline of LLM Development</Typography>
+            <BarChart width={600} height={300} data={mockData}>
+              <CartesianGrid strokeDasharray="3 3" />
+              <XAxis dataKey="year" />
+              <YAxis />
+              <Tooltip />
+              <Legend />
+              <Bar dataKey="models" fill="#8884d8" />
+            </BarChart>
+          </Stack>
+        );
+      case 2:
+        return (
+          <Stack spacing={2}>
+            <Typography variant="h4">Key Developments in LLMs</Typography>
+            <Typography variant="body1">
+              - 2018: BERT introduced by Google
+              - 2019: GPT-2 released by OpenAI
+              - 2020: GPT-3 showcases remarkable capabilities
+              - 2022: ChatGPT launches, gaining widespread attention
+            </Typography>
+          </Stack>
+        );
+      case 3:
+        return (
+          <Stack spacing={2}>
+            <Typography variant="h4">Impact of Large Language Models</Typography>
+            <Typography variant="body1">
+              LLMs have significantly impacted various fields including:
+              - Natural Language Processing
+              - Content Generation
+              - Code Assistance
+              - Educational Tools
+            </Typography>
+            <img src="https://placehold.co/600x400" alt="Infographic showing the impact of LLMs across different industries" style={{ maxWidth: '100%', height: 'auto' }} />
+          </Stack>
+        );
+      default:
+        return 'Unknown step';
+    }
   };
 
   return (
-    <div className="min-h-screen bg-gray-100 flex items-center justify-center">
-      <div className="max-w-4xl w-full bg-white rounded-xl shadow-2xl overflow-hidden">
-        <div className="p-8">
-          <h1 className="text-3xl font-bold text-center mb-8 text-blue-600">
-            Large Language Models: A Historical Journey
-          </h1>
-          <div className="relative">
-            <div className="mb-6">
-              <h2 className="text-2xl font-semibold mb-2">{slides[currentSlide].title}</h2>
-              <p className="text-gray-600 mb-4">{slides[currentSlide].content}</p>
-              <p className="text-lg font-medium text-blue-500">{slides[currentSlide].year}</p>
-            </div>
-            <div className="flex justify-between items-center mt-8">
-              <button
-                onClick={prevSlide}
-                className="bg-blue-500 text-white p-2 rounded-full hover:bg-blue-600 transition duration-300"
-              >
-                <ChevronLeftIcon className="h-6 w-6" />
-              </button>
-              <div className="text-gray-500">
-                {currentSlide + 1} / {slides.length}
-              </div>
-              <button
-                onClick={nextSlide}
-                className="bg-blue-500 text-white p-2 rounded-full hover:bg-blue-600 transition duration-300"
-              >
-                <ChevronRightIcon className="h-6 w-6" />
-              </button>
-            </div>
-          </div>
-        </div>
-        <div className="bg-blue-50 p-6">
-          <img
-            src="https://placehold.co/600x400/png?text=LLM+Timeline"
-            alt="Timeline illustration of Large Language Models development"
-            className="w-full rounded-lg shadow-md"
-          />
-        </div>
-      </div>
-    </div>
+    <Box sx={{ p: 4, backgroundColor: '#f5f5f5', height: '100%', minHeight: '100vh' }}>
+      <Paper elevation={3} sx={{ p: 3, backgroundColor: '#ffffff' }}>
+        <Stack spacing={3}>
+          <Typography variant="h3" align="center">Large Language Models: A Brief History</Typography>
+          <Stepper activeStep={activeStep} alternativeLabel>
+            {steps.map((label) => (
+              <Step key={label}>
+                <StepLabel>{label}</StepLabel>
+              </Step>
+            ))}
+          </Stepper>
+          <Box sx={{ mt: 2 }}>
+            {renderStepContent(activeStep)}
+          </Box>
+          <Box sx={{ display: 'flex', justifyContent: 'space-between', mt: 2 }}>
+            <Button
+              color="inherit"
+              disabled={activeStep === 0}
+              onClick={handleBack}
+            >
+              Back
+            </Button>
+            <Button
+              variant="contained"
+              onClick={activeStep === steps.length - 1 ? () => {} : handleNext}
+            >
+              {activeStep === steps.length - 1 ? 'Finish' : 'Next'}
+            </Button>
+          </Box>
+        </Stack>
+      </Paper>
+    </Box>
   );
-}
+};
+
+export default PreviewPage;
