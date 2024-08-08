@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useCallback } from 'react';
-import { Box, Typography, Button, Grid } from '@mui/material';
+import { Box, Typography, Button, Grid, ThemeProvider, createTheme } from '@mui/material';
 
 const BOARD_WIDTH = 10;
 const BOARD_HEIGHT = 20;
@@ -15,7 +15,21 @@ const SHAPES = [
   [[0, 1, 1], [1, 1, 0]]
 ];
 
-const COLORS = ['#FF0000', '#00FF00', '#0000FF', '#FFFF00', '#FF00FF', '#00FFFF', '#FFA500'];
+const COLORS = ['#FF6B6B', '#4ECDC4', '#45B7D1', '#FED766', '#6B48FF', '#98CE00', '#FF8C42'];
+
+const theme = createTheme({
+  palette: {
+    primary: {
+      main: '#4ECDC4',
+    },
+    background: {
+      default: '#1A1A2E',
+    },
+    text: {
+      primary: '#FFFFFF',
+    },
+  },
+});
 
 const createEmptyBoard = () => {
   return Array(BOARD_HEIGHT).fill().map(() => Array(BOARD_WIDTH).fill(0));
@@ -177,8 +191,9 @@ const PreviewPage = () => {
             sx={{
               width: BLOCK_SIZE,
               height: BLOCK_SIZE,
-              border: '1px solid #ccc',
-              backgroundColor: cell === 1 ? '#333' : cell === 2 ? COLORS[SHAPES.indexOf(currentShape)] : 'white',
+              border: '1px solid #2A2A3C',
+              backgroundColor: cell === 1 ? '#4ECDC4' : cell === 2 ? COLORS[SHAPES.indexOf(currentShape)] : '#16213E',
+              boxShadow: cell !== 0 ? '0 0 5px rgba(255, 255, 255, 0.5)' : 'none',
             }}
           />
         ))}
@@ -196,19 +211,35 @@ const PreviewPage = () => {
   };
 
   return (
-    <Box sx={{ p: 4, backgroundColor: '#f5f5f5', height: '100%', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
-      <Typography variant="h4" gutterBottom>Tetris</Typography>
-      <Box sx={{ border: '2px solid #333', mb: 2 }}>
-        {renderBoard()}
-      </Box>
-      <Typography variant="h6" gutterBottom>Score: {score}</Typography>
-      {gameOver && (
-        <Box sx={{ mt: 2, textAlign: 'center' }}>
-          <Typography variant="h5" gutterBottom>Game Over</Typography>
-          <Button variant="contained" onClick={restartGame}>Restart</Button>
+    <ThemeProvider theme={theme}>
+      <Box sx={{ p: 4, backgroundColor: 'background.default', minHeight: '100vh', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+        <Typography variant="h3" gutterBottom sx={{ color: 'primary.main', fontWeight: 'bold', textShadow: '2px 2px 4px rgba(0,0,0,0.5)' }}>
+          Tetris
+        </Typography>
+        <Box sx={{ border: '4px solid #4ECDC4', borderRadius: '10px', overflow: 'hidden', mb: 2 }}>
+          {renderBoard()}
         </Box>
-      )}
-    </Box>
+        <Typography variant="h5" gutterBottom sx={{ color: 'text.primary' }}>Score: {score}</Typography>
+        {gameOver && (
+          <Box sx={{ mt: 2, textAlign: 'center' }}>
+            <Typography variant="h4" gutterBottom sx={{ color: '#FF6B6B' }}>Game Over</Typography>
+            <Button 
+              variant="contained" 
+              onClick={restartGame}
+              sx={{
+                backgroundColor: '#4ECDC4',
+                color: '#1A1A2E',
+                '&:hover': {
+                  backgroundColor: '#45B7D1',
+                },
+              }}
+            >
+              Restart
+            </Button>
+          </Box>
+        )}
+      </Box>
+    </ThemeProvider>
   );
 };
 
