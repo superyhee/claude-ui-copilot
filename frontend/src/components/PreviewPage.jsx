@@ -17,16 +17,16 @@ const SHAPES = [
 
 const COLORS = ['#FF0000', '#00FF00', '#0000FF', '#FFFF00', '#FF00FF', '#00FFFF', '#FFA500'];
 
+const createEmptyBoard = () => {
+  return Array(BOARD_HEIGHT).fill().map(() => Array(BOARD_WIDTH).fill(0));
+};
+
 const PreviewPage = () => {
   const [board, setBoard] = useState(createEmptyBoard());
   const [currentShape, setCurrentShape] = useState(null);
   const [currentPosition, setCurrentPosition] = useState({ x: 0, y: 0 });
   const [gameOver, setGameOver] = useState(false);
   const [score, setScore] = useState(0);
-
-  const createEmptyBoard = () => {
-    return Array(BOARD_HEIGHT).fill().map(() => Array(BOARD_WIDTH).fill(0));
-  };
 
   const getRandomShape = () => {
     const randomIndex = Math.floor(Math.random() * SHAPES.length);
