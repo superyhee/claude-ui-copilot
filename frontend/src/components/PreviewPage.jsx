@@ -103,27 +103,32 @@ export default function App() {
         onMouseMove={movePlayer}
       >
         {!gameOver && (
-          <div
-            className="absolute bg-orange-500 rounded-full"
+          <img
+            src="https://placehold.co/40x40"
+            alt="Orange player fish"
+            className="absolute"
             style={{
               width: PLAYER_SIZE,
               height: PLAYER_SIZE,
               left: playerPosition.x,
               top: playerPosition.y,
-              transform: 'translate(-50%, -50%)',
+              transform: 'translate(-50%, -50%) rotate(90deg)',
+              transition: 'left 0.1s, top 0.1s',
             }}
           />
         )}
         {enemies.map((enemy, index) => (
-          <div
+          <img
             key={index}
-            className="absolute bg-green-500 rounded-full"
+            src="https://placehold.co/30x30"
+            alt="Green enemy fish"
+            className="absolute"
             style={{
               width: ENEMY_SIZE,
               height: ENEMY_SIZE,
               left: enemy.x,
               top: enemy.y,
-              transform: 'translate(-50%, -50%)',
+              transform: `translate(-50%, -50%) rotate(${enemy.direction * (180 / Math.PI)}deg)`,
             }}
           />
         ))}
