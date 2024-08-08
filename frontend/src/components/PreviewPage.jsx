@@ -1,78 +1,34 @@
-import React, { useState } from 'react';
-import { Box, Typography, Stack, Grid, Card, CardContent, CardMedia, Button, AppBar, Toolbar, IconButton, Badge } from '@mui/material';
-import { ShoppingCart as ShoppingCartIcon, Menu as MenuIcon } from '@mui/icons-material';
+import React from 'react';
 
-const flowerData = [
-  { id: 1, name: 'Rose Bouquet', price: 29.99, image: 'https://placehold.co/300x200?text=Rose+Bouquet' },
-  { id: 2, name: 'Tulip Arrangement', price: 24.99, image: 'https://placehold.co/300x200?text=Tulip+Arrangement' },
-  { id: 3, name: 'Sunflower Bunch', price: 19.99, image: 'https://placehold.co/300x200?text=Sunflower+Bunch' },
-  { id: 4, name: 'Orchid Plant', price: 39.99, image: 'https://placehold.co/300x200?text=Orchid+Plant' },
-];
-
-const FlowerShop = () => {
-  const [cartItems, setCartItems] = useState([]);
-
-  const addToCart = (flower) => {
-    setCartItems([...cartItems, flower]);
-  };
-
+export default function App() {
   return (
-    <Box sx={{ flexGrow: 1 }}>
-      <AppBar position="static">
-        <Toolbar>
-          <IconButton edge="start" color="inherit" aria-label="menu" sx={{ mr: 2 }}>
-            <MenuIcon />
-          </IconButton>
-          <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
-            Blooming Bliss Flower Shop
-          </Typography>
-          <IconButton color="inherit">
-            <Badge badgeContent={cartItems.length} color="secondary">
-              <ShoppingCartIcon />
-            </Badge>
-          </IconButton>
-        </Toolbar>
-      </AppBar>
-      <Box sx={{ p: 4, backgroundColor: '#f5f5f5', minHeight: '100vh' }}>
-        <Typography variant="h4" gutterBottom align="center">
-          Welcome to Blooming Bliss
-        </Typography>
-        <Typography variant="subtitle1" gutterBottom align="center">
-          Discover our beautiful flower arrangements
-        </Typography>
-        <Grid container spacing={4} sx={{ mt: 2 }}>
-          {flowerData.map((flower) => (
-            <Grid item xs={12} sm={6} md={3} key={flower.id}>
-              <Card>
-                <CardMedia
-                  component="img"
-                  height="200"
-                  image={flower.image}
-                  alt={flower.name}
-                />
-                <CardContent>
-                  <Typography gutterBottom variant="h6" component="div">
-                    {flower.name}
-                  </Typography>
-                  <Typography variant="body2" color="text.secondary">
-                    ${flower.price.toFixed(2)}
-                  </Typography>
-                  <Button
-                    variant="contained"
-                    color="primary"
-                    sx={{ mt: 2 }}
-                    onClick={() => addToCart(flower)}
-                  >
-                    Add to Cart
-                  </Button>
-                </CardContent>
-              </Card>
-            </Grid>
-          ))}
-        </Grid>
-      </Box>
-    </Box>
-  );
-};
+    <div className="text-black p-4 flex flex-col items-center justify-center">
+      <h1 className="text-2xl mb-4">Windows XP Inspired Wallpaper</h1>
+      <svg className="w-full max-w-2xl" viewBox="0 0 800 600">
+        <defs>
+          <linearGradient id="skyGradient" x1="0%" y1="0%" x2="0%" y2="100%">
+            <stop offset="0%" stopColor="#87CEEB" />
+            <stop offset="100%" stopColor="#4682B4" />
+          </linearGradient>
+          <radialGradient id="sunGlow" cx="50%" cy="50%" r="50%" fx="50%" fy="50%">
+            <stop offset="0%" stopColor="#FFD700" />
+            <stop offset="100%" stopColor="#FFA500" stopOpacity="0" />
+          </radialGradient>
+        </defs>
 
-export default FlowerShop;
+        <rect width="100%" height="100%" fill="url(#skyGradient)" />
+        
+        <circle cx="700" cy="100" r="60" fill="url(#sunGlow)" />
+        <circle cx="700" cy="100" r="40" fill="#FFD700" />
+
+        <ellipse cx="200" cy="150" rx="100" ry="40" fill="#FFFFFF" opacity="0.8" />
+        <ellipse cx="500" cy="100" rx="120" ry="50" fill="#FFFFFF" opacity="0.9" />
+        <ellipse cx="650" cy="180" rx="80" ry="30" fill="#FFFFFF" opacity="0.7" />
+
+        <path d="M0 400 Q 200 350, 400 400 T 800 400 L 800 600 L 0 600 Z" fill="#228B22" />
+        <path d="M0 450 Q 200 400, 400 450 T 800 450 L 800 600 L 0 600 Z" fill="#32CD32" />
+        <path d="M0 500 Q 200 450, 400 500 T 800 500 L 800 600 L 0 600 Z" fill="#7CFC00" />
+      </svg>
+    </div>
+  );
+}
