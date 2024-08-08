@@ -1,36 +1,52 @@
-import React from 'react';
-import { Box, Typography, Stack } from '@mui/material';
-import { SvgIcon } from '@mui/material';
+import React, { useState } from 'react';
+import { format, addMonths, subMonths, startOfMonth, endOfMonth, eachDayOfInterval, isSameMonth, isToday } from 'date-fns';
 
-const SaasIcon = (props) => (
-  <SvgIcon {...props} viewBox="0 0 24 24">
-    <path d="M3 13h8V3H3v10zm0 8h8v-6H3v6zm10 0h8V11h-8v10zm0-18v6h8V3h-8z" />
-  </SvgIcon>
-);
+const Calendar = () => {
+  const [currentDate, setCurrentDate] = useState(new Date());
 
-const PreviewPage = () => {
+  const getDaysInMonth = (date) => {
+    const start = startOfMonth(date);
+    const end = endOfMonth(date);
+    return eachDayOfInterval({ start, end });
+  };
+
+  const days = getDaysInMonth(currentDate);
+
+  const handlePrevMonth = () => setCurrentDate(subMonths(currentDate, 1));
+  const handleNextMonth = () => setCurrentDate(addMonths(currentDate, 1));
+
   return (
-    <Box sx={{ p: 4, backgroundColor: '#f0f8ff', height: '100%' }}>
-      <Stack alignItems="center" spacing={3}>
-        <Box sx={{ display: 'flex', alignItems: 'center', gap: 2 }}>
-          <SaasIcon sx={{ fontSize: 60, color: '#1976d2' }} />
-          <Typography variant="h4" fontWeight="bold" color="#1976d2">SaasFlow</Typography>
-        </Box>
-        <Typography variant="h6" color="#333">Streamline Your Business with SaaS</Typography>
-        <Typography variant="body1" align="center" maxWidth={600} color="#555">
-          SaasFlow is your all-in-one solution for managing and optimizing your business processes. 
-          Our cutting-edge SaaS platform empowers you to boost productivity, enhance collaboration, 
-          and drive growth in the digital age.
-        </Typography>
-        <Box 
-          component="img" 
-          src="https://placehold.co/600x400/1976d2/ffffff?text=SaasFlow+Dashboard" 
-          alt="SaasFlow dashboard mockup showing various analytics and management tools"
-          sx={{ maxWidth: '100%', height: 'auto', borderRadius: 2, boxShadow: 3 }}
-        />
-      </Stack>
-    </Box>
+    <div className="max-w-md mx-auto bg-white shadow-lg rounded-lg overflow-hidden">
+      <div className="bg-blue-500 text-white py-4 px-6 flex justify-between items-center">
+        <button onClick={handlePrevMonth} className="text-2xl">&lt;</button>
+        <h2 className="text-xl font-bold">{format(currentDate, 'MMMM yyyy')}</h2>
+        <button onClick={handleNextMonth} className="text-2xl">&gt;</button>
+      </div>
+      <div className="grid grid-cols-7 gap-1 p-4">
+        {['Sun', 'Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat'].map(day => (
+          <div key={day} className="text-center font-bold text-gray-500">{day}</div>
+        ))}
+        {days.map(day => (
+          <div
+            key={day.toString()}
+            className={`
+              p-2 text-center rounded-full
+              ${!isSameMonth(day, currentDate) ? 'text-gray-300' : ''}
+              ${isToday(day) ? 'bg-blue-500 text-white' : ''}
+            `}
+          >
+            {format(day, 'd')}
+          </div>
+        ))}
+      </div>
+    </div>
   );
 };
 
-export default PreviewPage;
+export default function App() {
+  return (
+    <div className="min-h-screen bg-gray-100 flex items-center justify-center p-4">
+      <Calendar />
+    </div>
+  );
+}
