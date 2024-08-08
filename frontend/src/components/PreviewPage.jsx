@@ -1,62 +1,155 @@
-import React from 'react';
-import { Box, Typography, Paper } from '@mui/material';
-import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
+import React, { useState, useEffect, useCallback } from 'react';
 
-const data = [
-  { name: 'Marketing', value2023: 2, value2024: 19 },
-  { name: 'Product design/R&D', value2023: 3, value2024: 19 },
-  { name: 'ESG/sustainability*', value2023: 0, value2024: 22 },
-  { name: 'Human resources*', value2023: 0, value2024: 24 },
-  { name: 'Finance', value2023: 5, value2024: 25 },
-  { name: 'Sales/customer operations', value2023: 4, value2024: 25 },
-  { name: 'Logistics', value2023: 2, value2024: 26 },
-  { name: 'Risk management', value2023: 4, value2024: 26 },
-  { name: 'IT', value2023: 4, value2024: 27 },
-];
+const GAME_HEIGHT = 600;
+const GAME_WIDTH = 400;
 
-const PreviewPage = () => {
+const Player = ({ position }) => (
+  <div className="absolute" style={{ left: position.x, bottom: 20 }}>
+    <img src="https://placehold.co/40x40" alt="Player airplane" className="w-10 h-10" />
+  </div>
+);
+
+const Enemy = ({ position }) => (
+  <div className="absolute" style={{ left: position.x, top: position.y }}>
+    <img src="https://placehold.co/30x30" alt="Enemy airplane" className="w-8 h-8" />
+  </div>
+);
+
+const Bullet = ({ position }) => (
+  <div className="absolute bg-yellow-400 w-2 h-4 rounded" style={{ left: position.x, bottom: position.y }} />
+);
+
+export default function App() {
+  const [playerPosition, setPlayerPosition] = useState({ x: GAME_WIDTH / 2 - 20 });
+  const [enemies, setEnemies] = useState([]);
+  const [bullets, setBullets] = useState([]);
+  const [score, setScore] = useState(0);
+  const [gameOver, setGameOver] = useState(false);
+
+  const movePlayer = useCallback((e) => {
+    if (e.key === 'ArrowLeft') {
+      setPlayerPosition((prev) => ({ x: Math.max(0, prev.x - 10) }));
+    } else if (e.key === 'ArrowRight') {
+      setPlayerPosition((prev) => ({ x: Math.min(GAME_WIDTH - 40, prev.x + 10) }));
+    } else if (e.key === ' ') {
+      setBullets((prev) => [...prev, { x: playerPosition.x + 19, y: 40 }]);
+    }
+  }, [playerPosition.x]);
+
+  useEffect(() => {
+    window.addEventListener('keydown', movePlayer);
+    return () => window.removeEventListener('keydown', movePlayer);
+  }, [movePlayer]);
+
+  useEffect(() => {
+    if (gameOver) return;
+
+    const gameLoop = setInterval(() => {
+      setEnemies((prevEnemies) => {
+        const newEnemies = prevEnemies
+          .map((enemy) => ({ ...enemy, y: enemy.y + 2 }))
+          .filter((enemy) => enemy.y < GAME_HEIGHT);
+
+        if (Math.random() < 0.02) {
+          newEnemies.push({ x: Math.random() * (GAME_WIDTH - 30), y: 0 });
+        }
+
+        return newEnemies;
+      });
+
+      setBullets((prevBullets) =>
+        prevBullets
+          .map((bullet) => ({ ...bullet, y: bullet.y + 5 }))
+          .filter((bullet) => bullet.y < GAME_HEIGHT)
+      );
+
+      setEnemies((prevEnemies) => {
+        let newScore = score;
+        const survivingEnemies = prevEnemies.filter((enemy) => {
+          const hitByBullet = bullets.some(
+            (bullet) =>
+              bullet.x < enemy.x + 30 &&
+              bullet.x + 2 > enemy.x &&
+              bullet.y < enemy.y + 30 &&
+              bullet.y + 4 > enemy.y
+          );
+
+          if (hitByBullet) {
+            newScore += 10;
+            return false;
+          }
+          return true;
+        });
+
+        setScore(newScore);
+        return survivingEnemies;
+      });
+
+      setBullets((prevBullets) =>
+        prevBullets.filter((bullet) => !enemies.some((enemy) =>
+          bullet.x < enemy.x + 30 &&
+          bullet.x + 2 > enemy.x &&
+          bullet.y < enemy.y + 30 &&
+          bullet.y + 4 > enemy.y
+        ))
+      );
+
+      if (enemies.some((enemy) =>
+        enemy.x < playerPosition.x + 40 &&
+        enemy.x + 30 > playerPosition.x &&
+        enemy.y + 30 > GAME_HEIGHT - 60
+      )) {
+        setGameOver(true);
+      }
+    }, 16);
+
+    return () => clearInterval(gameLoop);
+  }, [enemies, bullets, playerPosition, score, gameOver]);
+
+  const restartGame = () => {
+    setPlayerPosition({ x: GAME_WIDTH / 2 - 20 });
+    setEnemies([]);
+    setBullets([]);
+    setScore(0);
+    setGameOver(false);
+  };
+
   return (
-    <Box sx={{ p: 4, backgroundColor: '#ffffff', height: '100vh' }}>
-      <Paper elevation={3} sx={{ p: 3, maxWidth: 800, margin: 'auto' }}>
-        <Typography variant="h4" align="center" gutterBottom sx={{ fontWeight: 'bold', mb: 2 }}>
-          Top 9 Use Cases for Generative AI
-        </Typography>
-        <Typography variant="subtitle1" align="center" gutterBottom sx={{ mb: 3 }}>
-          % of organizations implementing generative AI use cases, by function
-        </Typography>
-        <ResponsiveContainer width="100%" height={400}>
-          <BarChart
-            data={data}
-            layout="vertical"
-            margin={{ top: 5, right: 30, left: 100, bottom: 5 }}
-          >
-            <CartesianGrid strokeDasharray="3 3" />
-            <XAxis type="number" />
-            <YAxis dataKey="name" type="category" />
-            <Tooltip />
-            <Legend />
-            <Bar dataKey="value2023" name="2023" fill="#00B7C2" />
-            <Bar dataKey="value2024" name="2024" fill="#0070AD" />
-          </BarChart>
-        </ResponsiveContainer>
-        <Typography variant="caption" display="block" align="right" sx={{ mt: 2 }}>
-          Copyright © 2024 Capgemini. All rights reserved.
-        </Typography>
-        <Typography variant="caption" display="block" sx={{ mt: 1 }}>
-          Source:Capgemini Research Institute, Generative AI executive survey, April 2023, N = 800 organizations; Generative AI executive survey, May–June 2024, N = 1,016 organizations that are at least exploring generative AI capabilities; N varies per functional use case, ranging from 499 to 716.
-        </Typography>
-        <Typography variant="caption" display="block" sx={{ mt: 1 }}>
-          *ESG/sustainability and human resources were excluded from the 2023 research.
-        </Typography>
-        <Typography variant="caption" display="block" sx={{ mt: 1 }}>
-          ** "Implementation" refers to organizations that have partially scaled the functional use case in question.
-        </Typography>
-        <Typography variant="caption" display="block" sx={{ mt: 1 }}>
-          ***In the 2024 averages, respondents from the public sector and India are excluded, as they were not included in the 2023 research.
-        </Typography>
-      </Paper>
-    </Box>
+    <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100">
+      <h1 className="text-3xl font-bold mb-4">Airplane Battle</h1>
+      <div
+        className="relative bg-blue-200 border-2 border-blue-500"
+        style={{ width: GAME_WIDTH, height: GAME_HEIGHT }}
+      >
+        {!gameOver ? (
+          <>
+            <Player position={playerPosition} />
+            {enemies.map((enemy, index) => (
+              <Enemy key={index} position={enemy} />
+            ))}
+            {bullets.map((bullet, index) => (
+              <Bullet key={index} position={bullet} />
+            ))}
+            <div className="absolute top-2 left-2 text-lg font-semibold">
+              Score: {score}
+            </div>
+          </>
+        ) : (
+          <div className="absolute inset-0 flex flex-col items-center justify-center bg-black bg-opacity-50">
+            <h2 className="text-white text-3xl font-bold mb-4">Game Over</h2>
+            <p className="text-white text-xl mb-4">Your Score: {score}</p>
+            <button
+              className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
+              onClick={restartGame}
+            >
+              Play Again
+            </button>
+          </div>
+        )}
+      </div>
+      <div className="mt-4 text-gray-600">
+        Use left and right arrow keys to move, spacebar to shoot
+      </div>
+    </div>
   );
-};
-
-export default PreviewPage;
+}
