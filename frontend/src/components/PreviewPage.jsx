@@ -1,171 +1,150 @@
 import React, { useState, useEffect, useCallback } from 'react';
 
-const GAME_HEIGHT = 600;
-const GAME_WIDTH = 400;
+const GRID_SIZE = 20;
+const CELL_SIZE = 20;
+const INITIAL_SNAKE = [{ x: 10, y: 10 }];
+const INITIAL_DIRECTION = 'RIGHT';
+const INITIAL_FOOD = { x: 15, y: 15 };
 
-const Player = ({ position }) => (
-  <div className="absolute" style={{ left: position.x, bottom: 20 }}>
-    <img src="https://placehold.co/40x40" alt="Player airplane" className="w-10 h-10" />
-  </div>
-);
-
-const Enemy = ({ position }) => (
-  <div className="absolute" style={{ left: position.x, top: position.y }}>
-    <img src="https://placehold.co/30x30" alt="Enemy airplane" className="w-8 h-8" />
-  </div>
-);
-
-const Bullet = ({ position }) => (
-  <div className="absolute bg-yellow-400 w-2 h-4 rounded" style={{ left: position.x, bottom: position.y }} />
-);
-
-const Explosion = ({ position }) => (
-  <div className="absolute" style={{ left: position.x - 15, top: position.y - 15 }}>
-    <img src="https://placehold.co/60x60" alt="Explosion effect" className="w-15 h-15" />
-  </div>
-);
-
-export default function App() {
-  const [playerPosition, setPlayerPosition] = useState({ x: GAME_WIDTH / 2 - 20 });
-  const [enemies, setEnemies] = useState([]);
-  const [bullets, setBullets] = useState([]);
-  const [explosions, setExplosions] = useState([]);
-  const [score, setScore] = useState(0);
+const App = () => {
+  const [snake, setSnake] = useState(INITIAL_SNAKE);
+  const [direction, setDirection] = useState(INITIAL_DIRECTION);
+  const [food, setFood] = useState(INITIAL_FOOD);
   const [gameOver, setGameOver] = useState(false);
 
-  const movePlayer = useCallback((e) => {
-    if (e.key === 'ArrowLeft') {
-      setPlayerPosition((prev) => ({ x: Math.max(0, prev.x - 10) }));
-    } else if (e.key === 'ArrowRight') {
-      setPlayerPosition((prev) => ({ x: Math.min(GAME_WIDTH - 40, prev.x + 10) }));
-    } else if (e.key === ' ') {
-      setBullets((prev) => [...prev, { x: playerPosition.x + 19, y: 40 }]);
+  const moveSnake = useCallback(() => {
+    const newSnake = [...snake];
+    const head = { ...newSnake[0] };
+
+    switch (direction) {
+      case 'UP':
+        head.y -= 1;
+        break;
+      case 'DOWN':
+        head.y += 1;
+        break;
+      case 'LEFT':
+        head.x -= 1;
+        break;
+      case 'RIGHT':
+        head.x += 1;
+        break;
+      default:
+        break;
     }
-  }, [playerPosition.x]);
+
+    newSnake.unshift(head);
+
+    if (head.x === food.x && head.y === food.y) {
+      setFood(generateFood());
+    } else {
+      newSnake.pop();
+    }
+
+    if (
+      head.x < 0 ||
+      head.x >= GRID_SIZE ||
+      head.y < 0 ||
+      head.y >= GRID_SIZE ||
+      newSnake.slice(1).some(segment => segment.x === head.x && segment.y === head.y)
+    ) {
+      setGameOver(true);
+    } else {
+      setSnake(newSnake);
+    }
+  }, [snake, direction, food]);
 
   useEffect(() => {
-    window.addEventListener('keydown', movePlayer);
-    return () => window.removeEventListener('keydown', movePlayer);
-  }, [movePlayer]);
-
-  useEffect(() => {
-    if (gameOver) return;
-
-    const gameLoop = setInterval(() => {
-      setEnemies((prevEnemies) => {
-        const newEnemies = prevEnemies
-          .map((enemy) => ({ ...enemy, y: enemy.y + 2 }))
-          .filter((enemy) => enemy.y < GAME_HEIGHT);
-
-        if (Math.random() < 0.02) {
-          newEnemies.push({ x: Math.random() * (GAME_WIDTH - 30), y: 0 });
-        }
-
-        return newEnemies;
-      });
-
-      setBullets((prevBullets) =>
-        prevBullets
-          .map((bullet) => ({ ...bullet, y: bullet.y + 5 }))
-          .filter((bullet) => bullet.y < GAME_HEIGHT)
-      );
-
-      setEnemies((prevEnemies) => {
-        let newScore = score;
-        const survivingEnemies = prevEnemies.filter((enemy) => {
-          const hitByBullet = bullets.some(
-            (bullet) =>
-              bullet.x < enemy.x + 30 &&
-              bullet.x + 2 > enemy.x &&
-              bullet.y < enemy.y + 30 &&
-              bullet.y + 4 > enemy.y
-          );
-
-          if (hitByBullet) {
-            newScore += 10;
-            setExplosions((prev) => [...prev, { x: enemy.x, y: enemy.y, id: Date.now() }]);
-            return false;
-          }
-          return true;
-        });
-
-        setScore(newScore);
-        return survivingEnemies;
-      });
-
-      setBullets((prevBullets) =>
-        prevBullets.filter((bullet) => !enemies.some((enemy) =>
-          bullet.x < enemy.x + 30 &&
-          bullet.x + 2 > enemy.x &&
-          bullet.y < enemy.y + 30 &&
-          bullet.y + 4 > enemy.y
-        ))
-      );
-
-      setExplosions((prevExplosions) =>
-        prevExplosions.filter((explosion) => Date.now() - explosion.id < 500)
-      );
-
-      if (enemies.some((enemy) =>
-        enemy.x < playerPosition.x + 40 &&
-        enemy.x + 30 > playerPosition.x &&
-        enemy.y + 30 > GAME_HEIGHT - 60
-      )) {
-        setGameOver(true);
+    const handleKeyPress = (e) => {
+      switch (e.key) {
+        case 'ArrowUp':
+          setDirection(prevDirection => prevDirection !== 'DOWN' ? 'UP' : prevDirection);
+          break;
+        case 'ArrowDown':
+          setDirection(prevDirection => prevDirection !== 'UP' ? 'DOWN' : prevDirection);
+          break;
+        case 'ArrowLeft':
+          setDirection(prevDirection => prevDirection !== 'RIGHT' ? 'LEFT' : prevDirection);
+          break;
+        case 'ArrowRight':
+          setDirection(prevDirection => prevDirection !== 'LEFT' ? 'RIGHT' : prevDirection);
+          break;
+        default:
+          break;
       }
-    }, 16);
+    };
 
-    return () => clearInterval(gameLoop);
-  }, [enemies, bullets, playerPosition, score, gameOver]);
+    window.addEventListener('keydown', handleKeyPress);
 
-  const restartGame = () => {
-    setPlayerPosition({ x: GAME_WIDTH / 2 - 20 });
-    setEnemies([]);
-    setBullets([]);
-    setExplosions([]);
-    setScore(0);
+    return () => {
+      window.removeEventListener('keydown', handleKeyPress);
+    };
+  }, []);
+
+  useEffect(() => {
+    if (!gameOver) {
+      const gameLoop = setInterval(moveSnake, 200);
+      return () => clearInterval(gameLoop);
+    }
+  }, [moveSnake, gameOver]);
+
+  const generateFood = () => {
+    let newFood;
+    do {
+      newFood = {
+        x: Math.floor(Math.random() * GRID_SIZE),
+        y: Math.floor(Math.random() * GRID_SIZE),
+      };
+    } while (snake.some(segment => segment.x === newFood.x && segment.y === newFood.y));
+    return newFood;
+  };
+
+  const resetGame = () => {
+    setSnake(INITIAL_SNAKE);
+    setDirection(INITIAL_DIRECTION);
+    setFood(INITIAL_FOOD);
     setGameOver(false);
   };
 
   return (
     <div className="flex flex-col items-center justify-center min-h-screen bg-gray-100">
-      <h1 className="text-3xl font-bold mb-4">Airplane Battle</h1>
-      <div
-        className="relative bg-blue-200 border-2 border-blue-500"
-        style={{ width: GAME_WIDTH, height: GAME_HEIGHT }}
-      >
-        {!gameOver ? (
-          <>
-            <Player position={playerPosition} />
-            {enemies.map((enemy, index) => (
-              <Enemy key={index} position={enemy} />
-            ))}
-            {bullets.map((bullet, index) => (
-              <Bullet key={index} position={bullet} />
-            ))}
-            {explosions.map((explosion) => (
-              <Explosion key={explosion.id} position={explosion} />
-            ))}
-            <div className="absolute top-2 left-2 text-lg font-semibold">
-              Score: {score}
-            </div>
-          </>
-        ) : (
-          <div className="absolute inset-0 flex flex-col items-center justify-center bg-black bg-opacity-50">
-            <h2 className="text-white text-3xl font-bold mb-4">Game Over</h2>
-            <p className="text-white text-xl mb-4">Your Score: {score}</p>
-            <button
-              className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
-              onClick={restartGame}
-            >
-              Play Again
-            </button>
-          </div>
-        )}
+      <h1 className="text-4xl font-bold mb-4">Snake Game</h1>
+      <div className="relative w-[400px] h-[400px] bg-white border-2 border-gray-300">
+        {snake.map((segment, index) => (
+          <div
+            key={index}
+            className="absolute bg-green-500 transition-all duration-200 ease-linear"
+            style={{
+              left: segment.x * CELL_SIZE,
+              top: segment.y * CELL_SIZE,
+              width: CELL_SIZE,
+              height: CELL_SIZE,
+            }}
+          />
+        ))}
+        <div
+          className="absolute bg-red-500"
+          style={{
+            left: food.x * CELL_SIZE,
+            top: food.y * CELL_SIZE,
+            width: CELL_SIZE,
+            height: CELL_SIZE,
+          }}
+        />
       </div>
-      <div className="mt-4 text-gray-600">
-        Use left and right arrow keys to move, spacebar to shoot
-      </div>
+      {gameOver && (
+        <div className="mt-4">
+          <p className="text-2xl font-bold mb-2">Game Over!</p>
+          <button
+            className="px-4 py-2 bg-blue-500 text-white rounded hover:bg-blue-600"
+            onClick={resetGame}
+          >
+            Play Again
+          </button>
+        </div>
+      )}
     </div>
   );
-}
+};
+
+export default App;
