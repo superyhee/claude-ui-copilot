@@ -1,6 +1,6 @@
 #  Code-Gen-GPT
 
-A React and Vite-based tool with an Express backend that converts text, screenshots, and Figma designs into clean, functional code using AI. It employs a conversational approach for continuous page effect adjustments. Now supports AWS Bedrock and Claude 3.5 Sonnet.
+A React and Vite-based tool with an Express backend that converts text, screenshots, and Figma designs into clean, functional code powered by LLMs. It employs a conversational approach for continuous page effect adjustments. Now supports AWS Bedrock and Claude 3.5 Sonnet.
 
 ### Text to code
 
