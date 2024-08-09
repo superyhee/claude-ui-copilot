@@ -1,4 +1,4 @@
-#  UI Code Generate
+#  Code-Gen-GPT
 
 A React and Vite-based tool with an Express backend that converts text, screenshots, and Figma designs into clean, functional code using AI. It employs a conversational approach for continuous page effect adjustments. Now supports AWS Bedrock and Claude 3.5 Sonnet.
 
@@ -38,7 +38,7 @@ https://github.com/user-attachments/assets/a77d428f-ce29-4f0a-b692-d983fdb02258
 1. Clone the repository:
 
    ```shell
-   git clone https://github.com/superyhee/ui-code-generator.git
+   git clone https://github.com/superyhee/code-gen-gpt.git
    cd ui-code-generator
    ```
 
