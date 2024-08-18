@@ -1,56 +1,65 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import Plot from 'react-plotly.js';
 
 function App() {
-  const z = [
-    [8.83, 8.89, 8.81, 8.87, 8.9, 8.87],
-    [8.89, 8.94, 8.85, 8.94, 8.96, 8.92],
-    [8.84, 8.9, 8.82, 8.92, 8.93, 8.91],
-    [8.79, 8.85, 8.79, 8.9, 8.94, 8.92],
-    [8.79, 8.88, 8.81, 8.9, 8.95, 8.92],
-    [8.8, 8.82, 8.78, 8.91, 8.94, 8.92],
-    [8.75, 8.78, 8.77, 8.91, 8.95, 8.92],
-    [8.8, 8.8, 8.77, 8.91, 8.95, 8.94],
-    [8.74, 8.81, 8.76, 8.93, 8.98, 8.99],
-    [8.89, 8.99, 8.92, 9.1, 9.13, 9.11],
-    [8.97, 8.97, 8.91, 9.09, 9.11, 9.11],
-    [9.04, 9.08, 9.05, 9.25, 9.28, 9.27],
-    [9, 9.01, 9, 9.2, 9.23, 9.2],
-    [8.99, 8.99, 8.98, 9.18, 9.2, 9.19],
-    [8.93, 8.97, 8.97, 9.18, 9.2, 9.18]
-  ];
+  const [data, setData] = useState([]);
+  const [layout, setLayout] = useState({});
 
-  const data = [{
-    z: z,
-    type: 'surface'
-  }];
+  useEffect(() => {
+    const generateData = () => {
+      const x = [];
+      const y = [];
+      const z = [];
+      for (let i = 0; i < 100; i++) {
+        x.push(Math.random() * 10);
+        y.push(Math.random() * 10);
+        z.push(Math.random() * 10);
+      }
+      return [{ x, y, z, mode: 'markers', type: 'scatter3d', marker: { size: 5, color: z, colorscale: 'Viridis' } }];
+    };
 
-  const layout = {
-    title: '3D Surface Plot',
-    autosize: false,
-    width: 800,
-    height: 600,
-    margin: {
-      l: 65,
-      r: 50,
-      b: 65,
-      t: 90,
-    }
-  };
+    setData(generateData());
+    setLayout({
+      title: '3D Scatter Plot',
+      autosize: false,
+      width: 800,
+      height: 600,
+      scene: {
+        xaxis: { title: 'X Axis' },
+        yaxis: { title: 'Y Axis' },
+        zaxis: { title: 'Z Axis' },
+      },
+      margin: { l: 0, r: 0, b: 0, t: 40 },
+    });
+  }, []);
 
   return (
     <div style={{
       display: 'flex',
-      justifyContent: 'center',
+      flexDirection: 'column',
       alignItems: 'center',
-      height: '100vh',
-      backgroundColor: '#f0f0f0'
+      minHeight: '100vh',
+      backgroundColor: '#f0f8ff',
+      padding: '20px',
     }}>
-      <Plot
-        data={data}
-        layout={layout}
-        config={{responsive: true}}
-      />
+      <h1 style={{ color: '#333', marginBottom: '20px' }}>Interactive 3D Scatter Plot</h1>
+      <div style={{
+        backgroundColor: 'white',
+        borderRadius: '8px',
+        boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)',
+        padding: '20px',
+      }}>
+        <Plot
+          data={data}
+          layout={layout}
+          config={{ responsive: true }}
+          style={{ width: '100%', height: '100%' }}
+        />
+      </div>
+      <p style={{ color: '#666', marginTop: '20px', textAlign: 'center', maxWidth: '600px' }}>
+        This 3D scatter plot visualizes random data points in a three-dimensional space. 
+        You can rotate, zoom, and pan the plot to explore the data from different angles.
+      </p>
     </div>
   );
 }
