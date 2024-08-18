@@ -1,5 +1,5 @@
-import React, { useState } from 'react';
-import { Dialog } from '@headlessui/react';
+import React, { useState, Fragment } from 'react';
+import { Dialog, Transition } from '@headlessui/react';
 
 const products = [
   { id: 1, name: 'Classic Espresso', price: 3.99, image: 'https://placehold.co/200x200?text=Espresso' },
@@ -108,33 +108,74 @@ function ShoppingCart({ isOpen, closeCart, cartItems, removeFromCart }) {
   const total = cartItems.reduce((sum, item) => sum + item.price * item.quantity, 0);
 
   return (
-    <Dialog open={isOpen} onClose={closeCart} className="fixed inset-0 z-10 overflow-y-auto">
-      <div className="flex items-center justify-center min-h-screen">
-        <Dialog.Overlay className="fixed inset-0 bg-black opacity-30" />
-        <div className="relative bg-white rounded max-w-md w-full mx-auto p-6">
-          <Dialog.Title className="text-2xl font-bold text-amber-800 mb-4">Your Cart</Dialog.Title>
-          {cartItems.length === 0 ? (
-            <p>Your cart is empty.</p>
-          ) : (
-            <>
-              {cartItems.map(item => (
-                <div key={item.id} className="flex justify-between items-center mb-4">
-                  <div>
-                    <h3 className="font-semibold">{item.name}</h3>
-                    <p className="text-sm text-gray-600">${item.price.toFixed(2)} x {item.quantity}</p>
-                  </div>
-                  <button onClick={() => removeFromCart(item.id)} className="text-red-500 hover:text-red-700">Remove</button>
-                </div>
-              ))}
-              <div className="mt-4 pt-4 border-t border-gray-200">
-                <p className="font-bold text-lg">Total: ${total.toFixed(2)}</p>
+    <Transition appear show={isOpen} as={Fragment}>
+      <Dialog as="div" className="fixed inset-0 z-10 overflow-y-auto" onClose={closeCart}>
+        <div className="min-h-screen px-4 text-center">
+          <Transition.Child
+            as={Fragment}
+            enter="ease-out duration-300"
+            enterFrom="opacity-0"
+            enterTo="opacity-100"
+            leave="ease-in duration-200"
+            leaveFrom="opacity-100"
+            leaveTo="opacity-0"
+          >
+            <Dialog.Overlay className="fixed inset-0 bg-black opacity-30" />
+          </Transition.Child>
+
+          <span className="inline-block h-screen align-middle" aria-hidden="true">
+            &#8203;
+          </span>
+          <Transition.Child
+            as={Fragment}
+            enter="ease-out duration-300"
+            enterFrom="opacity-0 scale-95"
+            enterTo="opacity-100 scale-100"
+            leave="ease-in duration-200"
+            leaveFrom="opacity-100 scale-100"
+            leaveTo="opacity-0 scale-95"
+          >
+            <div className="inline-block w-full max-w-md p-6 my-8 overflow-hidden text-left align-middle transition-all transform bg-white shadow-xl rounded-2xl">
+              <Dialog.Title as="h3" className="text-lg font-medium leading-6 text-gray-900">
+                Your Cart
+              </Dialog.Title>
+              <div className="mt-2">
+                {cartItems.length === 0 ? (
+                  <p className="text-sm text-gray-500">Your cart is empty.</p>
+                ) : (
+                  <>
+                    {cartItems.map(item => (
+                      <div key={item.id} className="flex justify-between items-center mb-4">
+                        <div>
+                          <h3 className="font-semibold">{item.name}</h3>
+                          <p className="text-sm text-gray-600">${item.price.toFixed(2)} x {item.quantity}</p>
+                        </div>
+                        <button onClick={() => removeFromCart(item.id)} className="text-red-500 hover:text-red-700">
+                          Remove
+                        </button>
+                      </div>
+                    ))}
+                    <div className="mt-4 pt-4 border-t border-gray-200">
+                      <p className="font-bold text-lg">Total: ${total.toFixed(2)}</p>
+                    </div>
+                  </>
+                )}
               </div>
-            </>
-          )}
-          <button onClick={closeCart} className="mt-6 bg-amber-600 text-white px-4 py-2 rounded hover:bg-amber-700">Close</button>
+
+              <div className="mt-4">
+                <button
+                  type="button"
+                  className="inline-flex justify-center px-4 py-2 text-sm font-medium text-white bg-amber-600 border border-transparent rounded-md hover:bg-amber-700 focus:outline-none focus-visible:ring-2 focus-visible:ring-offset-2 focus-visible:ring-amber-500"
+                  onClick={closeCart}
+                >
+                  Close
+                </button>
+              </div>
+            </div>
+          </Transition.Child>
         </div>
-      </div>
-    </Dialog>
+      </Dialog>
+    </Transition>
   );
 }
 
