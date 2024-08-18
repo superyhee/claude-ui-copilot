@@ -1,77 +1,58 @@
-import React, { useState } from 'react';
-import { Box, IconButton } from '@mui/material';
-import ZoomInIcon from '@mui/icons-material/ZoomIn';
-import ZoomOutIcon from '@mui/icons-material/ZoomOut';
-import mermaid from 'mermaid';
+import React from 'react';
+import Plot from 'react-plotly.js';
 
-const mermaidCode = `
-sequenceDiagram
-    participant Alice
-    participant CA as Certificate Authority
-    participant Bob
-    Alice->>CA: Request Certificate
-    CA->>Alice: Issue Certificate (Public Key)
-    Alice->>Bob: Send Public Key
-    Bob->>Bob: Generate Session Key
-    Bob->>Alice: Encrypt Session Key with Alice's Public Key
-    Alice->>Alice: Decrypt Session Key with Private Key
-    Alice->>Bob: Secure Communication using Session Key
-    Bob->>Alice: Secure Communication using Session Key
-`;
+function App() {
+  const z = [
+    [8.83, 8.89, 8.81, 8.87, 8.9, 8.87],
+    [8.89, 8.94, 8.85, 8.94, 8.96, 8.92],
+    [8.84, 8.9, 8.82, 8.92, 8.93, 8.91],
+    [8.79, 8.85, 8.79, 8.9, 8.94, 8.92],
+    [8.79, 8.88, 8.81, 8.9, 8.95, 8.92],
+    [8.8, 8.82, 8.78, 8.91, 8.94, 8.92],
+    [8.75, 8.78, 8.77, 8.91, 8.95, 8.92],
+    [8.8, 8.8, 8.77, 8.91, 8.95, 8.94],
+    [8.74, 8.81, 8.76, 8.93, 8.98, 8.99],
+    [8.89, 8.99, 8.92, 9.1, 9.13, 9.11],
+    [8.97, 8.97, 8.91, 9.09, 9.11, 9.11],
+    [9.04, 9.08, 9.05, 9.25, 9.28, 9.27],
+    [9, 9.01, 9, 9.2, 9.23, 9.2],
+    [8.99, 8.99, 8.98, 9.18, 9.2, 9.19],
+    [8.93, 8.97, 8.97, 9.18, 9.2, 9.18]
+  ];
 
-const PreviewPage = () => {
-  const [scale, setScale] = useState(1.5);
-  
-  const handleZoomIn = () => {
-    setScale(scale + 0.1);
-  };
-  
-  const handleZoomOut = () => {
-    setScale(Math.max(scale - 0.1, 0.5));
+  const data = [{
+    z: z,
+    type: 'surface'
+  }];
+
+  const layout = {
+    title: '3D Surface Plot',
+    autosize: false,
+    width: 800,
+    height: 600,
+    margin: {
+      l: 65,
+      r: 50,
+      b: 65,
+      t: 90,
+    }
   };
 
   return (
-    <Box sx={{ width: '100%', height: '80vh', display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', bgcolor: '#f5f5f5' }}>
-      <Box sx={{ fontSize: '24px', fontWeight: 'bold', mb: 2 }}>
-        PKI Encryption Principle
-      </Box>
-      <Box sx={{ flex: 1, width: '90%', display: 'flex', justifyContent: 'center', alignItems: 'center', bgcolor: 'white', borderRadius: '8px', boxShadow: '0px 0px 10px rgba(0,0,0,0.1)', overflow: 'hidden' }}>
-        <Box sx={{ transform: `scale(${scale})`, transition: 'transform 0.3s ease' }}>
-          <Mermaid chart={mermaidCode} />
-        </Box>
-      </Box>
-      <Box sx={{ display: 'flex', justifyContent: 'center', mt: 2 }}>
-        <IconButton onClick={handleZoomOut} disabled={scale <= 0.5} sx={{ mr: 1 }}>
-          <ZoomOutIcon />
-        </IconButton>
-        <IconButton onClick={handleZoomIn} sx={{ ml: 1 }}>
-          <ZoomInIcon />
-        </IconButton>
-      </Box>
-    </Box>
+    <div style={{
+      display: 'flex',
+      justifyContent: 'center',
+      alignItems: 'center',
+      height: '100vh',
+      backgroundColor: '#f0f0f0'
+    }}>
+      <Plot
+        data={data}
+        layout={layout}
+        config={{responsive: true}}
+      />
+    </div>
   );
-};
-
-mermaid.initialize({
-  startOnLoad: true,
-  theme: 'neutral',
-  sequence: {
-    diagramMarginX: 50,
-    diagramMarginY: 10,
-    boxTextMargin: 5,
-    noteMargin: 10,
-    messageMargin: 35,
-    mirrorActors: false
-  }
-});
-
-class Mermaid extends React.Component {
-  componentDidMount() {
-    mermaid.contentLoaded();
-  }
-  render() {
-    return <div className="mermaid">{this.props.chart}</div>;
-  }
 }
 
-export default PreviewPage;
+export default App;
