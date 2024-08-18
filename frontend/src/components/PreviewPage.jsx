@@ -1,127 +1,77 @@
-import React, { useState, useEffect } from 'react';
-import { Box, Typography, Stack, Button, TextField, Dialog, DialogTitle, DialogContent, DialogActions, IconButton } from '@mui/material';
-import { DataGrid } from '@mui/x-data-grid';
-import AddIcon from '@mui/icons-material/Add';
-import EditIcon from '@mui/icons-material/Edit';
-import DeleteIcon from '@mui/icons-material/Delete';
+import React, { useState } from 'react';
+import { Box, IconButton } from '@mui/material';
+import ZoomInIcon from '@mui/icons-material/ZoomIn';
+import ZoomOutIcon from '@mui/icons-material/ZoomOut';
+import mermaid from 'mermaid';
+
+const mermaidCode = `
+sequenceDiagram
+    participant Alice
+    participant CA as Certificate Authority
+    participant Bob
+    Alice->>CA: Request Certificate
+    CA->>Alice: Issue Certificate (Public Key)
+    Alice->>Bob: Send Public Key
+    Bob->>Bob: Generate Session Key
+    Bob->>Alice: Encrypt Session Key with Alice's Public Key
+    Alice->>Alice: Decrypt Session Key with Private Key
+    Alice->>Bob: Secure Communication using Session Key
+    Bob->>Alice: Secure Communication using Session Key
+`;
 
 const PreviewPage = () => {
-  const [rows, setRows] = useState([]);
-  const [open, setOpen] = useState(false);
-  const [editRow, setEditRow] = useState(null);
-  const [newRow, setNewRow] = useState({ name: '', age: '', email: '' });
-
-  useEffect(() => {
-    // Mock data
-    const mockData = [
-      { id: 1, name: 'John Doe', age: 30, email: 'john@example.com' },
-      { id: 2, name: 'Jane Smith', age: 25, email: 'jane@example.com' },
-      { id: 3, name: 'Bob Johnson', age: 35, email: 'bob@example.com' },
-    ];
-    setRows(mockData);
-  }, []);
-
-  const columns = [
-    { field: 'name', headerName: 'Name', flex: 1 },
-    { field: 'age', headerName: 'Age', width: 100 },
-    { field: 'email', headerName: 'Email', flex: 1 },
-    {
-      field: 'actions',
-      headerName: 'Actions',
-      width: 120,
-      renderCell: (params) => (
-        <Stack direction="row" spacing={1}>
-          <IconButton onClick={() => handleEdit(params.row)} size="small">
-            <EditIcon />
-          </IconButton>
-          <IconButton onClick={() => handleDelete(params.row.id)} size="small">
-            <DeleteIcon />
-          </IconButton>
-        </Stack>
-      ),
-    },
-  ];
-
-  const handleOpen = () => setOpen(true);
-  const handleClose = () => {
-    setOpen(false);
-    setEditRow(null);
-    setNewRow({ name: '', age: '', email: '' });
+  const [scale, setScale] = useState(1.5);
+  
+  const handleZoomIn = () => {
+    setScale(scale + 0.1);
   };
-
-  const handleEdit = (row) => {
-    setEditRow(row);
-    setNewRow(row);
-    handleOpen();
-  };
-
-  const handleDelete = (id) => {
-    setRows(rows.filter((row) => row.id !== id));
-  };
-
-  const handleSave = () => {
-    if (editRow) {
-      setRows(rows.map((row) => (row.id === editRow.id ? { ...row, ...newRow } : row)));
-    } else {
-      setRows([...rows, { id: rows.length + 1, ...newRow }]);
-    }
-    handleClose();
+  
+  const handleZoomOut = () => {
+    setScale(Math.max(scale - 0.1, 0.5));
   };
 
   return (
-    <Box sx={{ p: 4, backgroundColor: '#f5f5f5', height: '100%' }}>
-      <Stack spacing={4}>
-        <Typography variant="h4" align="center">Data Grid Example</Typography>
-        <Box sx={{ display: 'flex', justifyContent: 'flex-end', mb: 2 }}>
-          <Button variant="contained" startIcon={<AddIcon />} onClick={handleOpen}>
-            Add New Record
-          </Button>
+    <Box sx={{ width: '100%', height: '80vh', display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', bgcolor: '#f5f5f5' }}>
+      <Box sx={{ fontSize: '24px', fontWeight: 'bold', mb: 2 }}>
+        PKI Encryption Principle
+      </Box>
+      <Box sx={{ flex: 1, width: '90%', display: 'flex', justifyContent: 'center', alignItems: 'center', bgcolor: 'white', borderRadius: '8px', boxShadow: '0px 0px 10px rgba(0,0,0,0.1)', overflow: 'hidden' }}>
+        <Box sx={{ transform: `scale(${scale})`, transition: 'transform 0.3s ease' }}>
+          <Mermaid chart={mermaidCode} />
         </Box>
-        <DataGrid
-          rows={rows}
-          columns={columns}
-          pageSize={5}
-          rowsPerPageOptions={[5, 10, 20]}
-          checkboxSelection
-          disableSelectionOnClick
-          autoHeight
-          sx={{ backgroundColor: 'white' }}
-        />
-      </Stack>
-
-      <Dialog open={open} onClose={handleClose}>
-        <DialogTitle>{editRow ? 'Edit Record' : 'Add New Record'}</DialogTitle>
-        <DialogContent>
-          <TextField
-            autoFocus
-            margin="dense"
-            label="Name"
-            fullWidth
-            value={newRow.name}
-            onChange={(e) => setNewRow({ ...newRow, name: e.target.value })}
-          />
-          <TextField
-            margin="dense"
-            label="Age"
-            fullWidth
-            value={newRow.age}
-            onChange={(e) => setNewRow({ ...newRow, age: e.target.value })}
-          />
-          <TextField
-            margin="dense"
-            label="Email"
-            fullWidth
-            value={newRow.email}
-            onChange={(e) => setNewRow({ ...newRow, email: e.target.value })}
-          />
-        </DialogContent>
-        <DialogActions>
-          <Button onClick={handleClose}>Cancel</Button>
-          <Button onClick={handleSave}>Save</Button>
-        </DialogActions>
-      </Dialog>
+      </Box>
+      <Box sx={{ display: 'flex', justifyContent: 'center', mt: 2 }}>
+        <IconButton onClick={handleZoomOut} disabled={scale <= 0.5} sx={{ mr: 1 }}>
+          <ZoomOutIcon />
+        </IconButton>
+        <IconButton onClick={handleZoomIn} sx={{ ml: 1 }}>
+          <ZoomInIcon />
+        </IconButton>
+      </Box>
     </Box>
   );
 };
+
+mermaid.initialize({
+  startOnLoad: true,
+  theme: 'neutral',
+  sequence: {
+    diagramMarginX: 50,
+    diagramMarginY: 10,
+    boxTextMargin: 5,
+    noteMargin: 10,
+    messageMargin: 35,
+    mirrorActors: false
+  }
+});
+
+class Mermaid extends React.Component {
+  componentDidMount() {
+    mermaid.contentLoaded();
+  }
+  render() {
+    return <div className="mermaid">{this.props.chart}</div>;
+  }
+}
 
 export default PreviewPage;
