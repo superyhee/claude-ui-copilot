@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
-import { Box, Typography, Stack, TextField, Button, List, ListItem, ListItemText, ListItemSecondaryAction, IconButton, Checkbox, Select, MenuItem, FormControl, InputLabel } from '@mui/material';
+import { Box, Typography, Stack, TextField, Button, List, ListItem, ListItemText, ListItemSecondaryAction, IconButton, Checkbox, Select, MenuItem, FormControl, InputLabel, Paper, Container, Divider } from '@mui/material';
 import DeleteIcon from '@mui/icons-material/Delete';
 import EditIcon from '@mui/icons-material/Edit';
+import AddIcon from '@mui/icons-material/Add';
 
 const TodoApp = () => {
   const [tasks, setTasks] = useState([]);
@@ -44,69 +45,103 @@ const TodoApp = () => {
   });
 
   return (
-    <Box sx={{ p: 4, backgroundColor: '#f5f5f5', height: '100vh' }}>
-      <Stack alignItems="center" spacing={3}>
-        <Typography variant="h4">Todo List</Typography>
-        <Box sx={{ width: '100%', maxWidth: 500 }}>
-          <TextField
-            fullWidth
-            variant="outlined"
-            value={newTask}
-            onChange={(e) => setNewTask(e.target.value)}
-            placeholder="Add a new task"
-            InputProps={{
-              endAdornment: (
-                <Button variant="contained" onClick={addTask}>
-                  Add
-                </Button>
-              ),
-            }}
-          />
-        </Box>
-        <FormControl sx={{ m: 1, minWidth: 120 }}>
-          <InputLabel id="filter-label">Filter</InputLabel>
-          <Select
-            labelId="filter-label"
-            value={filter}
-            label="Filter"
-            onChange={(e) => setFilter(e.target.value)}
-          >
-            <MenuItem value="all">All</MenuItem>
-            <MenuItem value="active">Active</MenuItem>
-            <MenuItem value="completed">Completed</MenuItem>
-          </Select>
-        </FormControl>
-        <List sx={{ width: '100%', maxWidth: 500 }}>
-          {filteredTasks.map((task) => (
-            <ListItem key={task.id} dense button>
-              <Checkbox
-                edge="start"
-                checked={task.completed}
-                onChange={() => toggleComplete(task.id)}
-              />
-              {editingTask && editingTask.id === task.id ? (
-                <TextField
-                  fullWidth
-                  value={editingTask.text}
-                  onChange={(e) => setEditingTask({ ...editingTask, text: e.target.value })}
-                  onBlur={() => saveEdit(task.id, editingTask.text)}
+    <Container maxWidth="sm">
+      <Paper elevation={3} sx={{ p: 4, mt: 4, backgroundColor: '#ffffff' }}>
+        <Stack spacing={3}>
+          <Typography variant="h4" align="center" color="primary">
+            My Todo List
+          </Typography>
+          <Box sx={{ display: 'flex', alignItems: 'flex-end' }}>
+            <TextField
+              fullWidth
+              variant="standard"
+              value={newTask}
+              onChange={(e) => setNewTask(e.target.value)}
+              placeholder="Add a new task"
+              sx={{ mr: 1 }}
+            />
+            <Button
+              variant="contained"
+              color="primary"
+              onClick={addTask}
+              startIcon={<AddIcon />}
+            >
+              Add
+            </Button>
+          </Box>
+          <FormControl fullWidth>
+            <InputLabel id="filter-label">Filter</InputLabel>
+            <Select
+              labelId="filter-label"
+              value={filter}
+              label="Filter"
+              onChange={(e) => setFilter(e.target.value)}
+            >
+              <MenuItem value="all">All</MenuItem>
+              <MenuItem value="active">Active</MenuItem>
+              <MenuItem value="completed">Completed</MenuItem>
+            </Select>
+          </FormControl>
+          <Divider />
+          <List>
+            {filteredTasks.map((task) => (
+              <ListItem
+                key={task.id}
+                dense
+                button
+                sx={{
+                  borderRadius: 1,
+                  mb: 1,
+                  backgroundColor: task.completed ? '#e8f5e9' : '#fff',
+                  '&:hover': { backgroundColor: '#f5f5f5' },
+                }}
+              >
+                <Checkbox
+                  edge="start"
+                  checked={task.completed}
+                  onChange={() => toggleComplete(task.id)}
+                  sx={{ color: task.completed ? 'success.main' : 'inherit' }}
                 />
-              ) : (
-                <ListItemText primary={task.text} />
-              )}
-              <ListItemSecondaryAction>
-                <IconButton edge="end" aria-label="edit" onClick={() => startEditing(task)}>
-                  <EditIcon />
-                </IconButton>
-                <IconButton edge="end" aria-label="delete" onClick={() => deleteTask(task.id)}>
-                  <DeleteIcon />
-                </IconButton>
-              </ListItemSecondaryAction>
-            </ListItem>
-          ))}
-        </List>
-      </Stack>
-    </Box>
+                {editingTask && editingTask.id === task.id ? (
+                  <TextField
+                    fullWidth
+                    value={editingTask.text}
+                    onChange={(e) => setEditingTask({ ...editingTask, text: e.target.value })}
+                    onBlur={() => saveEdit(task.id, editingTask.text)}
+                    autoFocus
+                  />
+                ) : (
+                  <ListItemText
+                    primary={task.text}
+                    sx={{
+                      textDecoration: task.completed ? 'line-through' : 'none',
+                      color: task.completed ? 'text.secondary' : 'text.primary',
+                    }}
+                  />
+                )}
+                <ListItemSecondaryAction>
+                  <IconButton
+                    edge="end"
+                    aria-label="edit"
+                    onClick={() => startEditing(task)}
+                    sx={{ mr: 1 }}
+                  >
+                    <EditIcon />
+                  </IconButton>
+                  <IconButton
+                    edge="end"
+                    aria-label="delete"
+                    onClick={() => deleteTask(task.id)}
+                  >
+                    <DeleteIcon />
+                  </IconButton>
+                </ListItemSecondaryAction>
+              </ListItem>
+            ))}
+          </List>
+        </Stack>
+      </Paper>
+    </Container>
   );
 };
 
