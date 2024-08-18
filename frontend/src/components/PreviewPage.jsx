@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Box, Typography, Stack, Button, TextField, Paper } from '@mui/material';
+import { Box, Typography, Stack, Button, TextField, Paper, Container, Grid } from '@mui/material';
 
 const Calculator = () => {
   const [display, setDisplay] = useState('0');
@@ -47,17 +47,16 @@ const Calculator = () => {
   };
 
   const buttonStyle = {
-    width: '60px',
+    width: '100%',
     height: '60px',
     fontSize: '1.2rem',
-    margin: '5px',
   };
 
   return (
-    <Box sx={{ p: 4, backgroundColor: '#f5f5f5', height: '100vh', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-      <Paper elevation={3} sx={{ p: 3, borderRadius: '15px', backgroundColor: '#ffffff' }}>
-        <Stack spacing={2} alignItems="center">
-          <Typography variant="h4" gutterBottom>
+    <Container maxWidth="sm" sx={{ height: '100vh', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+      <Paper elevation={6} sx={{ p: 4, borderRadius: '20px', backgroundColor: '#f0f0f0', width: '100%' }}>
+        <Stack spacing={3}>
+          <Typography variant="h4" align="center" gutterBottom sx={{ fontWeight: 'bold', color: '#333' }}>
             Calculator
           </Typography>
           <TextField
@@ -66,53 +65,60 @@ const Calculator = () => {
             value={display}
             InputProps={{
               readOnly: true,
-              style: { fontSize: '1.5rem', textAlign: 'right' },
+              style: { fontSize: '2rem', textAlign: 'right', backgroundColor: '#fff', borderRadius: '10px' },
             }}
           />
-          <Stack direction="row" flexWrap="wrap" justifyContent="center">
+          <Grid container spacing={2}>
             {['7', '8', '9', '/', '4', '5', '6', '*', '1', '2', '3', '-', '0', '.', '=', '+'].map((btn) => (
+              <Grid item xs={3} key={btn}>
+                <Button
+                  variant="contained"
+                  fullWidth
+                  sx={{
+                    ...buttonStyle,
+                    backgroundColor: ['/', '*', '-', '+'].includes(btn) ? '#ff9800' : btn === '=' ? '#4caf50' : '#2196f3',
+                    color: '#ffffff',
+                    '&:hover': {
+                      backgroundColor: ['/', '*', '-', '+'].includes(btn) ? '#f57c00' : btn === '=' ? '#45a049' : '#1976d2',
+                    },
+                    borderRadius: '10px',
+                  }}
+                  onClick={() => {
+                    if (btn === '=') {
+                      handleEquals();
+                    } else if (['+', '-', '*', '/'].includes(btn)) {
+                      handleOperationClick(btn);
+                    } else {
+                      handleNumberClick(btn);
+                    }
+                  }}
+                >
+                  {btn}
+                </Button>
+              </Grid>
+            ))}
+            <Grid item xs={3}>
               <Button
-                key={btn}
                 variant="contained"
+                fullWidth
                 sx={{
                   ...buttonStyle,
-                  backgroundColor: ['/', '*', '-', '+'].includes(btn) ? '#ff9800' : '#2196f3',
+                  backgroundColor: '#f44336',
                   color: '#ffffff',
                   '&:hover': {
-                    backgroundColor: ['/', '*', '-', '+'].includes(btn) ? '#f57c00' : '#1976d2',
+                    backgroundColor: '#d32f2f',
                   },
+                  borderRadius: '10px',
                 }}
-                onClick={() => {
-                  if (btn === '=') {
-                    handleEquals();
-                  } else if (['+', '-', '*', '/'].includes(btn)) {
-                    handleOperationClick(btn);
-                  } else {
-                    handleNumberClick(btn);
-                  }
-                }}
+                onClick={handleClear}
               >
-                {btn}
+                C
               </Button>
-            ))}
-            <Button
-              variant="contained"
-              sx={{
-                ...buttonStyle,
-                backgroundColor: '#f44336',
-                color: '#ffffff',
-                '&:hover': {
-                  backgroundColor: '#d32f2f',
-                },
-              }}
-              onClick={handleClear}
-            >
-              C
-            </Button>
-          </Stack>
+            </Grid>
+          </Grid>
         </Stack>
       </Paper>
-    </Box>
+    </Container>
   );
 };
 
