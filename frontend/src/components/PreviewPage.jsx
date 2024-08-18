@@ -1,148 +1,119 @@
 import React, { useState } from 'react';
-import { Box, Typography, Stack, TextField, Button, List, ListItem, ListItemText, ListItemSecondaryAction, IconButton, Checkbox, Select, MenuItem, FormControl, InputLabel, Paper, Container, Divider } from '@mui/material';
-import DeleteIcon from '@mui/icons-material/Delete';
-import EditIcon from '@mui/icons-material/Edit';
-import AddIcon from '@mui/icons-material/Add';
+import { Box, Typography, Stack, Button, TextField, Paper } from '@mui/material';
 
-const TodoApp = () => {
-  const [tasks, setTasks] = useState([]);
-  const [newTask, setNewTask] = useState('');
-  const [filter, setFilter] = useState('all');
-  const [editingTask, setEditingTask] = useState(null);
+const Calculator = () => {
+  const [display, setDisplay] = useState('0');
+  const [prevValue, setPrevValue] = useState(null);
+  const [operation, setOperation] = useState(null);
 
-  const addTask = () => {
-    if (newTask.trim() !== '') {
-      setTasks([...tasks, { id: Date.now(), text: newTask, completed: false }]);
-      setNewTask('');
+  const handleNumberClick = (num) => {
+    setDisplay((prev) => (prev === '0' ? num : prev + num));
+  };
+
+  const handleOperationClick = (op) => {
+    setPrevValue(parseFloat(display));
+    setOperation(op);
+    setDisplay('0');
+  };
+
+  const handleEquals = () => {
+    const currentValue = parseFloat(display);
+    let result;
+    switch (operation) {
+      case '+':
+        result = prevValue + currentValue;
+        break;
+      case '-':
+        result = prevValue - currentValue;
+        break;
+      case '*':
+        result = prevValue * currentValue;
+        break;
+      case '/':
+        result = prevValue / currentValue;
+        break;
+      default:
+        return;
     }
+    setDisplay(result.toString());
+    setPrevValue(null);
+    setOperation(null);
   };
 
-  const deleteTask = (id) => {
-    setTasks(tasks.filter(task => task.id !== id));
+  const handleClear = () => {
+    setDisplay('0');
+    setPrevValue(null);
+    setOperation(null);
   };
 
-  const toggleComplete = (id) => {
-    setTasks(tasks.map(task =>
-      task.id === id ? { ...task, completed: !task.completed } : task
-    ));
+  const buttonStyle = {
+    width: '60px',
+    height: '60px',
+    fontSize: '1.2rem',
+    margin: '5px',
   };
-
-  const startEditing = (task) => {
-    setEditingTask(task);
-  };
-
-  const saveEdit = (id, newText) => {
-    setTasks(tasks.map(task =>
-      task.id === id ? { ...task, text: newText } : task
-    ));
-    setEditingTask(null);
-  };
-
-  const filteredTasks = tasks.filter(task => {
-    if (filter === 'active') return !task.completed;
-    if (filter === 'completed') return task.completed;
-    return true;
-  });
 
   return (
-    <Container maxWidth="sm">
-      <Paper elevation={3} sx={{ p: 4, mt: 4, backgroundColor: '#ffffff' }}>
-        <Stack spacing={3}>
-          <Typography variant="h4" align="center" color="primary">
-            My Todo List
+    <Box sx={{ p: 4, backgroundColor: '#f5f5f5', height: '100vh', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+      <Paper elevation={3} sx={{ p: 3, borderRadius: '15px', backgroundColor: '#ffffff' }}>
+        <Stack spacing={2} alignItems="center">
+          <Typography variant="h4" gutterBottom>
+            Calculator
           </Typography>
-          <Box sx={{ display: 'flex', alignItems: 'flex-end' }}>
-            <TextField
-              fullWidth
-              variant="standard"
-              value={newTask}
-              onChange={(e) => setNewTask(e.target.value)}
-              placeholder="Add a new task"
-              sx={{ mr: 1 }}
-            />
-            <Button
-              variant="contained"
-              color="primary"
-              onClick={addTask}
-              startIcon={<AddIcon />}
-            >
-              Add
-            </Button>
-          </Box>
-          <FormControl fullWidth>
-            <InputLabel id="filter-label">Filter</InputLabel>
-            <Select
-              labelId="filter-label"
-              value={filter}
-              label="Filter"
-              onChange={(e) => setFilter(e.target.value)}
-            >
-              <MenuItem value="all">All</MenuItem>
-              <MenuItem value="active">Active</MenuItem>
-              <MenuItem value="completed">Completed</MenuItem>
-            </Select>
-          </FormControl>
-          <Divider />
-          <List>
-            {filteredTasks.map((task) => (
-              <ListItem
-                key={task.id}
-                dense
-                button
+          <TextField
+            fullWidth
+            variant="outlined"
+            value={display}
+            InputProps={{
+              readOnly: true,
+              style: { fontSize: '1.5rem', textAlign: 'right' },
+            }}
+          />
+          <Stack direction="row" flexWrap="wrap" justifyContent="center">
+            {['7', '8', '9', '/', '4', '5', '6', '*', '1', '2', '3', '-', '0', '.', '=', '+'].map((btn) => (
+              <Button
+                key={btn}
+                variant="contained"
                 sx={{
-                  borderRadius: 1,
-                  mb: 1,
-                  backgroundColor: task.completed ? '#e8f5e9' : '#fff',
-                  '&:hover': { backgroundColor: '#f5f5f5' },
+                  ...buttonStyle,
+                  backgroundColor: ['/', '*', '-', '+'].includes(btn) ? '#ff9800' : '#2196f3',
+                  color: '#ffffff',
+                  '&:hover': {
+                    backgroundColor: ['/', '*', '-', '+'].includes(btn) ? '#f57c00' : '#1976d2',
+                  },
+                }}
+                onClick={() => {
+                  if (btn === '=') {
+                    handleEquals();
+                  } else if (['+', '-', '*', '/'].includes(btn)) {
+                    handleOperationClick(btn);
+                  } else {
+                    handleNumberClick(btn);
+                  }
                 }}
               >
-                <Checkbox
-                  edge="start"
-                  checked={task.completed}
-                  onChange={() => toggleComplete(task.id)}
-                  sx={{ color: task.completed ? 'success.main' : 'inherit' }}
-                />
-                {editingTask && editingTask.id === task.id ? (
-                  <TextField
-                    fullWidth
-                    value={editingTask.text}
-                    onChange={(e) => setEditingTask({ ...editingTask, text: e.target.value })}
-                    onBlur={() => saveEdit(task.id, editingTask.text)}
-                    autoFocus
-                  />
-                ) : (
-                  <ListItemText
-                    primary={task.text}
-                    sx={{
-                      textDecoration: task.completed ? 'line-through' : 'none',
-                      color: task.completed ? 'text.secondary' : 'text.primary',
-                    }}
-                  />
-                )}
-                <ListItemSecondaryAction>
-                  <IconButton
-                    edge="end"
-                    aria-label="edit"
-                    onClick={() => startEditing(task)}
-                    sx={{ mr: 1 }}
-                  >
-                    <EditIcon />
-                  </IconButton>
-                  <IconButton
-                    edge="end"
-                    aria-label="delete"
-                    onClick={() => deleteTask(task.id)}
-                  >
-                    <DeleteIcon />
-                  </IconButton>
-                </ListItemSecondaryAction>
-              </ListItem>
+                {btn}
+              </Button>
             ))}
-          </List>
+            <Button
+              variant="contained"
+              sx={{
+                ...buttonStyle,
+                backgroundColor: '#f44336',
+                color: '#ffffff',
+                '&:hover': {
+                  backgroundColor: '#d32f2f',
+                },
+              }}
+              onClick={handleClear}
+            >
+              C
+            </Button>
+          </Stack>
         </Stack>
       </Paper>
-    </Container>
+    </Box>
   );
 };
 
-export default TodoApp;
+export default Calculator;
