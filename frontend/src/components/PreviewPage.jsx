@@ -7,27 +7,30 @@ function App() {
 
   useEffect(() => {
     const generateData = () => {
-      const y0 = Array.from({ length: 50 }, () => Math.random());
-      const y1 = Array.from({ length: 50 }, () => Math.random() * 2 + 1);
-      const y2 = Array.from({ length: 50 }, () => Math.random() * 3 + 2);
-      const y3 = Array.from({ length: 50 }, () => Math.random() * 4 + 3);
+      const z = [];
+      for (let i = 0; i < 10; i++) {
+        const row = [];
+        for (let j = 0; j < 10; j++) {
+          row.push(Math.random());
+        }
+        z.push(row);
+      }
 
-      return [
-        { y: y0, type: 'box', name: 'Sample A' },
-        { y: y1, type: 'box', name: 'Sample B' },
-        { y: y2, type: 'box', name: 'Sample C' },
-        { y: y3, type: 'box', name: 'Sample D' }
-      ];
+      return [{
+        z: z,
+        type: 'heatmap',
+        colorscale: 'Viridis'
+      }];
     };
 
     setData(generateData());
     setLayout({
-      title: 'Box Plot Comparison',
+      title: 'Interactive Heatmap',
       autosize: false,
       width: 800,
       height: 600,
-      yaxis: { title: 'Values' },
-      boxmode: 'group',
+      xaxis: { title: 'X Axis' },
+      yaxis: { title: 'Y Axis' },
       margin: { l: 50, r: 50, b: 50, t: 80 },
       paper_bgcolor: '#f8f9fa',
       plot_bgcolor: '#ffffff',
@@ -45,7 +48,7 @@ function App() {
       padding: '20px',
     }}>
       <h1 style={{ color: '#333', marginBottom: '20px', fontFamily: 'Arial, sans-serif' }}>
-        Interactive Box Plot Comparison
+        Interactive Heatmap Visualization
       </h1>
       <div style={{
         backgroundColor: 'white',
@@ -61,14 +64,13 @@ function App() {
         />
       </div>
       <p style={{ color: '#666', marginTop: '20px', textAlign: 'center', maxWidth: '600px', fontFamily: 'Arial, sans-serif' }}>
-        This box plot compares the distribution of values across four different samples. 
-        Each box represents a sample, showing the median, quartiles, and potential outliers.
+        This heatmap visualizes a 10x10 matrix of random values. The color intensity represents the magnitude of each value.
       </p>
       <div style={{ marginTop: '20px', textAlign: 'center' }}>
-        <h3 style={{ color: '#333', fontFamily: 'Arial, sans-serif' }}>How to interpret a Box Plot</h3>
+        <h3 style={{ color: '#333', fontFamily: 'Arial, sans-serif' }}>How to interpret a Heatmap</h3>
         <img 
-          src="https://placehold.co/600x300?text=Box+Plot+Explanation" 
-          alt="Diagram explaining the components of a box plot including median, quartiles, and whiskers"
+          src="https://placehold.co/600x300?text=Heatmap+Explanation" 
+          alt="Diagram explaining how to read a heatmap, showing color scale and axis interpretations"
           style={{ maxWidth: '100%', height: 'auto', borderRadius: '8px', marginTop: '10px' }}
         />
       </div>
