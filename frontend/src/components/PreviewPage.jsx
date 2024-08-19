@@ -1,50 +1,45 @@
-import { useState, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
+
+const colors = ['bg-blue-500', 'bg-green-500', 'bg-yellow-500', 'bg-purple-500', 'bg-pink-500'];
 
 export default function App() {
-  const [breathingState, setBreathingState] = useState('inhale');
-  const [circleSize, setCircleSize] = useState(100);
-  const [circleColor, setCircleColor] = useState('#4b94ff');
+  const [inhale, setInhale] = useState(true);
+  const [colorIndex, setColorIndex] = useState(0);
+  const [timer, setTimer] = useState(4);
+  const [circleSize, setCircleSize] = useState(48);
 
   useEffect(() => {
-    const intervalId = setInterval(() => {
-      if (breathingState === 'inhale') {
-        setCircleSize((prevSize) => prevSize + 10);
-        setCircleColor('#10b981');
-        if (circleSize >= 300) {
-          setBreathingState('exhale');
+    const interval = setInterval(() => {
+      setTimer((prevTimer) => {
+        if (prevTimer === 1) {
+          setInhale((prev) => !prev);
+          setColorIndex((prevIndex) => (prevIndex + 1) % colors.length);
+          setCircleSize((prevSize) => (prevSize === 48 ? 64 : 48));
+          return 4;
         }
-      } else {
-        setCircleSize((prevSize) => prevSize - 10);
-        setCircleColor('#ef4444');
-        if (circleSize <= 100) {
-          setBreathingState('inhale');
-        }
-      }
-    }, 100);
+        return prevTimer - 1;
+      });
+    }, 1000);
 
-    return () => clearInterval(intervalId);
-  }, [breathingState, circleSize]);
+    return () => clearInterval(interval);
+  }, []);
 
   return (
-    <div className="bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 min-h-screen flex flex-col items-center justify-center">
-      <h1 className="text-3xl font-bold text-white mb-8">Meditation App</h1>
-      <div className="relative">
+    <div className={`min-h-screen ${colors[colorIndex]} transition-colors duration-1000 flex flex-col items-center justify-center text-white`}>
+      <h1 className="text-4xl font-bold mb-8">Meditation Game</h1>
+      <div className="text-6xl font-semibold mb-4">
+        {inhale ? 'Inhale' : 'Exhale'}
+      </div>
+      <div className="text-3xl">{timer}</div>
+      <div className="mt-8">
         <img
-          src="https://placehold.co/500x500?text=Peaceful+Nature+Background"
-          alt="Peaceful Nature Background"
-          className="w-full h-auto rounded-lg shadow-lg"
-        />
-        <div
-          className={`absolute inset-0 m-auto rounded-full transition-all duration-500 shadow-lg`}
-          style={{
-            width: `${circleSize}px`,
-            height: `${circleSize}px`,
-            backgroundColor: circleColor,
-          }}
+          src={`https://placehold.co/${circleSize}x${circleSize}/png?text=Breathing+Circle`}
+          alt="A circle that expands and contracts to guide breathing"
+          className={`rounded-full ${inhale ? 'animate-pulse' : 'animate-none'}`}
         />
       </div>
-      <p className="mt-8 text-2xl font-semibold text-white">
-        {breathingState === 'inhale' ? 'Inhale' : 'Exhale'}
+      <p className="mt-8 text-xl">
+        Follow the circle and let your mind relax...
       </p>
     </div>
   );
