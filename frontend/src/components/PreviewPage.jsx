@@ -1,62 +1,82 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import { useForm } from 'react-hook-form';
 
-const App = () => {
-  const [meditationTime, setMeditationTime] = useState(0);
-  const [isRunning, setIsRunning] = useState(false);
+export default function App() {
+  const { register, handleSubmit } = useForm();
+  const [breathingState, setBreathingState] = useState('inhale');
+  const [breathingAnimation, setBreathingAnimation] = useState('');
 
-  const handleStartMeditation = () => {
-    setIsRunning(true);
-    const interval = setInterval(() => {
-      setMeditationTime((prevTime) => prevTime + 1);
-    }, 1000);
-
-    return () => clearInterval(interval);
+  const onSubmit = (data) => {
+    setBreathingState('inhale');
   };
 
-  const handleStopMeditation = () => {
-    setIsRunning(false);
-  };
+  useEffect(() => {
+    let animationInterval;
 
-  const formatTime = (time) => {
-    const minutes = Math.floor(time / 60);
-    const seconds = time % 60;
-    return `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
-  };
+    if (breathingState === 'inhale') {
+      setBreathingAnimation('animate-inhale');
+      animationInterval = setInterval(() => {
+        setBreathingState('exhale');
+      }, 4000);
+    } else {
+      setBreathingAnimation('animate-exhale');
+      animationInterval = setInterval(() => {
+        setBreathingState('inhale');
+      }, 4000);
+    }
+
+    return () => clearInterval(animationInterval);
+  }, [breathingState]);
 
   return (
-    <div className="flex flex-col items-center justify-center h-screen bg-gradient-to-br from-indigo-500 to-purple-800">
-      <div className="bg-white shadow-lg rounded-lg p-8 max-w-md">
-        <h1 className="text-3xl font-bold mb-4 text-center">Meditation Timer</h1>
-        <div className="flex justify-center mb-8">
-          <img
-            src="https://placehold.co/200x200/EEE/333?text=Meditation+Icon"
-            alt="Meditation icon placeholder"
-            className="w-32 h-32"
+    <div className="text-black p-4 flex flex-col items-center justify-center">
+      <h1 className="text-2xl mb-4">Meditation App</h1>
+      <div className="flex flex-col items-center justify-center">
+        <img
+          src="https://placehold.co/200x200?text=Breathing+Animation"
+          alt="Breathing Animation"
+          className={`w-64 h-64 mb-4 ${breathingAnimation}`}
+        />
+        <form onSubmit={handleSubmit(onSubmit)}>
+          <input
+            type="submit"
+            value="Start Meditation"
+            className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
           />
-        </div>
-        <div className="flex justify-center mb-8">
-          <h2 className="text-6xl font-bold">{formatTime(meditationTime)}</h2>
-        </div>
-        <div className="flex justify-center">
-          {!isRunning ? (
-            <button
-              onClick={handleStartMeditation}
-              className="bg-indigo-500 hover:bg-indigo-700 text-white font-bold py-2 px-4 rounded"
-            >
-              Start Meditation
-            </button>
-          ) : (
-            <button
-              onClick={handleStopMeditation}
-              className="bg-red-500 hover:bg-red-700 text-white font-bold py-2 px-4 rounded"
-            >
-              Stop Meditation
-            </button>
-          )}
-        </div>
+        </form>
       </div>
     </div>
   );
-};
+}
 
-export default App;
+.animate-inhale {
+  animation: inhale 4s infinite;
+}
+
+.animate-exhale {
+  animation: exhale 4s infinite;
+}
+
+@keyframes inhale {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.2);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
+
+@keyframes exhale {
+  0% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(0.8);
+  }
+  100% {
+    transform: scale(1);
+  }
+}
