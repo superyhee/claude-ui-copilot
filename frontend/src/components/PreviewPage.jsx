@@ -1,10 +1,11 @@
 import React, { useState } from 'react';
+import { Box, Button, TextField, Grid } from '@mui/material';
 
-export default function App() {
+const Calculator = () => {
   const [display, setDisplay] = useState('');
 
   const handleClick = (value) => {
-    setDisplay(prev => prev + value);
+    setDisplay(prevDisplay => prevDisplay + value);
   };
 
   const handleClear = () => {
@@ -20,28 +21,62 @@ export default function App() {
   };
 
   return (
-    <div className="flex items-center justify-center h-screen bg-black">
-      <div className="bg-gray-800 p-6 rounded-lg shadow-lg">
-        <div className="mb-4">
-          <input
-            type="text"
-            value={display}
-            readOnly
-            className="w-full bg-gray-700 text-white text-right text-2xl p-2 rounded"
-          />
-        </div>
-        <div className="grid grid-cols-4 gap-2">
-          {['1', '2', '3', '.', '4', '5', '6', '*', '7', '8', '9', '/', '?', '+', '-', '='].map((btn, index) => (
-            <button
-              key={index}
-              onClick={() => btn === '=' ? handleCalculate() : btn === '?' ? handleClear() : handleClick(btn)}
-              className="bg-gray-600 hover:bg-gray-500 text-white font-bold py-2 px-4 rounded"
+    <Box
+      sx={{
+        width: '300px',
+        padding: '20px',
+        backgroundColor: '#FFE4E1',
+        borderRadius: '10px',
+        border: '2px solid #FF69B4',
+        margin: 'auto',
+        marginTop: '50px',
+      }}
+    >
+      <TextField
+        fullWidth
+        value={display}
+        sx={{
+          marginBottom: '20px',
+          '& .MuiOutlinedInput-root': {
+            '& fieldset': {
+              borderColor: '#FF69B4',
+            },
+            '&:hover fieldset': {
+              borderColor: '#FF69B4',
+            },
+            '&.Mui-focused fieldset': {
+              borderColor: '#FF69B4',
+            },
+          },
+        }}
+      />
+      <Grid container spacing={1}>
+        {['1', '2', '3', '.', '4', '5', '6', '*', '7', '8', '9', '/', 'C', '+', '-', '='].map((btn) => (
+          <Grid item xs={3} key={btn}>
+            <Button
+              fullWidth
+              variant="outlined"
+              onClick={() => {
+                if (btn === '=') handleCalculate();
+                else if (btn === 'C') handleClear();
+                else handleClick(btn);
+              }}
+              sx={{
+                border: '1px solid #FF69B4',
+                color: '#FF69B4',
+                '&:hover': {
+                  backgroundColor: '#FFB6C1',
+                  borderColor: '#FF69B4',
+                },
+              }}
             >
               {btn}
-            </button>
-          ))}
-        </div>
-      </div>
-    </div>
+            </Button>
+          </Grid>
+        ))}
+      </Grid>
+    </Box>
   );
-}
+};
+
+export default Calculator;
