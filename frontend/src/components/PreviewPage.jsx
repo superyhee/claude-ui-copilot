@@ -1,132 +1,113 @@
-import React, { useState } from 'react';
-import { Box, Button, TextField, Grid, Typography, Paper } from '@mui/material';
-import { styled } from '@mui/system';
+import React, { useState, useEffect } from 'react';
 
-const StyledPaper = styled(Paper)(({ theme }) => ({
-  padding: theme.spacing(3),
-  background: '#2c3e50',
-  borderRadius: 15,
-  boxShadow: '0 10px 20px rgba(0, 0, 0, 0.19), 0 6px 6px rgba(0, 0, 0, 0.23)',
-}));
+const players = [
+  { id: 1, name: 'Player 1', role: 'Villager' },
+  { id: 2, name: 'Player 2', role: 'Werewolf' },
+  { id: 3, name: 'Player 3', role: 'Seer' },
+  { id: 4, name: 'Player 4', role: 'Villager' },
+  { id: 5, name: 'Player 5', role: 'Werewolf' },
+  { id: 6, name: 'Player 6', role: 'Villager' },
+];
 
-const StyledButton = styled(Button)(({ theme }) => ({
-  background: '#34495e',
-  border: 0,
-  borderRadius: 8,
-  color: 'white',
-  height: 56,
-  fontSize: '1.2rem',
-  fontWeight: 'bold',
-  '&:hover': {
-    background: '#2c3e50',
-  },
-}));
+const App = () => {
+  const [gameState, setGameState] = useState('lobby');
+  const [selectedPlayer, setSelectedPlayer] = useState(null);
+  const [currentPlayer, setCurrentPlayer] = useState(1);
+  const [time, setTime] = useState(60);
 
-const OperatorButton = styled(StyledButton)(({ theme }) => ({
-  background: '#e67e22',
-  '&:hover': {
-    background: '#d35400',
-  },
-}));
+  useEffect(() => {
+    if (gameState === 'night' || gameState === 'day') {
+      const timer = setInterval(() => {
+        setTime((prevTime) => {
+          if (prevTime === 0) {
+            setGameState(gameState === 'night' ? 'day' : 'night');
+            return 60;
+          }
+          return prevTime - 1;
+        });
+      }, 1000);
+      return () => clearInterval(timer);
+    }
+  }, [gameState]);
 
-const EqualButton = styled(StyledButton)(({ theme }) => ({
-  background: '#27ae60',
-  '&:hover': {
-    background: '#2ecc71',
-  },
-}));
-
-const Calculator = () => {
-  const [display, setDisplay] = useState('');
-
-  const handleClick = (value) => {
-    setDisplay(prevDisplay => prevDisplay + value);
+  const startGame = () => {
+    setGameState('night');
   };
 
-  const handleClear = () => {
-    setDisplay('');
+  const handlePlayerClick = (playerId) => {
+    setSelectedPlayer(playerId);
   };
 
-  const handleCalculate = () => {
-    try {
-      setDisplay(eval(display).toString());
-    } catch (error) {
-      setDisplay('Error');
+  const handleVote = () => {
+    if (selectedPlayer) {
+      // Handle voting logic here
+      setSelectedPlayer(null);
+      setCurrentPlayer((prev) => (prev % players.length) + 1);
     }
   };
 
   return (
-    <Box
-      sx={{
-        display: 'flex',
-        justifyContent: 'center',
-        alignItems: 'center',
-        height: '100vh',
-        background: 'linear-gradient(to right bottom, #2c3e50, #3498db)',
-      }}
-    >
-      <StyledPaper elevation={3}>
-        <Typography variant="h4" align="center" gutterBottom sx={{ color: '#ecf0f1', fontWeight: 'bold', marginBottom: '20px' }}>
-          Cool Calculator
-        </Typography>
-        <TextField
-          fullWidth
-          value={display}
-          variant="filled"
-          InputProps={{
-            style: { 
-              fontSize: '2rem',
-              color: '#ecf0f1',
-              background: 'rgba(236, 240, 241, 0.1)',
-              borderRadius: '8px 8px 0 0',
-            }
-          }}
-          sx={{
-            marginBottom: '20px',
-            '& .MuiFilledInput-underline:before': {
-              borderBottomColor: 'transparent',
-            },
-            '& .MuiFilledInput-underline:after': {
-              borderBottomColor: 'transparent',
-            },
-          }}
-        />
-        <Grid container spacing={2}>
-          {['7', '8', '9', '/', '4', '5', '6', '*', '1', '2', '3', '-', 'C', '0', '.', '+'].map((btn) => (
-            <Grid item xs={3} key={btn}>
-              {['/', '*', '-', '+'].includes(btn) ? (
-                <OperatorButton
-                  fullWidth
-                  onClick={() => handleClick(btn)}
-                >
-                  {btn}
-                </OperatorButton>
-              ) : (
-                <StyledButton
-                  fullWidth
-                  onClick={() => {
-                    if (btn === 'C') handleClear();
-                    else handleClick(btn);
-                  }}
-                >
-                  {btn}
-                </StyledButton>
-              )}
-            </Grid>
-          ))}
-          <Grid item xs={12}>
-            <EqualButton
-              fullWidth
-              onClick={handleCalculate}
-              sx={{ height: 70, fontSize: '1.5rem' }}
+    <div className="min-h-screen bg-gray-100 flex flex-col items-center justify-center p-4">
+      <h1 className="text-4xl font-bold mb-8 text-indigo-700">狼人杀</h1>
+      
+      {gameState === 'lobby' && (
+        <div className="text-center">
+          <p className="text-xl mb-4">欢迎来到狼人杀游戏！</p>
+          <button
+            className="bg-indigo-600 text-white px-6 py-2 rounded-lg hover:bg-indigo-700 transition-colors"
+            onClick={startGame}
+          >
+            开始游戏
+          </button>
+        </div>
+      )}
+
+      {(gameState === 'night' || gameState === 'day') && (
+        <div className="w-full max-w-3xl">
+          <div className="flex justify-between items-center mb-4">
+            <h2 className="text-2xl font-semibold">
+              {gameState === 'night' ? '夜晚' : '白天'}
+            </h2>
+            <p className="text-xl">剩余时间: {time}秒</p>
+          </div>
+          <div className="grid grid-cols-2 sm:grid-cols-3 gap-4 mb-6">
+            {players.map((player) => (
+              <div
+                key={player.id}
+                className={`p-4 rounded-lg cursor-pointer ${
+                  selectedPlayer === player.id
+                    ? 'bg-indigo-200 border-2 border-indigo-600'
+                    : 'bg-white hover:bg-gray-100'
+                }`}
+                onClick={() => handlePlayerClick(player.id)}
+              >
+                <img
+                  src={`https://placehold.co/100x100?text=${player.name}`}
+                  alt={`Avatar of ${player.name}`}
+                  className="w-16 h-16 rounded-full mx-auto mb-2"
+                />
+                <p className="text-center font-semibold">{player.name}</p>
+                {currentPlayer === player.id && (
+                  <p className="text-center text-sm text-indigo-600 mt-1">
+                    当前玩家
+                  </p>
+                )}
+              </div>
+            ))}
+          </div>
+          <div className="text-center">
+            <button
+              className="bg-indigo-600 text-white px-6 py-2 rounded-lg hover:bg-indigo-700 transition-colors disabled:bg-gray-400"
+              onClick={handleVote}
+              disabled={!selectedPlayer}
             >
-              =
-            </EqualButton>
-          </Grid>
-        </Grid>
-      </StyledPaper>
-    </Box>
+              {gameState === 'night' ? '使用技能' : '投票'}
+            </button>
+          </div>
+        </div>
+      )}
+    </div>
   );
 };
 
-export default Calculator;
+export default App;
