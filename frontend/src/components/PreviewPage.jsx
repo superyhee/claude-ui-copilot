@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { PencilIcon, TrashIcon, SearchIcon, ChevronLeftIcon, ChevronRightIcon } from '@heroicons/react/solid';
+import { PencilIcon, TrashIcon, SearchIcon, ChevronLeftIcon, ChevronRightIcon } from '@heroicons/react/24/solid';
 
 const mockData = [
   { id: 1, name: 'John Doe', email: 'john@example.com', role: 'Developer' },
@@ -20,7 +20,6 @@ const DataGrid = () => {
   const [newRecord, setNewRecord] = useState({ name: '', email: '', role: '' });
 
   useEffect(() => {
-    // Simulating data fetching
     setData(mockData);
   }, []);
 
