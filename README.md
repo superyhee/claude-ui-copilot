@@ -1,4 +1,4 @@
-#  Code-Gen-GPT
+# ui-gen-gpt
 
 A React and Vite-based tool with an Express backend that converts text, screenshots, and Figma designs into clean, functional code powered by LLMs. It employs a conversational approach for continuous page effect adjustments. Now supports AWS Bedrock and Claude 3.5 Sonnet.
 
@@ -6,7 +6,7 @@ A React and Vite-based tool with an Express backend that converts text, screensh
 
 <img width="100%" alt="image" src="./images/code.png">
 
-### ScreenShot to code 
+### ScreenShot to code
 
 <img width="100%" alt="image" src="./images/home.png">
 
@@ -17,7 +17,6 @@ A React and Vite-based tool with an Express backend that converts text, screensh
 ### Demo
 
 https://github.com/user-attachments/assets/a77d428f-ce29-4f0a-b692-d983fdb02258
-
 
 ## Supported stacks:
 
@@ -38,7 +37,7 @@ https://github.com/user-attachments/assets/a77d428f-ce29-4f0a-b692-d983fdb02258
 1. Clone the repository:
 
    ```shell
-   git clone https://github.com/superyhee/code-gen-gpt.git
+   git clone https://github.com/superyhee/ui-gen-gpt.git
    cd ui-code-generator
    ```
 
@@ -53,11 +52,12 @@ https://github.com/user-attachments/assets/a77d428f-ce29-4f0a-b692-d983fdb02258
 
    - Set ANTHROPIC_KEY or AWS AK and SK
    - Set IS_DOCKER_ENV to true for Docker, false otherwise
-   ```shell 
+
+   ```shell
    IS_DOCKER_ENV=true
-   ANTHROPIC_API_KEY= 
-   AWS_ACCESS_KEY_ID= 
-   AWS_SECRET_ACCESS_KEY= 
+   ANTHROPIC_API_KEY=
+   AWS_ACCESS_KEY_ID=
+   AWS_SECRET_ACCESS_KEY=
    AWS_REGION=us-east-1
    ```
 
@@ -103,5 +103,3 @@ Open your browser and visit http://localhost:9000 to see the frontend page.
 ## License
 
 Licensed under the MIT License.
-
-
