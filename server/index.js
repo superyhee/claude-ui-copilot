@@ -47,7 +47,6 @@ const handleFileUpload = async (files) => {
     files.map(async (file) => {
       const fileData = await fs.readFile(file.path);
       const base64 = fileData.toString('base64');
-      // 调用processImage函数
       const [processedMediaType, processedBase64] = await processImage(
         file.mimetype,
         base64
@@ -74,14 +73,17 @@ const generateCode = async (req, res) => {
     const currentCode = await readCode(template);
     const uiTemplate = getUITemplate(template);
     const myPrompt = hasFile
-      ? `Replicate the page design exactly as shown in the screenshot.`
+      ? 'Make sure the page looks exactly like the screenshot,match the colors,sizes exactly.'
       : prompt;
     const detailedPrompt = getPrompt(currentCode, myPrompt);
-    const content = await handleFileUpload(req.files);
-    content.push({ type: 'text', text: detailedPrompt });
+    const content = [
+      ...(await handleFileUpload(req.files)),
+      { type: 'text', text: detailedPrompt }
+    ];
+
     let code = '';
     sendMessage('chats', 'starting');
-    let client = provider === 'Bedrock' ? bedrockClient : anthropicClient;
+    const client = provider === 'Bedrock' ? bedrockClient : anthropicClient;
     const stream = await client.messages.create({
       model,
       system: getSystemPrompt(hasFile, template, uiTemplate),
@@ -93,17 +95,17 @@ const generateCode = async (req, res) => {
       stream: true
     });
 
-    for await (const messageStreamEvent of stream) {
-      if (messageStreamEvent.type === 'content_block_delta') {
-        const text = messageStreamEvent.delta.text;
-        code += text;
-        sendMessage('chats', text);
+    for await (const { type, delta } of stream) {
+      if (type === 'content_block_delta') {
+        code += delta.text;
+        sendMessage('chats', delta.text);
       }
     }
     sendMessage('chats', 'ending');
+
     const updatedCode = code.replace(/```jsx|```/g, '').trim();
     await writeCode(updatedCode);
-    await autoCommit(`${myPrompt}`);
+    await autoCommit(myPrompt);
     res.json({ success: true, code: updatedCode });
   } catch (error) {
     console.error(error);
