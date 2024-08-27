@@ -1,115 +1,97 @@
-import React, { useState } from 'react';
-import { Box, Typography, Stack, TextField, Button, List, ListItem, ListItemText, ListItemSecondaryAction, IconButton, Checkbox, Select, MenuItem, FormControl, InputLabel } from '@mui/material';
-import DeleteIcon from '@mui/icons-material/Delete';
-import EditIcon from '@mui/icons-material/Edit';
+import React from 'react';
+import { AppBar, Toolbar, Typography, Box, Container, Grid, Paper, Icon } from '@mui/material';
+import ChatIcon from '@mui/icons-material/Chat';
+import CampaignIcon from '@mui/icons-material/Campaign';
+import GroupIcon from '@mui/icons-material/Group';
+import AutoFixHighIcon from '@mui/icons-material/AutoFixHigh';
+import CheckIcon from '@mui/icons-material/Check';
 
-const TodoList = () => {
-  const [tasks, setTasks] = useState([]);
-  const [newTask, setNewTask] = useState('');
-  const [filter, setFilter] = useState('all');
-  const [editingTask, setEditingTask] = useState(null);
-
-  const addTask = () => {
-    if (newTask.trim()) {
-      setTasks([...tasks, { id: Date.now(), text: newTask, completed: false }]);
-      setNewTask('');
-    }
-  };
-
-  const deleteTask = (id) => {
-    setTasks(tasks.filter(task => task.id !== id));
-  };
-
-  const toggleTask = (id) => {
-    setTasks(tasks.map(task =>
-      task.id === id ? { ...task, completed: !task.completed } : task
-    ));
-  };
-
-  const startEditing = (task) => {
-    setEditingTask(task);
-    setNewTask(task.text);
-  };
-
-  const saveEdit = () => {
-    setTasks(tasks.map(task =>
-      task.id === editingTask.id ? { ...task, text: newTask } : task
-    ));
-    setEditingTask(null);
-    setNewTask('');
-  };
-
-  const filteredTasks = tasks.filter(task => {
-    if (filter === 'active') return !task.completed;
-    if (filter === 'completed') return task.completed;
-    return true;
-  });
-
+const LandingPage = () => {
   return (
-    <Box sx={{ p: 4, backgroundColor: '#f5f5f5', height: '100%', minHeight: '100vh' }}>
-      <Stack alignItems="center" spacing={3}>
-        <Typography variant="h4" color="primary">Todo List</Typography>
-        
-        <Box sx={{ display: 'flex', width: '100%', maxWidth: 500, gap: 2 }}>
-          <TextField
-            fullWidth
-            variant="outlined"
-            value={newTask}
-            onChange={(e) => setNewTask(e.target.value)}
-            placeholder="Add a new task"
-          />
-          <Button
-            variant="contained"
-            onClick={editingTask ? saveEdit : addTask}
-          >
-            {editingTask ? 'Save' : 'Add'}
-          </Button>
+    <Box sx={{ flexGrow: 1 }}>
+      <AppBar position="static" color="transparent" elevation={1}>
+        <Toolbar>
+          <Typography variant="h6" component="div" sx={{ flexGrow: 1, fontWeight: 'bold' }}>
+            MY LANDING PAGE
+          </Typography>
+          <Box>
+            {['FEATURES', 'ABOUT', 'SERVICES', 'GALLERY', 'TESTIMONIALS'].map((item) => (
+              <Typography key={item} component="span" sx={{ ml: 2, color: '#666', fontSize: '0.9rem' }}>
+                {item}
+              </Typography>
+            ))}
+          </Box>
+        </Toolbar>
+      </AppBar>
+
+      <Container maxWidth="lg">
+        <Box sx={{ my: 8 }}>
+          <Typography variant="h4" align="center" gutterBottom sx={{ fontWeight: 'bold' }}>
+            FEATURES
+          </Typography>
+          <Box sx={{ width: '40px', height: '3px', bgcolor: '#3f51b5', mx: 'auto', mb: 4 }} />
+          
+          <Grid container spacing={4} justifyContent="center">
+            {[
+              { icon: <ChatIcon />, title: 'Lorem ipsum' },
+              { icon: <CampaignIcon />, title: 'Lorem ipsum' },
+              { icon: <GroupIcon />, title: 'Lorem ipsum' },
+              { icon: <AutoFixHighIcon />, title: 'Lorem ipsum' },
+            ].map((feature, index) => (
+              <Grid item xs={12} sm={6} md={3} key={index}>
+                <Paper elevation={0} sx={{ textAlign: 'center', p: 2, bgcolor: 'transparent' }}>
+                  <Icon component="div" sx={{ fontSize: 60, color: '#3f51b5', bgcolor: '#e8eaf6', borderRadius: '50%', p: 2, mb: 2 }}>
+                    {feature.icon}
+                  </Icon>
+                  <Typography variant="h6" gutterBottom>{feature.title}</Typography>
+                  <Typography variant="body2" color="text.secondary">
+                    Lorem ipsum dolor sit amet placerat facilisis felis mi in tempus eleifend pellentesque natoque etiam.
+                  </Typography>
+                </Paper>
+              </Grid>
+            ))}
+          </Grid>
         </Box>
 
-        <FormControl sx={{ m: 1, minWidth: 120 }}>
-          <InputLabel id="filter-label">Filter</InputLabel>
-          <Select
-            labelId="filter-label"
-            value={filter}
-            label="Filter"
-            onChange={(e) => setFilter(e.target.value)}
-          >
-            <MenuItem value="all">All</MenuItem>
-            <MenuItem value="active">Active</MenuItem>
-            <MenuItem value="completed">Completed</MenuItem>
-          </Select>
-        </FormControl>
-
-        <List sx={{ width: '100%', maxWidth: 500 }}>
-          {filteredTasks.map((task) => (
-            <ListItem
-              key={task.id}
-              secondaryAction={
-                <Stack direction="row" spacing={1}>
-                  <IconButton edge="end" aria-label="edit" onClick={() => startEditing(task)}>
-                    <EditIcon />
-                  </IconButton>
-                  <IconButton edge="end" aria-label="delete" onClick={() => deleteTask(task.id)}>
-                    <DeleteIcon />
-                  </IconButton>
-                </Stack>
-              }
-            >
-              <Checkbox
-                edge="start"
-                checked={task.completed}
-                onChange={() => toggleTask(task.id)}
-              />
-              <ListItemText 
-                primary={task.text} 
-                sx={{ textDecoration: task.completed ? 'line-through' : 'none' }}
-              />
-            </ListItem>
-          ))}
-        </List>
-      </Stack>
+        <Box sx={{ my: 8 }}>
+          <Grid container spacing={4}>
+            <Grid item xs={12} md={6}>
+              <img src="https://placehold.co/600x400" alt="Workshop interior" style={{ width: '100%', height: 'auto' }} />
+            </Grid>
+            <Grid item xs={12} md={6}>
+              <Typography variant="h4" gutterBottom sx={{ fontWeight: 'bold' }}>
+                ABOUT US
+              </Typography>
+              <Box sx={{ width: '40px', height: '3px', bgcolor: '#3f51b5', mb: 2 }} />
+              <Typography paragraph>
+                Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor
+                incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis
+                nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
+                Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor
+                incididunt ut labore et dolore magna aliqua.
+              </Typography>
+              <Typography variant="h6" gutterBottom sx={{ fontWeight: 'bold', mt: 2 }}>
+                Why Choose Us?
+              </Typography>
+              <Grid container spacing={2}>
+                {[
+                  'Lorem ipsum dolor', 'Tempor incididunt', 'Lorem ipsum dolor', 'Incididunt ut labore',
+                  'Aliquip ex ea commodo', 'Lorem ipsum dolor', 'Exercitation ullamco', 'Lorem ipsum dolor'
+                ].map((item, index) => (
+                  <Grid item xs={6} key={index}>
+                    <Box sx={{ display: 'flex', alignItems: 'center' }}>
+                      <CheckIcon sx={{ color: '#3f51b5', mr: 1 }} />
+                      <Typography variant="body2">{item}</Typography>
+                    </Box>
+                  </Grid>
+                ))}
+              </Grid>
+            </Grid>
+          </Grid>
+        </Box>
+      </Container>
     </Box>
   );
 };
 
-export default TodoList;
+export default LandingPage;
