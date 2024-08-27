@@ -6,28 +6,31 @@ import mermaid from 'mermaid';
 
 const mermaidCode = `
 mindmap
-  root((LLM))
-    Architecture
-      Transformer
-      Attention Mechanism
-      Encoder-Decoder
-    Training
-      Pretraining
-      Fine-tuning
-      Transfer Learning
-    Applications
-      Natural Language Processing
-      Text Generation
-      Translation
-      Summarization
-    Challenges
-      Bias
-      Hallucination
-      Ethical Concerns
-    Future Directions
-      Multimodal Models
-      Improved Efficiency
-      Interpretability
+  root((ADAS))
+    Sensing
+      Cameras
+      Radar
+      Lidar
+      Ultrasonic sensors
+    Perception
+      Object detection
+      Lane detection
+      Traffic sign recognition
+    Decision Making
+      Path planning
+      Collision avoidance
+    Control
+      Steering
+      Acceleration
+      Braking
+    Human-Machine Interface
+      Alerts
+      Displays
+      Controls
+    Safety Systems
+      Emergency braking
+      Lane keeping assist
+      Adaptive cruise control
 `;
 
 const PreviewPage = () => {
@@ -42,17 +45,20 @@ const PreviewPage = () => {
   };
 
   return (
-    <Box sx={{ width: '100%', height: '80vh', display: 'flex', justifyContent: 'center', alignItems: 'center', backgroundColor: '#f5f5f5' }}>
-      <Box sx={{ flex: 1, height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', overflow: 'auto', border: '1px solid #e0e0e0', borderRadius: '8px', backgroundColor: '#ffffff' }}>
-        <Box sx={{ transform: `scale(${scale})`, margin: 2 }}>
+    <Box sx={{ width: '100%', height: '90vh', display: 'flex', flexDirection: 'column', alignItems: 'center', bgcolor: '#f5f5f5' }}>
+      <Box sx={{ fontSize: '24px', fontWeight: 'bold', my: 2 }}>
+        ADAS (Advanced Driver Assistance Systems) Mindmap
+      </Box>
+      <Box sx={{ flex: 1, width: '100%', display: 'flex', justifyContent: 'center', alignItems: 'center', position: 'relative', overflow: 'hidden' }}>
+        <Box sx={{ transform: `scale(${scale})`, transition: 'transform 0.3s ease' }}>
           <Mermaid chart={mermaidCode} />
         </Box>
       </Box>
-      <Box sx={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', marginLeft: 2 }}>
-        <IconButton onClick={handleZoomOut} disabled={scale <= 0.5} sx={{ backgroundColor: '#e0e0e0', marginBottom: 1 }}>
+      <Box sx={{ display: 'flex', justifyContent: 'center', my: 2 }}>
+        <IconButton onClick={handleZoomOut} disabled={scale <= 0.5} sx={{ mr: 1 }}>
           <ZoomOutIcon />
         </IconButton>
-        <IconButton onClick={handleZoomIn} sx={{ backgroundColor: '#e0e0e0' }}>
+        <IconButton onClick={handleZoomIn} sx={{ ml: 1 }}>
           <ZoomInIcon />
         </IconButton>
       </Box>
@@ -62,9 +68,8 @@ const PreviewPage = () => {
 
 mermaid.initialize({
   startOnLoad: true,
-  theme: 'neutral',
-  mindmap: {
-    padding: 20,
+  theme: 'default',
+  flowchart: {
     curve: 'basis'
   }
 });
@@ -72,7 +77,7 @@ mermaid.initialize({
 const Mermaid = ({ chart }) => {
   React.useEffect(() => {
     mermaid.contentLoaded();
-  }, [chart]);
+  }, []);
 
   return <div className="mermaid">{chart}</div>;
 };
