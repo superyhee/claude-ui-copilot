@@ -5,36 +5,18 @@ import ZoomOutIcon from '@mui/icons-material/ZoomOut';
 import mermaid from 'mermaid';
 
 const mermaidCode = `
-erDiagram
-    CUSTOMER ||--o{ ORDER : places
-    ORDER ||--|{ ORDER_ITEM : contains
-    ORDER_ITEM }o--|| PRODUCT : "refers to"
-    CUSTOMER {
-        int id
-        string name
-        string email
-        string address
-    }
-    ORDER {
-        int id
-        date order_date
-        float total_amount
-        string status
-    }
-    ORDER_ITEM {
-        int id
-        int order_id
-        int product_id
-        int quantity
-        float unit_price
-    }
-    PRODUCT {
-        int id
-        string name
-        string description
-        float price
-        int stock_quantity
-    }
+sequenceDiagram
+    participant Alice
+    participant CA as Certificate Authority
+    participant Bob
+
+    Alice->>CA: Generate key pair
+    CA->>Alice: Issue certificate
+    Alice->>Bob: Send public key & certificate
+    Bob->>CA: Verify certificate
+    CA->>Bob: Confirm certificate validity
+    Bob->>Alice: Encrypt message with Alice's public key
+    Alice->>Alice: Decrypt message with private key
 `;
 
 const PreviewPage = () => {
