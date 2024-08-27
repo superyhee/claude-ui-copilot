@@ -6,19 +6,28 @@ import mermaid from 'mermaid';
 
 const mermaidCode = `
 sequenceDiagram
-    participant Car
-    participant OBU
-    participant RSU
+    participant User
+    participant Vehicle
+    participant PKI
     participant CA
-    Car->>OBU: Generate key pair
-    OBU->>RSU: Send public key and identity info
-    RSU->>CA: Forward request
-    CA->>CA: Verify identity
-    CA->>RSU: Issue certificate
-    RSU->>OBU: Transmit certificate
-    OBU->>Car: Store certificate
-    Car->>RSU: Sign and encrypt messages
-    RSU->>Car: Verify signature and decrypt
+    
+    User->>Vehicle: Start vehicle
+    Vehicle->>PKI: Request authentication
+    PKI->>CA: Verify certificate
+    CA->>PKI: Certificate status
+    PKI->>Vehicle: Authentication result
+    Vehicle->>User: Grant/deny access
+    
+    Vehicle->>PKI: Request secure communication
+    PKI->>Vehicle: Provide encryption keys
+    Vehicle->>User: Establish secure connection
+    
+    User->>Vehicle: Initiate software update
+    Vehicle->>PKI: Verify update signature
+    PKI->>CA: Check certificate revocation
+    CA->>PKI: Revocation status
+    PKI->>Vehicle: Signature verification result
+    Vehicle->>User: Apply/reject update
 `;
 
 const PreviewPage = () => {
@@ -33,37 +42,27 @@ const PreviewPage = () => {
   };
 
   return (
-    <Box sx={{ width: '100%', height: '100vh', display: 'flex', flexDirection: 'column', alignItems: 'center', backgroundColor: '#f5f5f5' }}>
-      <Box sx={{ width: '100%', padding: '20px', backgroundColor: '#3f51b5', color: 'white', textAlign: 'center' }}>
-        <h1>PKI Application in Automotive</h1>
+    <Box sx={{ width: '100%', height: '90vh', display: 'flex', flexDirection: 'column', alignItems: 'center', bgcolor: '#f0f8ff' }}>
+      <Box sx={{ fontSize: '24px', fontWeight: 'bold', my: 2, color: '#333' }}>
+        PKI Application in Automotive Systems
       </Box>
-      <Box sx={{ flex: 1, width: '100%', display: 'flex', justifyContent: 'center', alignItems: 'center', position: 'relative' }}>
-        <Box sx={{ 
-          width: '80%', 
-          height: '80%', 
-          overflow: 'auto', 
-          backgroundColor: 'white', 
-          boxShadow: '0px 0px 10px rgba(0,0,0,0.1)', 
-          borderRadius: '8px',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center'
-        }}>
-          <Box sx={{ transform: `scale(${scale})` }}>
-            <Mermaid chart={mermaidCode} />
-          </Box>
-        </Box>
-        <Box sx={{ position: 'absolute', right: '20px', display: 'flex', flexDirection: 'column' }}>
-          <IconButton onClick={handleZoomIn} sx={{ backgroundColor: 'white', margin: '5px' }}>
-            <ZoomInIcon />
-          </IconButton>
-          <IconButton onClick={handleZoomOut} disabled={scale <= 0.5} sx={{ backgroundColor: 'white', margin: '5px' }}>
-            <ZoomOutIcon />
-          </IconButton>
+      <Box sx={{ flex: 1, width: '100%', display: 'flex', justifyContent: 'center', alignItems: 'center', position: 'relative', overflow: 'hidden', border: '1px solid #ddd', borderRadius: '8px', boxShadow: '0 4px 6px rgba(0,0,0,0.1)' }}>
+        <Box sx={{ transform: `scale(${scale})`, transition: 'transform 0.3s ease' }}>
+          <Mermaid chart={mermaidCode} />
         </Box>
       </Box>
-      <Box sx={{ width: '100%', padding: '20px', backgroundColor: '#3f51b5', color: 'white', textAlign: 'center' }}>
-        <p>PKI Application Sequence Diagram for Automotive Industry</p>
+      <Box sx={{ display: 'flex', justifyContent: 'center', my: 2 }}>
+        <IconButton onClick={handleZoomOut} disabled={scale <= 0.5} sx={{ mr: 1, bgcolor: '#e0e0e0', '&:hover': { bgcolor: '#d0d0d0' } }}>
+          <ZoomOutIcon />
+        </IconButton>
+        <IconButton onClick={handleZoomIn} sx={{ ml: 1, bgcolor: '#e0e0e0', '&:hover': { bgcolor: '#d0d0d0' } }}>
+          <ZoomInIcon />
+        </IconButton>
+      </Box>
+      <Box sx={{ fontSize: '14px', color: '#666', textAlign: 'center', maxWidth: '600px', mt: 2 }}>
+        This sequence diagram illustrates the application of Public Key Infrastructure (PKI) in automotive systems, 
+        showcasing the interactions between the user, vehicle, PKI system, and Certificate Authority (CA) for secure authentication, 
+        communication, and software updates.
       </Box>
     </Box>
   );
@@ -72,17 +71,22 @@ const PreviewPage = () => {
 mermaid.initialize({
   startOnLoad: true,
   theme: 'default',
-  securityLevel: 'loose',
+  sequence: {
+    diagramMarginX: 50,
+    diagramMarginY: 10,
+    boxTextMargin: 5,
+    noteMargin: 10,
+    messageMargin: 35,
+    mirrorActors: true
+  }
 });
 
-class Mermaid extends React.Component {
-  componentDidMount() {
+const Mermaid = ({ chart }) => {
+  React.useEffect(() => {
     mermaid.contentLoaded();
-  }
+  }, []);
 
-  render() {
-    return <div className="mermaid">{this.props.chart}</div>;
-  }
-}
+  return <div className="mermaid">{chart}</div>;
+};
 
 export default PreviewPage;
