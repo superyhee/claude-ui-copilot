@@ -1,97 +1,215 @@
-import React from 'react';
-import { AppBar, Toolbar, Typography, Box, Container, Grid, Paper, Icon } from '@mui/material';
-import ChatIcon from '@mui/icons-material/Chat';
-import CampaignIcon from '@mui/icons-material/Campaign';
-import GroupIcon from '@mui/icons-material/Group';
-import AutoFixHighIcon from '@mui/icons-material/AutoFixHigh';
-import CheckIcon from '@mui/icons-material/Check';
+import React, { useState, useEffect } from 'react';
+import {
+  Box,
+  Typography,
+  Stack,
+  Button,
+  TextField,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogActions,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+  Paper,
+  TablePagination,
+  IconButton,
+} from '@mui/material';
+import { Delete as DeleteIcon, Edit as EditIcon, Add as AddIcon, Search as SearchIcon } from '@mui/icons-material';
 
-const LandingPage = () => {
+const PreviewPage = () => {
+  const [data, setData] = useState([]);
+  const [page, setPage] = useState(0);
+  const [rowsPerPage, setRowsPerPage] = useState(5);
+  const [openDialog, setOpenDialog] = useState(false);
+  const [editingRecord, setEditingRecord] = useState(null);
+  const [searchTerm, setSearchTerm] = useState('');
+
+  useEffect(() => {
+    // Mock data
+    const mockData = [
+      { id: 1, name: 'John Doe', email: 'john@example.com', role: 'Developer' },
+      { id: 2, name: 'Jane Smith', email: 'jane@example.com', role: 'Designer' },
+      { id: 3, name: 'Bob Johnson', email: 'bob@example.com', role: 'Manager' },
+      { id: 4, name: 'Alice Brown', email: 'alice@example.com', role: 'Tester' },
+      { id: 5, name: 'Charlie Davis', email: 'charlie@example.com', role: 'Developer' },
+      { id: 6, name: 'Eva White', email: 'eva@example.com', role: 'Designer' },
+    ];
+    setData(mockData);
+  }, []);
+
+  const handleChangePage = (event, newPage) => {
+    setPage(newPage);
+  };
+
+  const handleChangeRowsPerPage = (event) => {
+    setRowsPerPage(parseInt(event.target.value, 10));
+    setPage(0);
+  };
+
+  const handleOpenDialog = (record = null) => {
+    setEditingRecord(record);
+    setOpenDialog(true);
+  };
+
+  const handleCloseDialog = () => {
+    setEditingRecord(null);
+    setOpenDialog(false);
+  };
+
+  const handleSave = (newRecord) => {
+    if (editingRecord) {
+      setData(data.map(item => item.id === editingRecord.id ? newRecord : item));
+    } else {
+      setData([...data, { ...newRecord, id: Date.now() }]);
+    }
+    handleCloseDialog();
+  };
+
+  const handleDelete = (id) => {
+    setData(data.filter(item => item.id !== id));
+  };
+
+  const handleSearch = (event) => {
+    setSearchTerm(event.target.value);
+    setPage(0);
+  };
+
+  const filteredData = data.filter(item =>
+    Object.values(item).some(value => 
+      value.toString().toLowerCase().includes(searchTerm.toLowerCase())
+    )
+  );
+
   return (
-    <Box sx={{ flexGrow: 1 }}>
-      <AppBar position="static" color="transparent" elevation={1}>
-        <Toolbar>
-          <Typography variant="h6" component="div" sx={{ flexGrow: 1, fontWeight: 'bold' }}>
-            MY LANDING PAGE
-          </Typography>
-          <Box>
-            {['FEATURES', 'ABOUT', 'SERVICES', 'GALLERY', 'TESTIMONIALS'].map((item) => (
-              <Typography key={item} component="span" sx={{ ml: 2, color: '#666', fontSize: '0.9rem' }}>
-                {item}
-              </Typography>
-            ))}
-          </Box>
-        </Toolbar>
-      </AppBar>
-
-      <Container maxWidth="lg">
-        <Box sx={{ my: 8 }}>
-          <Typography variant="h4" align="center" gutterBottom sx={{ fontWeight: 'bold' }}>
-            FEATURES
-          </Typography>
-          <Box sx={{ width: '40px', height: '3px', bgcolor: '#3f51b5', mx: 'auto', mb: 4 }} />
-          
-          <Grid container spacing={4} justifyContent="center">
-            {[
-              { icon: <ChatIcon />, title: 'Lorem ipsum' },
-              { icon: <CampaignIcon />, title: 'Lorem ipsum' },
-              { icon: <GroupIcon />, title: 'Lorem ipsum' },
-              { icon: <AutoFixHighIcon />, title: 'Lorem ipsum' },
-            ].map((feature, index) => (
-              <Grid item xs={12} sm={6} md={3} key={index}>
-                <Paper elevation={0} sx={{ textAlign: 'center', p: 2, bgcolor: 'transparent' }}>
-                  <Icon component="div" sx={{ fontSize: 60, color: '#3f51b5', bgcolor: '#e8eaf6', borderRadius: '50%', p: 2, mb: 2 }}>
-                    {feature.icon}
-                  </Icon>
-                  <Typography variant="h6" gutterBottom>{feature.title}</Typography>
-                  <Typography variant="body2" color="text.secondary">
-                    Lorem ipsum dolor sit amet placerat facilisis felis mi in tempus eleifend pellentesque natoque etiam.
-                  </Typography>
-                </Paper>
-              </Grid>
-            ))}
-          </Grid>
-        </Box>
-
-        <Box sx={{ my: 8 }}>
-          <Grid container spacing={4}>
-            <Grid item xs={12} md={6}>
-              <img src="https://placehold.co/600x400" alt="Workshop interior" style={{ width: '100%', height: 'auto' }} />
-            </Grid>
-            <Grid item xs={12} md={6}>
-              <Typography variant="h4" gutterBottom sx={{ fontWeight: 'bold' }}>
-                ABOUT US
-              </Typography>
-              <Box sx={{ width: '40px', height: '3px', bgcolor: '#3f51b5', mb: 2 }} />
-              <Typography paragraph>
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor
-                incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis
-                nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat.
-                Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor
-                incididunt ut labore et dolore magna aliqua.
-              </Typography>
-              <Typography variant="h6" gutterBottom sx={{ fontWeight: 'bold', mt: 2 }}>
-                Why Choose Us?
-              </Typography>
-              <Grid container spacing={2}>
-                {[
-                  'Lorem ipsum dolor', 'Tempor incididunt', 'Lorem ipsum dolor', 'Incididunt ut labore',
-                  'Aliquip ex ea commodo', 'Lorem ipsum dolor', 'Exercitation ullamco', 'Lorem ipsum dolor'
-                ].map((item, index) => (
-                  <Grid item xs={6} key={index}>
-                    <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                      <CheckIcon sx={{ color: '#3f51b5', mr: 1 }} />
-                      <Typography variant="body2">{item}</Typography>
-                    </Box>
-                  </Grid>
+    <Box sx={{ p: 4, backgroundColor: '#f5f5f5', height: '100%' }}>
+      <Stack spacing={2}>
+        <Typography variant="h4" align="center" gutterBottom>
+          Employee Data Grid
+        </Typography>
+        <Stack direction="row" justifyContent="space-between" alignItems="center">
+          <Button
+            variant="contained"
+            startIcon={<AddIcon />}
+            onClick={() => handleOpenDialog()}
+          >
+            Add New Employee
+          </Button>
+          <TextField
+            variant="outlined"
+            placeholder="Search..."
+            InputProps={{
+              startAdornment: <SearchIcon color="action" />,
+            }}
+            onChange={handleSearch}
+          />
+        </Stack>
+        <TableContainer component={Paper}>
+          <Table>
+            <TableHead>
+              <TableRow>
+                <TableCell>Name</TableCell>
+                <TableCell>Email</TableCell>
+                <TableCell>Role</TableCell>
+                <TableCell align="right">Actions</TableCell>
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              {filteredData
+                .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
+                .map((row) => (
+                  <TableRow key={row.id}>
+                    <TableCell>{row.name}</TableCell>
+                    <TableCell>{row.email}</TableCell>
+                    <TableCell>{row.role}</TableCell>
+                    <TableCell align="right">
+                      <IconButton onClick={() => handleOpenDialog(row)}>
+                        <EditIcon />
+                      </IconButton>
+                      <IconButton onClick={() => handleDelete(row.id)}>
+                        <DeleteIcon />
+                      </IconButton>
+                    </TableCell>
+                  </TableRow>
                 ))}
-              </Grid>
-            </Grid>
-          </Grid>
-        </Box>
-      </Container>
+            </TableBody>
+          </Table>
+        </TableContainer>
+        <TablePagination
+          component="div"
+          count={filteredData.length}
+          page={page}
+          onPageChange={handleChangePage}
+          rowsPerPage={rowsPerPage}
+          onRowsPerPageChange={handleChangeRowsPerPage}
+        />
+      </Stack>
+      <Dialog open={openDialog} onClose={handleCloseDialog}>
+        <DialogTitle>{editingRecord ? 'Edit Employee' : 'Add New Employee'}</DialogTitle>
+        <DialogContent>
+          <EmployeeForm
+            initialData={editingRecord}
+            onSave={handleSave}
+            onCancel={handleCloseDialog}
+          />
+        </DialogContent>
+      </Dialog>
     </Box>
   );
 };
 
-export default LandingPage;
+const EmployeeForm = ({ initialData, onSave, onCancel }) => {
+  const [formData, setFormData] = useState(initialData || { name: '', email: '', role: '' });
+
+  const handleChange = (event) => {
+    const { name, value } = event.target;
+    setFormData({ ...formData, [name]: value });
+  };
+
+  const handleSubmit = (event) => {
+    event.preventDefault();
+    onSave(formData);
+  };
+
+  return (
+    <form onSubmit={handleSubmit}>
+      <Stack spacing={2}>
+        <TextField
+          name="name"
+          label="Name"
+          value={formData.name}
+          onChange={handleChange}
+          fullWidth
+          required
+        />
+        <TextField
+          name="email"
+          label="Email"
+          type="email"
+          value={formData.email}
+          onChange={handleChange}
+          fullWidth
+          required
+        />
+        <TextField
+          name="role"
+          label="Role"
+          value={formData.role}
+          onChange={handleChange}
+          fullWidth
+          required
+        />
+        <DialogActions>
+          <Button onClick={onCancel}>Cancel</Button>
+          <Button type="submit" variant="contained">Save</Button>
+        </DialogActions>
+      </Stack>
+    </form>
+  );
+};
+
+export default PreviewPage;
