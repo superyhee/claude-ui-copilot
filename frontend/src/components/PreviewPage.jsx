@@ -1,114 +1,84 @@
-import React, { useState, useEffect, useRef } from 'react';
-import { Box, IconButton, Typography } from '@mui/material';
-import ZoomInIcon from '@mui/icons-material/ZoomIn';
-import ZoomOutIcon from '@mui/icons-material/ZoomOut';
-import mermaid from 'mermaid';
+import React from 'react';
+import Plot from 'react-plotly.js';
 
-const mermaidCode = `
-sequenceDiagram
-    participant User
-    participant Vehicle
-    participant OTA Server
-    participant Manufacturer
+function App() {
+  const data = [{
+    z: [
+      [1, 20, 30, 50, 1],
+      [20, 1, 60, 80, 30],
+      [30, 60, 1, -10, 20],
+      [50, 80, -10, 1, 60],
+      [1, 30, 20, 60, 1]
+    ],
+    x: ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'],
+    y: ['Morning', 'Noon', 'Afternoon', 'Evening', 'Night'],
+    type: 'heatmap',
+    colorscale: 'Viridis'
+  }];
 
-    User->>Vehicle: Initiate OTA Update
-    Vehicle->>OTA Server: Check for Updates
-    OTA Server->>Vehicle: Available Update Info
-    Vehicle->>User: Notify Update Available
-    User->>Vehicle: Confirm Update
-    Vehicle->>OTA Server: Request Update Package
-    OTA Server->>Vehicle: Send Update Package
-    Vehicle->>Vehicle: Verify Package Integrity
-    Vehicle->>Vehicle: Install Update
-    Vehicle->>OTA Server: Report Update Status
-    OTA Server->>Manufacturer: Log Update
-    Vehicle->>User: Update Complete
-`;
+  const layout = {
+    title: 'Weekly Activity Heatmap',
+    annotations: [],
+    xaxis: {title: 'Day of Week'},
+    yaxis: {title: 'Time of Day'},
+    height: 600,
+    width: 800
+  };
 
-const PreviewPage = () => {
-  const [scale, setScale] = useState(1);
-  const containerRef = useRef(null);
-  const diagramRef = useRef(null);
-
-  useEffect(() => {
-    mermaid.initialize({
-      startOnLoad: true,
-      theme: 'neutral',
-      sequence: {
-        diagramMarginX: 50,
-        diagramMarginY: 10,
-        boxTextMargin: 5,
-        noteMargin: 10,
-        messageMargin: 35,
-        mirrorActors: true
+  for (let i = 0; i < 5; i++) {
+    for (let j = 0; j < 5; j++) {
+      const currentValue = data[0].z[i][j];
+      if (currentValue !== 1) {
+        layout.annotations.push({
+          x: data[0].x[j],
+          y: data[0].y[i],
+          text: currentValue.toString(),
+          showarrow: false,
+          font: {
+            color: currentValue > 40 ? 'white' : 'black'
+          }
+        });
       }
-    });
-
-    mermaid.render('mermaid-diagram', mermaidCode).then(({ svg }) => {
-      if (diagramRef.current) {
-        diagramRef.current.innerHTML = svg;
-      }
-    });
-  }, []);
-
-  useEffect(() => {
-    const adjustScale = () => {
-      if (containerRef.current && diagramRef.current) {
-        const containerWidth = containerRef.current.offsetWidth;
-        const diagramWidth = diagramRef.current.scrollWidth;
-        const newScale = Math.min(containerWidth / diagramWidth, 1);
-        setScale(newScale);
-      }
-    };
-
-    adjustScale();
-    window.addEventListener('resize', adjustScale);
-    return () => window.removeEventListener('resize', adjustScale);
-  }, []);
-
-  const handleZoomIn = () => setScale(prev => Math.min(prev + 0.1, 2));
-  const handleZoomOut = () => setScale(prev => Math.max(prev - 0.1, 0.5));
+    }
+  }
 
   return (
-    <Box sx={{ width: '100%', height: '90vh', display: 'flex', flexDirection: 'column', alignItems: 'center', bgcolor: '#f5f5f5' }}>
-      <Typography variant="h4" sx={{ fontWeight: 'bold', my: 3, color: '#333' }}>
-        OTA Update Process for Automobiles
-      </Typography>
-      <Box ref={containerRef} sx={{ flex: 1, width: '95%', display: 'flex', justifyContent: 'center', alignItems: 'center', position: 'relative', overflow: 'auto', border: '1px solid #ccc', borderRadius: '12px', boxShadow: '0 6px 12px rgba(0,0,0,0.1)', bgcolor: 'white' }}>
-        <Box ref={diagramRef} sx={{ transform: `scale(${scale})`, transition: 'transform 0.3s ease', transformOrigin: 'center center' }} />
-      </Box>
-      <Box sx={{ display: 'flex', justifyContent: 'center', my: 3 }}>
-        <IconButton onClick={handleZoomOut} disabled={scale <= 0.5} sx={{ mr: 2, bgcolor: '#2196f3', color: 'white', '&:hover': { bgcolor: '#1976d2' } }}>
-          <ZoomOutIcon />
-        </IconButton>
-        <IconButton onClick={handleZoomIn} disabled={scale >= 2} sx={{ ml: 2, bgcolor: '#2196f3', color: 'white', '&:hover': { bgcolor: '#1976d2' } }}>
-          <ZoomInIcon />
-        </IconButton>
-      </Box>
-      <Typography variant="body1" sx={{ color: '#555', textAlign: 'center', maxWidth: '800px', mt: 2, mb: 4, px: 3 }}>
-        This sequence diagram illustrates the Over-The-Air (OTA) update process for automobiles. 
-        It shows the interactions between the User, Vehicle, OTA Server, and Manufacturer during a software update, 
-        highlighting the steps from initiation to completion of the update.
-      </Typography>
-      <Box sx={{ display: 'flex', justifyContent: 'space-around', width: '100%', mb: 4, flexWrap: 'wrap' }}>
-        <Box sx={{ textAlign: 'center', maxWidth: '200px', m: 2 }}>
-          <img src="https://placehold.co/100x100?text=Security" alt="A shield icon representing the secure nature of OTA updates" style={{ marginBottom: '10px' }} />
-          <Typography variant="subtitle1" sx={{ fontWeight: 'bold' }}>Enhanced Security</Typography>
-          <Typography variant="body2">Secure communication and package verification ensure update integrity.</Typography>
-        </Box>
-        <Box sx={{ textAlign: 'center', maxWidth: '200px', m: 2 }}>
-          <img src="https://placehold.co/100x100?text=Convenience" alt="A smartphone icon showing the ease of OTA updates" style={{ marginBottom: '10px' }} />
-          <Typography variant="subtitle1" sx={{ fontWeight: 'bold' }}>User Convenience</Typography>
-          <Typography variant="body2">Updates can be performed remotely without visiting a service center.</Typography>
-        </Box>
-        <Box sx={{ textAlign: 'center', maxWidth: '200px', m: 2 }}>
-          <img src="https://placehold.co/100x100?text=Efficiency" alt="A lightning bolt icon representing quick update process" style={{ marginBottom: '10px' }} />
-          <Typography variant="subtitle1" sx={{ fontWeight: 'bold' }}>Efficient Process</Typography>
-          <Typography variant="body2">Streamlined update process reduces downtime and improves vehicle performance.</Typography>
-        </Box>
-      </Box>
-    </Box>
+    <div style={{
+      display: 'flex',
+      flexDirection: 'column',
+      alignItems: 'center',
+      padding: '20px',
+      backgroundColor: '#f0f0f0',
+      minHeight: '100vh'
+    }}>
+      <h1 style={{color: '#333', marginBottom: '20px'}}>Activity Tracker</h1>
+      <div style={{
+        backgroundColor: 'white',
+        borderRadius: '8px',
+        boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)',
+        padding: '20px'
+      }}>
+        <Plot
+          data={data}
+          layout={layout}
+          config={{responsive: true}}
+        />
+      </div>
+      <div style={{
+        marginTop: '20px',
+        backgroundColor: 'white',
+        borderRadius: '8px',
+        boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)',
+        padding: '20px',
+        maxWidth: '600px'
+      }}>
+        <h2 style={{color: '#333', marginBottom: '10px'}}>Heatmap Description</h2>
+        <p style={{color: '#666', lineHeight: '1.6'}}>
+          This heatmap visualizes activity levels throughout the week. Each cell represents a specific time and day combination, with colors indicating the intensity of activity. Darker colors represent higher activity levels, while lighter colors indicate lower activity. Use this chart to identify patterns and peak activity times.
+        </p>
+      </div>
+    </div>
   );
-};
+}
 
-export default PreviewPage;
+export default App;
