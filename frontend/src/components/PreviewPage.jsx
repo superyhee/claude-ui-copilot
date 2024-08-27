@@ -1,256 +1,178 @@
-import React, { useState, useEffect } from 'react';
-import {
-  Box,
-  Typography,
-  Stack,
-  Button,
-  TextField,
-  Dialog,
-  DialogTitle,
-  DialogContent,
-  DialogActions,
-  Table,
-  TableBody,
-  TableCell,
-  TableContainer,
-  TableHead,
-  TableRow,
-  Paper,
-  TablePagination,
-  IconButton,
-  Container,
-  Avatar,
-  Chip,
-  Tooltip,
-} from '@mui/material';
-import { Delete as DeleteIcon, Edit as EditIcon, Add as AddIcon, Search as SearchIcon } from '@mui/icons-material';
-import { createTheme, ThemeProvider } from '@mui/material/styles';
+import React from 'react';
+import { useState } from 'react';
 
-const theme = createTheme({
-  palette: {
-    primary: {
-      main: '#3f51b5',
-    },
-    secondary: {
-      main: '#f50057',
-    },
-    background: {
-      default: '#f5f5f5',
-    },
-  },
-  typography: {
-    fontFamily: 'Roboto, Arial, sans-serif',
-  },
-});
+const Header = () => (
+  <header className="bg-white shadow-md py-4">
+    <div className="container mx-auto flex justify-between items-center">
+      <img src="https://placehold.co/150x50" alt="Startup Logo" className="h-8" />
+      <nav>
+        <ul className="flex space-x-6">
+          <li><a href="#" className="text-gray-600 hover:text-blue-500">Home</a></li>
+          <li><a href="#" className="text-gray-600 hover:text-blue-500">Features</a></li>
+          <li><a href="#" className="text-gray-600 hover:text-blue-500">Testimonials</a></li>
+          <li><a href="#" className="text-gray-600 hover:text-blue-500">FAQ</a></li>
+          <li><a href="#" className="text-gray-600 hover:text-blue-500">Contact</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+);
 
-const PreviewPage = () => {
-  const [data, setData] = useState([]);
-  const [page, setPage] = useState(0);
-  const [rowsPerPage, setRowsPerPage] = useState(5);
-  const [openDialog, setOpenDialog] = useState(false);
-  const [editingRecord, setEditingRecord] = useState(null);
-  const [searchTerm, setSearchTerm] = useState('');
+const Hero = () => (
+  <section className="bg-gradient-to-r from-blue-500 to-purple-600 text-white py-20">
+    <div className="container mx-auto text-center">
+      <h1 className="text-4xl font-bold mb-4">Revolutionize Your Business with Our Startup</h1>
+      <p className="text-xl mb-8">We provide innovative solutions to help your business grow and succeed.</p>
+      <button className="bg-white text-blue-500 font-bold py-2 px-6 rounded-full hover:bg-blue-100 transition duration-300">
+        Get Started
+      </button>
+    </div>
+  </section>
+);
 
-  useEffect(() => {
-    const mockData = [
-      { id: 1, name: 'John Doe', email: 'john@example.com', role: 'Developer', avatar: 'https://placehold.co/100x100?text=JD' },
-      { id: 2, name: 'Jane Smith', email: 'jane@example.com', role: 'Designer', avatar: 'https://placehold.co/100x100?text=JS' },
-      { id: 3, name: 'Bob Johnson', email: 'bob@example.com', role: 'Manager', avatar: 'https://placehold.co/100x100?text=BJ' },
-      { id: 4, name: 'Alice Brown', email: 'alice@example.com', role: 'Tester', avatar: 'https://placehold.co/100x100?text=AB' },
-      { id: 5, name: 'Charlie Davis', email: 'charlie@example.com', role: 'Developer', avatar: 'https://placehold.co/100x100?text=CD' },
-      { id: 6, name: 'Eva White', email: 'eva@example.com', role: 'Designer', avatar: 'https://placehold.co/100x100?text=EW' },
-    ];
-    setData(mockData);
-  }, []);
+const Features = () => (
+  <section className="py-16 bg-gray-100">
+    <div className="container mx-auto">
+      <h2 className="text-3xl font-bold text-center mb-12">Our Key Features</h2>
+      <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+        {[
+          { title: "Innovative Technology", icon: "💡" },
+          { title: "24/7 Support", icon: "🛠" },
+          { title: "Data-Driven Insights", icon: "📊" }
+        ].map((feature, index) => (
+          <div key={index} className="bg-white p-6 rounded-lg shadow-md text-center">
+            <div className="text-4xl mb-4">{feature.icon}</div>
+            <h3 className="text-xl font-semibold mb-2">{feature.title}</h3>
+            <p className="text-gray-600">Lorem ipsum dolor sit amet, consectetur adipiscing elit.</p>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+);
 
-  const handleChangePage = (event, newPage) => {
-    setPage(newPage);
-  };
+const SocialProof = () => (
+  <section className="py-16">
+    <div className="container mx-auto">
+      <h2 className="text-3xl font-bold text-center mb-12">What Our Clients Say</h2>
+      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+        {[
+          { name: "John Doe", company: "Tech Co", quote: "Amazing service! Highly recommended." },
+          { name: "Jane Smith", company: "Design Inc", quote: "Transformed our business processes." },
+          { name: "Mike Johnson", company: "Marketing LLC", quote: "Exceptional support and results." }
+        ].map((testimonial, index) => (
+          <div key={index} className="bg-white p-6 rounded-lg shadow-md">
+            <p className="text-gray-600 mb-4">"{testimonial.quote}"</p>
+            <div className="flex items-center">
+              <img src={`https://placehold.co/50x50?text=${testimonial.name[0]}`} alt={testimonial.name} className="w-10 h-10 rounded-full mr-4" />
+              <div>
+                <p className="font-semibold">{testimonial.name}</p>
+                <p className="text-sm text-gray-500">{testimonial.company}</p>
+              </div>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+);
 
-  const handleChangeRowsPerPage = (event) => {
-    setRowsPerPage(parseInt(event.target.value, 10));
-    setPage(0);
-  };
+const FAQ = () => {
+  const [activeIndex, setActiveIndex] = useState(null);
 
-  const handleOpenDialog = (record = null) => {
-    setEditingRecord(record);
-    setOpenDialog(true);
-  };
-
-  const handleCloseDialog = () => {
-    setEditingRecord(null);
-    setOpenDialog(false);
-  };
-
-  const handleSave = (newRecord) => {
-    if (editingRecord) {
-      setData(data.map(item => item.id === editingRecord.id ? { ...newRecord, avatar: editingRecord.avatar } : item));
-    } else {
-      setData([...data, { ...newRecord, id: Date.now(), avatar: `https://placehold.co/100x100?text=${newRecord.name.split(' ').map(n => n[0]).join('')}` }]);
-    }
-    handleCloseDialog();
-  };
-
-  const handleDelete = (id) => {
-    setData(data.filter(item => item.id !== id));
-  };
-
-  const handleSearch = (event) => {
-    setSearchTerm(event.target.value);
-    setPage(0);
-  };
-
-  const filteredData = data.filter(item =>
-    Object.values(item).some(value => 
-      value.toString().toLowerCase().includes(searchTerm.toLowerCase())
-    )
-  );
+  const faqs = [
+    { question: "What services do you offer?", answer: "We offer a wide range of innovative solutions tailored to your business needs." },
+    { question: "How can I get started?", answer: "Simply contact our sales team, and we'll guide you through the process." },
+    { question: "What makes your startup unique?", answer: "Our cutting-edge technology and dedicated support set us apart from the competition." }
+  ];
 
   return (
-    <ThemeProvider theme={theme}>
-      <Box sx={{ backgroundColor: 'background.default', minHeight: '100vh', py: 4 }}>
-        <Container maxWidth="lg">
-          <Stack spacing={4}>
-            <Typography variant="h3" align="center" gutterBottom sx={{ fontWeight: 'bold', color: 'primary.main' }}>
-              Employee Data Grid
-            </Typography>
-            <Stack direction="row" justifyContent="space-between" alignItems="center">
-              <Button
-                variant="contained"
-                startIcon={<AddIcon />}
-                onClick={() => handleOpenDialog()}
-                sx={{ borderRadius: 20, px: 3 }}
+    <section className="py-16 bg-gray-100">
+      <div className="container mx-auto">
+        <h2 className="text-3xl font-bold text-center mb-12">Frequently Asked Questions</h2>
+        <div className="max-w-3xl mx-auto">
+          {faqs.map((faq, index) => (
+            <div key={index} className="mb-4">
+              <button
+                className="flex justify-between items-center w-full p-4 bg-white rounded-lg shadow-md"
+                onClick={() => setActiveIndex(activeIndex === index ? null : index)}
               >
-                Add New Employee
-              </Button>
-              <TextField
-                variant="outlined"
-                placeholder="Search..."
-                InputProps={{
-                  startAdornment: <SearchIcon color="action" />,
-                }}
-                onChange={handleSearch}
-                sx={{ width: 300, '& .MuiOutlinedInput-root': { borderRadius: 20 } }}
-              />
-            </Stack>
-            <TableContainer component={Paper} elevation={3} sx={{ borderRadius: 2 }}>
-              <Table>
-                <TableHead>
-                  <TableRow>
-                    <TableCell>Avatar</TableCell>
-                    <TableCell>Name</TableCell>
-                    <TableCell>Email</TableCell>
-                    <TableCell>Role</TableCell>
-                    <TableCell align="right">Actions</TableCell>
-                  </TableRow>
-                </TableHead>
-                <TableBody>
-                  {filteredData
-                    .slice(page * rowsPerPage, page * rowsPerPage + rowsPerPage)
-                    .map((row) => (
-                      <TableRow key={row.id} hover>
-                        <TableCell>
-                          <Avatar src={row.avatar} alt={`Avatar of ${row.name}`} />
-                        </TableCell>
-                        <TableCell>{row.name}</TableCell>
-                        <TableCell>{row.email}</TableCell>
-                        <TableCell>
-                          <Chip label={row.role} color="primary" variant="outlined" />
-                        </TableCell>
-                        <TableCell align="right">
-                          <Tooltip title="Edit">
-                            <IconButton onClick={() => handleOpenDialog(row)} color="primary">
-                              <EditIcon />
-                            </IconButton>
-                          </Tooltip>
-                          <Tooltip title="Delete">
-                            <IconButton onClick={() => handleDelete(row.id)} color="secondary">
-                              <DeleteIcon />
-                            </IconButton>
-                          </Tooltip>
-                        </TableCell>
-                      </TableRow>
-                    ))}
-                </TableBody>
-              </Table>
-            </TableContainer>
-            <TablePagination
-              component="div"
-              count={filteredData.length}
-              page={page}
-              onPageChange={handleChangePage}
-              rowsPerPage={rowsPerPage}
-              onRowsPerPageChange={handleChangeRowsPerPage}
-              sx={{ display: 'flex', justifyContent: 'center' }}
-            />
-          </Stack>
-          <Dialog open={openDialog} onClose={handleCloseDialog} PaperProps={{ sx: { borderRadius: 2 } }}>
-            <DialogTitle>{editingRecord ? 'Edit Employee' : 'Add New Employee'}</DialogTitle>
-            <DialogContent>
-              <EmployeeForm
-                initialData={editingRecord}
-                onSave={handleSave}
-                onCancel={handleCloseDialog}
-              />
-            </DialogContent>
-          </Dialog>
-        </Container>
-      </Box>
-    </ThemeProvider>
+                <span className="font-semibold">{faq.question}</span>
+                <span>{activeIndex === index ? '−' : '+'}</span>
+              </button>
+              {activeIndex === index && (
+                <div className="p-4 bg-white rounded-b-lg shadow-md mt-1">
+                  <p className="text-gray-600">{faq.answer}</p>
+                </div>
+              )}
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
   );
 };
 
-const EmployeeForm = ({ initialData, onSave, onCancel }) => {
-  const [formData, setFormData] = useState(initialData || { name: '', email: '', role: '' });
+const Banner = () => (
+  <section className="bg-blue-600 text-white py-12">
+    <div className="container mx-auto text-center">
+      <h2 className="text-3xl font-bold mb-4">Special Offer: 30-Day Free Trial</h2>
+      <p className="text-xl mb-8">Experience the power of our platform with no commitment. Limited time offer!</p>
+      <button className="bg-white text-blue-600 font-bold py-2 px-6 rounded-full hover:bg-blue-100 transition duration-300">
+        Claim Your Free Trial
+      </button>
+    </div>
+  </section>
+);
 
-  const handleChange = (event) => {
-    const { name, value } = event.target;
-    setFormData({ ...formData, [name]: value });
-  };
+const Footer = () => (
+  <footer className="bg-gray-800 text-white py-8">
+    <div className="container mx-auto grid grid-cols-1 md:grid-cols-3 gap-8">
+      <div>
+        <h3 className="text-xl font-bold mb-4">Contact Us</h3>
+        <p>Email: info@startup.com</p>
+        <p>Phone: (123) 456-7890</p>
+        <p>Address: 123 Startup St, Tech City</p>
+      </div>
+      <div>
+        <h3 className="text-xl font-bold mb-4">Quick Links</h3>
+        <ul>
+          <li><a href="#" className="hover:text-blue-400">About Us</a></li>
+          <li><a href="#" className="hover:text-blue-400">Services</a></li>
+          <li><a href="#" className="hover:text-blue-400">Blog</a></li>
+          <li><a href="#" className="hover:text-blue-400">Careers</a></li>
+        </ul>
+      </div>
+      <div>
+        <h3 className="text-xl font-bold mb-4">Follow Us</h3>
+        <div className="flex space-x-4">
+          <a href="#" className="text-2xl hover:text-blue-400">📘</a>
+          <a href="#" className="text-2xl hover:text-blue-400">🐦</a>
+          <a href="#" className="text-2xl hover:text-blue-400">📸</a>
+          <a href="#" className="text-2xl hover:text-blue-400">🔗</a>
+        </div>
+      </div>
+    </div>
+    <div className="mt-8 text-center text-sm">
+      <p>&copy; 2023 Startup Name. All rights reserved.</p>
+      <p className="mt-2">
+        <a href="#" className="hover:text-blue-400">Privacy Policy</a> | 
+        <a href="#" className="hover:text-blue-400 ml-2">Terms of Service</a>
+      </p>
+    </div>
+  </footer>
+);
 
-  const handleSubmit = (event) => {
-    event.preventDefault();
-    onSave(formData);
-  };
-
+export default function App() {
   return (
-    <form onSubmit={handleSubmit}>
-      <Stack spacing={3} sx={{ mt: 2, minWidth: 300 }}>
-        <TextField
-          name="name"
-          label="Name"
-          value={formData.name}
-          onChange={handleChange}
-          fullWidth
-          required
-          variant="outlined"
-        />
-        <TextField
-          name="email"
-          label="Email"
-          type="email"
-          value={formData.email}
-          onChange={handleChange}
-          fullWidth
-          required
-          variant="outlined"
-        />
-        <TextField
-          name="role"
-          label="Role"
-          value={formData.role}
-          onChange={handleChange}
-          fullWidth
-          required
-          variant="outlined"
-        />
-        <DialogActions sx={{ px: 0, pb: 0 }}>
-          <Button onClick={onCancel} variant="outlined">Cancel</Button>
-          <Button type="submit" variant="contained">Save</Button>
-        </DialogActions>
-      </Stack>
-    </form>
+    <div className="font-sans">
+      <Header />
+      <Hero />
+      <Features />
+      <SocialProof />
+      <FAQ />
+      <Banner />
+      <Footer />
+    </div>
   );
-};
-
-export default PreviewPage;
+}
