@@ -5,18 +5,49 @@ import ZoomOutIcon from '@mui/icons-material/ZoomOut';
 import mermaid from 'mermaid';
 
 const mermaidCode = `
-sequenceDiagram
-    participant Alice
-    participant CA as Certificate Authority
-    participant Bob
-
-    Alice->>CA: Generate key pair
-    CA->>Alice: Issue certificate
-    Alice->>Bob: Send public key & certificate
-    Bob->>CA: Verify certificate
-    CA->>Bob: Confirm certificate validity
-    Bob->>Alice: Encrypt message with Alice's public key
-    Alice->>Alice: Decrypt message with private key
+classDiagram
+    class User {
+        +String username
+        +String email
+        +String password
+        +register()
+        +login()
+        +updateProfile()
+    }
+    class Product {
+        +String name
+        +Number price
+        +String description
+        +Number stock
+        +addToCart()
+        +updateStock()
+    }
+    class Cart {
+        +Array items
+        +Number totalPrice
+        +addItem()
+        +removeItem()
+        +checkout()
+    }
+    class Order {
+        +String orderId
+        +Array products
+        +String status
+        +Date orderDate
+        +processOrder()
+        +updateStatus()
+    }
+    class Payment {
+        +String paymentMethod
+        +Number amount
+        +processPayment()
+        +refund()
+    }
+    User "1" -- "0..*" Order
+    User "1" -- "1" Cart
+    Cart "1" -- "0..*" Product
+    Order "1" -- "1..*" Product
+    Order "1" -- "1" Payment
 `;
 
 const PreviewPage = () => {
