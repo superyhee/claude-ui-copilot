@@ -41,16 +41,16 @@ const PreviewPage = () => {
   return (
     <Box sx={{ display: 'flex', height: '100vh', bgcolor: '#f0f2f5' }}>
       <Box sx={{ width: '35%', borderRight: '1px solid #e0e0e0', display: 'flex', flexDirection: 'column', bgcolor: '#ffffff' }}>
-        <Box sx={{ p: 2, display: 'flex', alignItems: 'center', borderBottom: '1px solid #e0e0e0' }}>
+        <Box sx={{ p: 2, display: 'flex', alignItems: 'center', borderBottom: '1px solid #e0e0e0', bgcolor: '#075e54' }}>
           <Avatar src="https://placehold.co/40x40" alt="User avatar" sx={{ cursor: 'pointer' }} />
           <Box sx={{ flexGrow: 1 }} />
           <Tooltip title="New chat">
-            <IconButton>
+            <IconButton sx={{ color: '#ffffff' }}>
               <Group />
             </IconButton>
           </Tooltip>
           <Tooltip title="Menu">
-            <IconButton>
+            <IconButton sx={{ color: '#ffffff' }}>
               <MoreVert />
             </IconButton>
           </Tooltip>
@@ -66,7 +66,7 @@ const PreviewPage = () => {
             <ListItem 
               key={contact.id} 
               sx={{ 
-                bgcolor: contact.id === 1 ? '#f0f2f5' : 'transparent',
+                bgcolor: contact.id === 1 ? '#ebebeb' : 'transparent',
                 '&:hover': { bgcolor: '#f5f5f5' },
                 cursor: 'pointer',
                 borderRadius: '10px',
@@ -105,24 +105,24 @@ const PreviewPage = () => {
           ))}
         </List>
       </Box>
-      <Box sx={{ flexGrow: 1, display: 'flex', flexDirection: 'column', bgcolor: '#efeae2' }}>
-        <Box sx={{ p: 2, display: 'flex', alignItems: 'center', bgcolor: '#f0f2f5', borderBottom: '1px solid #e0e0e0' }}>
+      <Box sx={{ flexGrow: 1, display: 'flex', flexDirection: 'column', bgcolor: '#e5ddd5' }}>
+        <Box sx={{ p: 2, display: 'flex', alignItems: 'center', bgcolor: '#075e54', color: '#ffffff' }}>
           <Avatar src="https://placehold.co/40x40?text=LO" alt="Lucian Obrien avatar" />
           <Box sx={{ ml: 2, flexGrow: 1 }}>
             <Typography variant="subtitle1" fontWeight="medium">
               Lucian Obrien
             </Typography>
-            <Typography variant="caption" color="success.main">
+            <Typography variant="caption" sx={{ color: '#a5f6cd' }}>
               Online
             </Typography>
           </Box>
           <Tooltip title="Search">
-            <IconButton>
+            <IconButton sx={{ color: '#ffffff' }}>
               <Search />
             </IconButton>
           </Tooltip>
           <Tooltip title="More">
-            <IconButton>
+            <IconButton sx={{ color: '#ffffff' }}>
               <MoreVert />
             </IconButton>
           </Tooltip>
@@ -177,7 +177,7 @@ const PreviewPage = () => {
             </IconButton>
           </Tooltip>
           <Tooltip title="Send">
-            <IconButton onClick={handleSendMessage} color="primary">
+            <IconButton onClick={handleSendMessage} sx={{ color: '#075e54' }}>
               <Send />
             </IconButton>
           </Tooltip>
