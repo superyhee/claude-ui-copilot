@@ -1,23 +1,46 @@
 import React, { useState } from 'react';
-import { Box, Typography, Stack, Tab, Tabs, TextField, IconButton, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Checkbox, Avatar, Select, MenuItem, FormControlLabel, Switch } from '@mui/material';
-import { Search, MoreVert, CalendarToday, ArrowUpward, ArrowBack, ArrowForward } from '@mui/icons-material';
+import { Box, Typography, Stack, Tab, Tabs, TextField, IconButton, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Checkbox, Avatar, Select, MenuItem, FormControlLabel, Switch, Dialog, DialogTitle, DialogContent, DialogActions, Button } from '@mui/material';
+import { Search, MoreVert, CalendarToday, ArrowUpward, ArrowBack, ArrowForward, Edit } from '@mui/icons-material';
 
 const PreviewPage = () => {
   const [value, setValue] = useState(0);
   const [dense, setDense] = useState(false);
   const [rowsPerPage, setRowsPerPage] = useState(5);
+  const [editDialogOpen, setEditDialogOpen] = useState(false);
+  const [editingInvoice, setEditingInvoice] = useState(null);
 
   const handleChange = (event, newValue) => {
     setValue(newValue);
   };
 
-  const invoices = [
+  const [invoices, setInvoices] = useState([
     { name: 'Amiah Pruitt', invoice: 'INV-19919', createDate: '09 Aug 2024', createTime: '12:27 pm', dueDate: '02 Oct 2024', dueTime: '7:27 am', amount: 2331.63, sent: 9, status: 'Paid', color: '#4caf50' },
     { name: 'Ariana Lang', invoice: 'INV-19918', createDate: '10 Aug 2024', createTime: '12:27 pm', dueDate: '01 Oct 2024', dueTime: '6:27 am', amount: 2372.93, sent: 4, status: 'Overdue', color: '#f44336' },
     { name: 'Lawson Bass', invoice: 'INV-19917', createDate: '11 Aug 2024', createTime: '12:27 pm', dueDate: '30 Sep 2024', dueTime: '5:27 am', amount: 2283.97, sent: 9, status: 'Paid', color: '#03a9f4' },
     { name: 'Selina Boyer', invoice: 'INV-19916', createDate: '12 Aug 2024', createTime: '12:27 pm', dueDate: '29 Sep 2024', dueTime: '4:27 am', amount: 2251.84, sent: 8, status: 'Pending', color: '#ffc107' },
     { name: 'Angelique Morse', invoice: 'INV-19915', createDate: '13 Aug 2024', createTime: '12:27 pm', dueDate: '28 Sep 2024', dueTime: '3:27 am', amount: 2343.51, sent: 11, status: 'Paid', color: '#4caf50' },
-  ];
+  ]);
+
+  const handleEditClick = (invoice) => {
+    setEditingInvoice({ ...invoice });
+    setEditDialogOpen(true);
+  };
+
+  const handleEditDialogClose = () => {
+    setEditDialogOpen(false);
+    setEditingInvoice(null);
+  };
+
+  const handleEditDialogSave = () => {
+    setInvoices(invoices.map((inv) => (inv.invoice === editingInvoice.invoice ? editingInvoice : inv)));
+    setEditDialogOpen(false);
+    setEditingInvoice(null);
+  };
+
+  const handleEditInputChange = (event) => {
+    const { name, value } = event.target;
+    setEditingInvoice({ ...editingInvoice, [name]: value });
+  };
 
   return (
     <Box sx={{ p: 2, backgroundColor: '#fff', height: '100%' }}>
@@ -82,7 +105,7 @@ const PreviewPage = () => {
               <TableCell>Amount</TableCell>
               <TableCell>Sent</TableCell>
               <TableCell>Status</TableCell>
-              <TableCell></TableCell>
+              <TableCell>Actions</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
@@ -143,6 +166,9 @@ const PreviewPage = () => {
                   </Typography>
                 </TableCell>
                 <TableCell>
+                  <IconButton size="small" onClick={() => handleEditClick(invoice)}>
+                    <Edit />
+                  </IconButton>
                   <IconButton size="small">
                     <MoreVert />
                   </IconButton>
@@ -174,6 +200,61 @@ const PreviewPage = () => {
           </IconButton>
         </Stack>
       </Stack>
+
+      <Dialog open={editDialogOpen} onClose={handleEditDialogClose}>
+        <DialogTitle>Edit Invoice</DialogTitle>
+        <DialogContent>
+          <TextField
+            autoFocus
+            margin="dense"
+            name="name"
+            label="Customer Name"
+            type="text"
+            fullWidth
+            variant="standard"
+            value={editingInvoice?.name || ''}
+            onChange={handleEditInputChange}
+          />
+          <TextField
+            margin="dense"
+            name="invoice"
+            label="Invoice Number"
+            type="text"
+            fullWidth
+            variant="standard"
+            value={editingInvoice?.invoice || ''}
+            onChange={handleEditInputChange}
+          />
+          <TextField
+            margin="dense"
+            name="amount"
+            label="Amount"
+            type="number"
+            fullWidth
+            variant="standard"
+            value={editingInvoice?.amount || ''}
+            onChange={handleEditInputChange}
+          />
+          <TextField
+            margin="dense"
+            name="status"
+            label="Status"
+            select
+            fullWidth
+            variant="standard"
+            value={editingInvoice?.status || ''}
+            onChange={handleEditInputChange}
+          >
+            <MenuItem value="Paid">Paid</MenuItem>
+            <MenuItem value="Pending">Pending</MenuItem>
+            <MenuItem value="Overdue">Overdue</MenuItem>
+          </TextField>
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleEditDialogClose}>Cancel</Button>
+          <Button onClick={handleEditDialogSave}>Save</Button>
+        </DialogActions>
+      </Dialog>
     </Box>
   );
 };
