@@ -1,22 +1,43 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Box, Typography, Avatar, InputBase, List, ListItem, ListItemAvatar, ListItemText, IconButton, Paper, Stack } from '@mui/material';
-import { Search, ArrowBack, Group, AttachFile, InsertEmoticon, Mic } from '@mui/icons-material';
+import { Search, ArrowBack, Group, AttachFile, InsertEmoticon, Mic, Send } from '@mui/icons-material';
 
 const PreviewPage = () => {
-  const contacts = [
+  const [contacts, setContacts] = useState([
     { id: 1, name: 'Lucian Obrien', message: 'You: asdfasdf', time: '2 hours', online: true },
     { id: 2, name: 'Deja Brady', message: 'You: The scent of bloo...', time: '3 hours', online: false },
     { id: 3, name: 'Harrison Stein', message: 'Sent a photo', time: '4 hours', online: true },
     { id: 4, name: 'Reece Chung', message: 'She gazed up at the ni...', time: '2 hours', online: false },
     { id: 5, name: 'Lainey Davidson', message: 'The concert was a me...', time: '2 hours', online: true },
     { id: 6, name: 'Cristopher Cardenas', message: '', time: '3 hours', online: false },
-  ];
+  ]);
 
-  const messages = [
-    { id: 1, text: 'The concert was a mesmerizing experience, with the music filling the venue and the crowd cheering in delight.', time: '2 hours' },
-    { id: 2, text: 'The waves crashed against the shore, creating a soothing symphony of sound.', time: '2 hours' },
-    { id: 3, text: 'asdfasdf', time: '2 hours' },
-  ];
+  const [messages, setMessages] = useState([
+    { id: 1, text: 'The concert was a mesmerizing experience, with the music filling the venue and the crowd cheering in delight.', time: '2 hours', sent: true },
+    { id: 2, text: 'The waves crashed against the shore, creating a soothing symphony of sound.', time: '2 hours', sent: true },
+    { id: 3, text: 'asdfasdf', time: '2 hours', sent: true },
+  ]);
+
+  const [inputMessage, setInputMessage] = useState('');
+
+  const handleSendMessage = () => {
+    if (inputMessage.trim() !== '') {
+      const newMessage = {
+        id: messages.length + 1,
+        text: inputMessage,
+        time: 'Just now',
+        sent: true,
+      };
+      setMessages([...messages, newMessage]);
+      setInputMessage('');
+      
+      // Update the last message in contacts
+      const updatedContacts = contacts.map((contact, index) => 
+        index === 0 ? { ...contact, message: `You: ${inputMessage.slice(0, 20)}${inputMessage.length > 20 ? '...' : ''}` } : contact
+      );
+      setContacts(updatedContacts);
+    }
+  };
 
   return (
     <Box sx={{ display: 'flex', height: '100vh', bgcolor: '#f5f5f5' }}>
@@ -89,8 +110,8 @@ const PreviewPage = () => {
               key={message.id}
               sx={{
                 maxWidth: '70%',
-                alignSelf: 'flex-end',
-                bgcolor: '#e7ffd6',
+                alignSelf: message.sent ? 'flex-end' : 'flex-start',
+                bgcolor: message.sent ? '#e7ffd6' : '#ffffff',
                 borderRadius: 2,
                 p: 2,
                 mb: 1,
@@ -110,9 +131,20 @@ const PreviewPage = () => {
           <IconButton>
             <AttachFile />
           </IconButton>
-          <InputBase sx={{ ml: 1, flex: 1 }} placeholder="Type a message" />
-          <IconButton>
-            <Mic />
+          <InputBase 
+            sx={{ ml: 1, flex: 1 }} 
+            placeholder="Type a message" 
+            value={inputMessage}
+            onChange={(e) => setInputMessage(e.target.value)}
+            onKeyPress={(e) => {
+              if (e.key === 'Enter') {
+                e.preventDefault();
+                handleSendMessage();
+              }
+            }}
+          />
+          <IconButton onClick={handleSendMessage}>
+            <Send />
           </IconButton>
         </Box>
       </Box>
