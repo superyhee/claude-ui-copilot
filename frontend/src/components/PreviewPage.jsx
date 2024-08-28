@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import { Box, Typography, Avatar, InputBase, List, ListItem, ListItemAvatar, ListItemText, IconButton, Paper, Stack } from '@mui/material';
-import { Search, ArrowBack, Group, AttachFile, InsertEmoticon, Mic, Send } from '@mui/icons-material';
+import { Box, Typography, Avatar, InputBase, List, ListItem, ListItemAvatar, ListItemText, IconButton, Paper, Stack, Tooltip } from '@mui/material';
+import { Search, ArrowBack, Group, AttachFile, InsertEmoticon, Mic, Send, MoreVert } from '@mui/icons-material';
 
 const PreviewPage = () => {
   const [contacts, setContacts] = useState([
@@ -31,7 +31,6 @@ const PreviewPage = () => {
       setMessages([...messages, newMessage]);
       setInputMessage('');
       
-      // Update the last message in contacts
       const updatedContacts = contacts.map((contact, index) => 
         index === 0 ? { ...contact, message: `You: ${inputMessage.slice(0, 20)}${inputMessage.length > 20 ? '...' : ''}` } : contact
       );
@@ -40,27 +39,41 @@ const PreviewPage = () => {
   };
 
   return (
-    <Box sx={{ display: 'flex', height: '100vh', bgcolor: '#f5f5f5' }}>
-      <Box sx={{ width: '35%', borderRight: '1px solid #e0e0e0', display: 'flex', flexDirection: 'column' }}>
+    <Box sx={{ display: 'flex', height: '100vh', bgcolor: '#f0f2f5' }}>
+      <Box sx={{ width: '35%', borderRight: '1px solid #e0e0e0', display: 'flex', flexDirection: 'column', bgcolor: '#ffffff' }}>
         <Box sx={{ p: 2, display: 'flex', alignItems: 'center', borderBottom: '1px solid #e0e0e0' }}>
-          <Avatar src="https://placehold.co/40x40" alt="User avatar" />
+          <Avatar src="https://placehold.co/40x40" alt="User avatar" sx={{ cursor: 'pointer' }} />
           <Box sx={{ flexGrow: 1 }} />
-          <IconButton>
-            <ArrowBack />
-          </IconButton>
-          <IconButton>
-            <Group />
-          </IconButton>
+          <Tooltip title="New chat">
+            <IconButton>
+              <Group />
+            </IconButton>
+          </Tooltip>
+          <Tooltip title="Menu">
+            <IconButton>
+              <MoreVert />
+            </IconButton>
+          </Tooltip>
         </Box>
-        <Paper component="form" sx={{ p: '2px 4px', display: 'flex', alignItems: 'center', m: 2 }}>
-          <InputBase sx={{ ml: 1, flex: 1 }} placeholder="Search contacts..." />
-          <IconButton type="submit" sx={{ p: '10px' }} aria-label="search">
+        <Paper component="form" sx={{ p: '2px 4px', display: 'flex', alignItems: 'center', m: 2, borderRadius: '20px', bgcolor: '#f0f2f5' }}>
+          <IconButton sx={{ p: '10px' }} aria-label="search">
             <Search />
           </IconButton>
+          <InputBase sx={{ ml: 1, flex: 1 }} placeholder="Search or start new chat" />
         </Paper>
         <List sx={{ flexGrow: 1, overflow: 'auto' }}>
           {contacts.map((contact) => (
-            <ListItem key={contact.id} sx={{ bgcolor: contact.id === 1 ? '#e0e0e0' : 'transparent' }}>
+            <ListItem 
+              key={contact.id} 
+              sx={{ 
+                bgcolor: contact.id === 1 ? '#f0f2f5' : 'transparent',
+                '&:hover': { bgcolor: '#f5f5f5' },
+                cursor: 'pointer',
+                borderRadius: '10px',
+                my: 0.5,
+                mx: 1
+              }}
+            >
               <ListItemAvatar>
                 <Avatar src={`https://placehold.co/40x40?text=${contact.name[0]}`} alt={`${contact.name} avatar`}>
                   {contact.online && (
@@ -69,8 +82,8 @@ const PreviewPage = () => {
                         position: 'absolute',
                         bottom: 0,
                         right: 0,
-                        width: 10,
-                        height: 10,
+                        width: 12,
+                        height: 12,
                         borderRadius: '50%',
                         bgcolor: '#4caf50',
                         border: '2px solid white',
@@ -82,8 +95,8 @@ const PreviewPage = () => {
               <ListItemText
                 primary={contact.name}
                 secondary={contact.message}
-                primaryTypographyProps={{ fontWeight: 'bold' }}
-                secondaryTypographyProps={{ noWrap: true }}
+                primaryTypographyProps={{ fontWeight: 'medium' }}
+                secondaryTypographyProps={{ noWrap: true, color: 'text.secondary' }}
               />
               <Typography variant="caption" color="text.secondary">
                 {contact.time}
@@ -92,17 +105,27 @@ const PreviewPage = () => {
           ))}
         </List>
       </Box>
-      <Box sx={{ flexGrow: 1, display: 'flex', flexDirection: 'column' }}>
-        <Box sx={{ p: 2, display: 'flex', alignItems: 'center', borderBottom: '1px solid #e0e0e0' }}>
+      <Box sx={{ flexGrow: 1, display: 'flex', flexDirection: 'column', bgcolor: '#efeae2' }}>
+        <Box sx={{ p: 2, display: 'flex', alignItems: 'center', bgcolor: '#f0f2f5', borderBottom: '1px solid #e0e0e0' }}>
           <Avatar src="https://placehold.co/40x40?text=LO" alt="Lucian Obrien avatar" />
-          <Box sx={{ ml: 2 }}>
-            <Typography variant="subtitle1" fontWeight="bold">
+          <Box sx={{ ml: 2, flexGrow: 1 }}>
+            <Typography variant="subtitle1" fontWeight="medium">
               Lucian Obrien
             </Typography>
             <Typography variant="caption" color="success.main">
               Online
             </Typography>
           </Box>
+          <Tooltip title="Search">
+            <IconButton>
+              <Search />
+            </IconButton>
+          </Tooltip>
+          <Tooltip title="More">
+            <IconButton>
+              <MoreVert />
+            </IconButton>
+          </Tooltip>
         </Box>
         <Box sx={{ flexGrow: 1, overflow: 'auto', p: 2, display: 'flex', flexDirection: 'column-reverse' }}>
           {messages.map((message) => (
@@ -111,28 +134,33 @@ const PreviewPage = () => {
               sx={{
                 maxWidth: '70%',
                 alignSelf: message.sent ? 'flex-end' : 'flex-start',
-                bgcolor: message.sent ? '#e7ffd6' : '#ffffff',
-                borderRadius: 2,
+                bgcolor: message.sent ? '#dcf8c6' : '#ffffff',
+                borderRadius: '10px',
                 p: 2,
                 mb: 1,
+                boxShadow: '0 1px 2px rgba(0, 0, 0, 0.1)',
               }}
             >
               <Typography variant="body1">{message.text}</Typography>
-              <Typography variant="caption" color="text.secondary" align="right" display="block">
+              <Typography variant="caption" color="text.secondary" align="right" display="block" sx={{ mt: 0.5 }}>
                 {message.time}
               </Typography>
             </Box>
           ))}
         </Box>
-        <Box sx={{ p: 2, borderTop: '1px solid #e0e0e0', display: 'flex', alignItems: 'center' }}>
-          <IconButton>
-            <InsertEmoticon />
-          </IconButton>
-          <IconButton>
-            <AttachFile />
-          </IconButton>
+        <Box sx={{ p: 2, bgcolor: '#f0f2f5', display: 'flex', alignItems: 'center' }}>
+          <Tooltip title="Emojis">
+            <IconButton>
+              <InsertEmoticon />
+            </IconButton>
+          </Tooltip>
+          <Tooltip title="Attach file">
+            <IconButton>
+              <AttachFile />
+            </IconButton>
+          </Tooltip>
           <InputBase 
-            sx={{ ml: 1, flex: 1 }} 
+            sx={{ ml: 1, flex: 1, bgcolor: '#ffffff', borderRadius: '20px', p: '5px 15px' }} 
             placeholder="Type a message" 
             value={inputMessage}
             onChange={(e) => setInputMessage(e.target.value)}
@@ -143,9 +171,16 @@ const PreviewPage = () => {
               }
             }}
           />
-          <IconButton onClick={handleSendMessage}>
-            <Send />
-          </IconButton>
+          <Tooltip title="Voice message">
+            <IconButton>
+              <Mic />
+            </IconButton>
+          </Tooltip>
+          <Tooltip title="Send">
+            <IconButton onClick={handleSendMessage} color="primary">
+              <Send />
+            </IconButton>
+          </Tooltip>
         </Box>
       </Box>
     </Box>
