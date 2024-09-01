@@ -7,14 +7,15 @@ const PreviewPage = () => {
   const [dense, setDense] = useState(false);
   const [rowsPerPage, setRowsPerPage] = useState(5);
   const [filteredInvoices, setFilteredInvoices] = useState([]);
+  const [editingCell, setEditingCell] = useState(null);
 
-  const invoices = [
+  const [invoices, setInvoices] = useState([
     { name: 'Amiah Pruitt', invoiceNumber: 'INV-19919', createDate: '09 Aug 2024', createTime: '12:27 pm', dueDate: '02 Oct 2024', dueTime: '7:27 am', amount: '$2,331.63', sent: 9, status: 'Paid', color: '#4caf50' },
     { name: 'Ariana Lang', invoiceNumber: 'INV-19918', createDate: '10 Aug 2024', createTime: '12:27 pm', dueDate: '01 Oct 2024', dueTime: '6:27 am', amount: '$2,372.93', sent: 4, status: 'Overdue', color: '#f44336' },
     { name: 'Lawson Bass', invoiceNumber: 'INV-19917', createDate: '11 Aug 2024', createTime: '12:27 pm', dueDate: '30 Sep 2024', dueTime: '5:27 am', amount: '$2,283.97', sent: 9, status: 'Paid', color: '#2196f3' },
     { name: 'Selina Boyer', invoiceNumber: 'INV-19916', createDate: '12 Aug 2024', createTime: '12:27 pm', dueDate: '29 Sep 2024', dueTime: '4:27 am', amount: '$2,251.84', sent: 8, status: 'Pending', color: '#ff9800' },
     { name: 'Angelique Morse', invoiceNumber: 'INV-19915', createDate: '13 Aug 2024', createTime: '12:27 pm', dueDate: '28 Sep 2024', dueTime: '3:27 am', amount: '$2,343.51', sent: 11, status: 'Paid', color: '#4caf50' },
-  ];
+  ]);
 
   const handleChange = (event, newValue) => {
     setValue(newValue);
@@ -22,7 +23,7 @@ const PreviewPage = () => {
 
   useEffect(() => {
     filterInvoices(value);
-  }, [value]);
+  }, [value, invoices]);
 
   const filterInvoices = (tabIndex) => {
     switch (tabIndex) {
@@ -44,6 +45,24 @@ const PreviewPage = () => {
       default:
         setFilteredInvoices(invoices);
     }
+  };
+
+  const handleCellClick = (invoiceNumber, field) => {
+    setEditingCell({ invoiceNumber, field });
+  };
+
+  const handleCellChange = (event, invoiceNumber, field) => {
+    const updatedInvoices = invoices.map(invoice => {
+      if (invoice.invoiceNumber === invoiceNumber) {
+        return { ...invoice, [field]: event.target.value };
+      }
+      return invoice;
+    });
+    setInvoices(updatedInvoices);
+  };
+
+  const handleCellBlur = () => {
+    setEditingCell(null);
   };
 
   return (
@@ -114,7 +133,16 @@ const PreviewPage = () => {
                   <Stack direction="row" alignItems="center" spacing={1}>
                     <Avatar sx={{ bgcolor: invoice.color }}>{invoice.name[0]}</Avatar>
                     <Box>
-                      <Typography variant="body1">{invoice.name}</Typography>
+                      {editingCell && editingCell.invoiceNumber === invoice.invoiceNumber && editingCell.field === 'name' ? (
+                        <TextField
+                          value={invoice.name}
+                          onChange={(e) => handleCellChange(e, invoice.invoiceNumber, 'name')}
+                          onBlur={handleCellBlur}
+                          autoFocus
+                        />
+                      ) : (
+                        <Typography variant="body1" onClick={() => handleCellClick(invoice.invoiceNumber, 'name')}>{invoice.name}</Typography>
+                      )}
                       <Typography variant="body2" color="text.secondary">{invoice.invoiceNumber}</Typography>
                     </Box>
                   </Stack>
@@ -127,7 +155,18 @@ const PreviewPage = () => {
                   <Typography variant="body2">{invoice.dueDate}</Typography>
                   <Typography variant="body2" color="text.secondary">{invoice.dueTime}</Typography>
                 </TableCell>
-                <TableCell>{invoice.amount}</TableCell>
+                <TableCell>
+                  {editingCell && editingCell.invoiceNumber === invoice.invoiceNumber && editingCell.field === 'amount' ? (
+                    <TextField
+                      value={invoice.amount}
+                      onChange={(e) => handleCellChange(e, invoice.invoiceNumber, 'amount')}
+                      onBlur={handleCellBlur}
+                      autoFocus
+                    />
+                  ) : (
+                    <Typography variant="body2" onClick={() => handleCellClick(invoice.invoiceNumber, 'amount')}>{invoice.amount}</Typography>
+                  )}
+                </TableCell>
                 <TableCell>{invoice.sent}</TableCell>
                 <TableCell>
                   <Box sx={{ bgcolor: invoice.status === 'Paid' ? '#e8f5e9' : invoice.status === 'Overdue' ? '#ffebee' : '#fff3e0', color: invoice.status === 'Paid' ? '#4caf50' : invoice.status === 'Overdue' ? '#f44336' : '#ff9800', borderRadius: 1, px: 1, py: 0.5, display: 'inline-block' }}>
