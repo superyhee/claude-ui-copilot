@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Box, Typography, Stack, Tabs, Tab, TextField, IconButton, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Checkbox, Avatar, FormControlLabel, Switch, Select, MenuItem } from '@mui/material';
 import { Search, MoreVert, CalendarToday, KeyboardArrowLeft, KeyboardArrowRight } from '@mui/icons-material';
 
@@ -6,10 +6,7 @@ const PreviewPage = () => {
   const [value, setValue] = useState(0);
   const [dense, setDense] = useState(false);
   const [rowsPerPage, setRowsPerPage] = useState(5);
-
-  const handleChange = (event, newValue) => {
-    setValue(newValue);
-  };
+  const [filteredInvoices, setFilteredInvoices] = useState([]);
 
   const invoices = [
     { name: 'Amiah Pruitt', invoiceNumber: 'INV-19919', createDate: '09 Aug 2024', createTime: '12:27 pm', dueDate: '02 Oct 2024', dueTime: '7:27 am', amount: '$2,331.63', sent: 9, status: 'Paid', color: '#4caf50' },
@@ -18,6 +15,36 @@ const PreviewPage = () => {
     { name: 'Selina Boyer', invoiceNumber: 'INV-19916', createDate: '12 Aug 2024', createTime: '12:27 pm', dueDate: '29 Sep 2024', dueTime: '4:27 am', amount: '$2,251.84', sent: 8, status: 'Pending', color: '#ff9800' },
     { name: 'Angelique Morse', invoiceNumber: 'INV-19915', createDate: '13 Aug 2024', createTime: '12:27 pm', dueDate: '28 Sep 2024', dueTime: '3:27 am', amount: '$2,343.51', sent: 11, status: 'Paid', color: '#4caf50' },
   ];
+
+  const handleChange = (event, newValue) => {
+    setValue(newValue);
+  };
+
+  useEffect(() => {
+    filterInvoices(value);
+  }, [value]);
+
+  const filterInvoices = (tabIndex) => {
+    switch (tabIndex) {
+      case 0:
+        setFilteredInvoices(invoices);
+        break;
+      case 1:
+        setFilteredInvoices(invoices.filter(invoice => invoice.status === 'Paid'));
+        break;
+      case 2:
+        setFilteredInvoices(invoices.filter(invoice => invoice.status === 'Pending'));
+        break;
+      case 3:
+        setFilteredInvoices(invoices.filter(invoice => invoice.status === 'Overdue'));
+        break;
+      case 4:
+        setFilteredInvoices(invoices.filter(invoice => invoice.status === 'Draft'));
+        break;
+      default:
+        setFilteredInvoices(invoices);
+    }
+  };
 
   return (
     <Box sx={{ p: 2, backgroundColor: '#ffffff', height: '100%' }}>
@@ -78,7 +105,7 @@ const PreviewPage = () => {
             </TableRow>
           </TableHead>
           <TableBody>
-            {invoices.map((invoice) => (
+            {filteredInvoices.map((invoice) => (
               <TableRow key={invoice.invoiceNumber} hover>
                 <TableCell padding="checkbox">
                   <Checkbox />
