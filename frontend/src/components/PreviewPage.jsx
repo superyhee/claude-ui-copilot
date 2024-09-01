@@ -119,7 +119,7 @@ const PreviewPage = () => {
     const newInvoice = {
       id: invoices.length + 1,
       name: 'New Customer',
-      invoiceNumber: `INV-${Math.floor(Math.random() * 10000)}`,
+      invoiceNumber: 'INV-' + Math.floor(Math.random() * 10000),
       createDate: new Date().toLocaleDateString(),
       createTime: new Date().toLocaleTimeString(),
       dueDate: 'TBD',
