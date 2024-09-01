@@ -10,7 +10,7 @@ const pricingPlans = [
     price: '$9.99',
     features: ['1 User', '10 Projects', 'Basic Support', '1GB Storage'],
     buttonText: 'Get Started',
-    color: '#4CAF50',
+    color: '#007AFF',
   },
   {
     title: 'Pro',
@@ -18,14 +18,14 @@ const pricingPlans = [
     features: ['5 Users', 'Unlimited Projects', 'Priority Support', '10GB Storage'],
     buttonText: 'Go Pro',
     highlighted: true,
-    color: '#2196F3',
+    color: '#34C759',
   },
   {
     title: 'Enterprise',
     price: '$99.99',
     features: ['Unlimited Users', 'Unlimited Projects', 'Dedicated Support', '100GB Storage'],
     buttonText: 'Contact Sales',
-    color: '#9C27B0',
+    color: '#5856D6',
   },
 ];
 
@@ -39,13 +39,13 @@ const PricingPage = () => {
       maxWidth: 1200,
       margin: 'auto',
       padding: 4,
-      background: 'linear-gradient(45deg, #F3F4F6 30%, #E5E7EB 90%)',
+      background: '#F2F2F7',
       minHeight: '100vh',
       display: 'flex',
       flexDirection: 'column',
       justifyContent: 'center',
     }}>
-      <Typography variant="h2" align="center" gutterBottom sx={{ fontWeight: 'bold', color: '#1F2937' }}>
+      <Typography variant="h2" align="center" gutterBottom sx={{ fontWeight: 'bold', color: '#1D1D1F' }}>
         Choose Your Perfect Plan
       </Typography>
       <Typography variant="subtitle1" align="center" color="text.secondary" sx={{ mb: 6, maxWidth: 600, mx: 'auto' }}>
@@ -70,6 +70,7 @@ const PricingPage = () => {
                 },
                 borderRadius: 4,
                 overflow: 'hidden',
+                backgroundColor: '#FFFFFF',
               }}
             >
               <Box sx={{
@@ -86,6 +87,7 @@ const PricingPage = () => {
                     top: 20,
                     right: 20,
                     fontWeight: 'bold',
+                    backgroundColor: '#007AFF',
                   }}
                 />
               )}
@@ -110,7 +112,7 @@ const PricingPage = () => {
                   ))}
                 </Box>
               </CardContent>
-              <Box sx={{ p: 3, backgroundColor: '#F9FAFB' }}>
+              <Box sx={{ p: 3, backgroundColor: '#F2F2F7' }}>
                 <Button 
                   variant="contained" 
                   fullWidth
@@ -121,6 +123,7 @@ const PricingPage = () => {
                       backgroundColor: darken(plan.color, 0.1),
                     },
                     py: 1.5,
+                    borderRadius: 20,
                   }}
                 >
                   {plan.buttonText}
@@ -137,7 +140,7 @@ const PricingPage = () => {
       </Box>
       {!isMobile && (
         <Box sx={{ position: 'absolute', bottom: 20, left: 20, opacity: 0.8 }}>
-          <img src="https://placehold.co/200x100?text=Company+Logo" alt="Company logo showing brand identity" style={{ maxWidth: 150 }} />
+          <img src="https://placehold.co/200x100?text=Company+Logo" alt="Minimalist company logo with sleek Apple-inspired design" style={{ maxWidth: 150 }} />
         </Box>
       )}
     </Box>
