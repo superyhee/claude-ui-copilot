@@ -40,14 +40,14 @@ const WeatherForecast = () => {
   };
 
   return (
-    <Box sx={{ minHeight: '100vh', background: 'linear-gradient(to bottom, #87CEEB, #E0F7FA)' }}>
-      <Container maxWidth="md">
+    <Box sx={{ minHeight: '100vh', background: 'linear-gradient(to bottom, #1E90FF, #87CEFA)', color: 'white' }}>
+      <Container maxWidth="sm">
         <Stack alignItems="center" spacing={4} sx={{ py: 4 }}>
-          <Typography variant="h3" gutterBottom fontWeight="bold" color="primary">
-            Weather Forecast
+          <Typography variant="h3" gutterBottom fontWeight="bold">
+            Weather
           </Typography>
 
-          <Paper elevation={3} sx={{ width: '100%', p: 2, borderRadius: 2 }}>
+          <Paper elevation={3} sx={{ width: '100%', p: 2, borderRadius: 20, backgroundColor: 'rgba(255, 255, 255, 0.2)' }}>
             <form onSubmit={handleSubmit(onSubmit)}>
               <Stack direction="row" spacing={2}>
                 <Controller
@@ -63,10 +63,16 @@ const WeatherForecast = () => {
                       fullWidth
                       error={!!error}
                       helperText={error?.message}
+                      InputProps={{
+                        style: { color: 'white' },
+                      }}
+                      InputLabelProps={{
+                        style: { color: 'white' },
+                      }}
                     />
                   )}
                 />
-                <IconButton type="submit" color="primary" sx={{ p: '10px' }}>
+                <IconButton type="submit" sx={{ p: '10px', color: 'white' }}>
                   <Search />
                 </IconButton>
               </Stack>
@@ -74,34 +80,26 @@ const WeatherForecast = () => {
           </Paper>
 
           {weatherData && (
-            <Card elevation={5} sx={{ width: '100%', borderRadius: 4, overflow: 'hidden' }}>
+            <Card sx={{ width: '100%', borderRadius: 4, overflow: 'hidden', backgroundColor: 'rgba(255, 255, 255, 0.2)', boxShadow: 'none' }}>
               <CardContent sx={{ p: 3 }}>
-                <Typography variant="h4" gutterBottom color="primary">
+                <Typography variant="h4" gutterBottom>
                   {weatherData.city}
                 </Typography>
                 <Grid container spacing={3} alignItems="center">
-                  <Grid item xs={12} md={6}>
-                    <Stack spacing={2}>
-                      <Typography variant="h5">Current Weather</Typography>
-                      <Box display="flex" alignItems="center">
+                  <Grid item xs={12}>
+                    <Stack spacing={2} alignItems="center">
+                      <Box display="flex" alignItems="center" justifyContent="center">
                         {getWeatherIcon(weatherData.current.description)}
-                        <Typography variant="h6" sx={{ ml: 2 }}>
-                          {weatherData.current.temp}°C
+                        <Typography variant="h1" sx={{ ml: 2 }}>
+                          {weatherData.current.temp}°
                         </Typography>
                       </Box>
+                      <Typography variant="h5">{weatherData.current.description}</Typography>
                       <Box display="flex" alignItems="center">
-                        <Opacity color="primary" />
+                        <Opacity />
                         <Typography sx={{ ml: 1 }}>Humidity: {weatherData.current.humidity}%</Typography>
                       </Box>
-                      <Typography>{weatherData.current.description}</Typography>
                     </Stack>
-                  </Grid>
-                  <Grid item xs={12} md={6}>
-                    <img
-                      src="https://placehold.co/300x200"
-                      alt="Current weather condition illustration"
-                      style={{ width: '100%', borderRadius: 8 }}
-                    />
                   </Grid>
                 </Grid>
               </CardContent>
@@ -109,23 +107,22 @@ const WeatherForecast = () => {
           )}
 
           {weatherData && (
-            <Card elevation={5} sx={{ width: '100%', borderRadius: 4, overflow: 'hidden' }}>
+            <Card sx={{ width: '100%', borderRadius: 4, overflow: 'hidden', backgroundColor: 'rgba(255, 255, 255, 0.2)', boxShadow: 'none' }}>
               <CardContent sx={{ p: 3 }}>
-                <Typography variant="h5" gutterBottom color="primary">
+                <Typography variant="h5" gutterBottom>
                   5-Day Forecast
                 </Typography>
-                <ResponsiveContainer width="100%" height={300}>
-                  <LineChart data={weatherData.forecast}>
-                    <CartesianGrid strokeDasharray="3 3" />
-                    <XAxis dataKey="day" />
-                    <YAxis yAxisId="left" orientation="left" stroke="#8884d8" />
-                    <YAxis yAxisId="right" orientation="right" stroke="#82ca9d" />
-                    <Tooltip />
-                    <Legend />
-                    <Line yAxisId="left" type="monotone" dataKey="temp" stroke="#8884d8" activeDot={{ r: 8 }} />
-                    <Line yAxisId="right" type="monotone" dataKey="humidity" stroke="#82ca9d" />
-                  </LineChart>
-                </ResponsiveContainer>
+                <Grid container spacing={2}>
+                  {weatherData.forecast.map((day, index) => (
+                    <Grid item xs={2.4} key={index}>
+                      <Stack alignItems="center" spacing={1}>
+                        <Typography>{day.day}</Typography>
+                        {getWeatherIcon(day.temp > 22 ? 'sunny' : 'cloudy')}
+                        <Typography>{day.temp}°</Typography>
+                      </Stack>
+                    </Grid>
+                  ))}
+                </Grid>
               </CardContent>
             </Card>
           )}
