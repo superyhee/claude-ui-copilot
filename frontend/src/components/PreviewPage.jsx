@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Box, Typography, Button, Card, CardContent, Grid, Chip, Avatar, useTheme, useMediaQuery } from '@mui/material';
 import CheckIcon from '@mui/icons-material/Check';
 import StarIcon from '@mui/icons-material/Star';
+import { darken } from '@mui/material/styles';
 
 const pricingPlans = [
   {
@@ -117,7 +118,7 @@ const PricingPage = () => {
                   sx={{
                     backgroundColor: plan.color,
                     '&:hover': {
-                      backgroundColor: theme.palette.darken(plan.color, 0.1),
+                      backgroundColor: darken(plan.color, 0.1),
                     },
                     py: 1.5,
                   }}
@@ -136,7 +137,7 @@ const PricingPage = () => {
       </Box>
       {!isMobile && (
         <Box sx={{ position: 'absolute', bottom: 20, left: 20, opacity: 0.8 }}>
-          <img src="https://placehold.co/200x100?text=Company+Logo" alt="Company logo" style={{ maxWidth: 150 }} />
+          <img src="https://placehold.co/200x100?text=Company+Logo" alt="Company logo showing brand identity" style={{ maxWidth: 150 }} />
         </Box>
       )}
     </Box>
