@@ -19,7 +19,7 @@ const WeatherIcon = ({ icon }) => {
     rainy: '🌧️',
   };
 
-  return <span className="text-4xl">{iconMap[icon]}</span>;
+  return <span className="text-5xl">{iconMap[icon]}</span>;
 };
 
 const WeatherApp = () => {
@@ -32,39 +32,39 @@ const WeatherApp = () => {
   if (!currentWeather) return null;
 
   return (
-    <div className="min-h-screen bg-gradient-to-b from-blue-400 to-blue-600 text-white p-8">
+    <div className="min-h-screen bg-gradient-to-br from-blue-400 via-purple-500 to-pink-500 text-white p-8 font-sans">
       <div className="max-w-md mx-auto">
-        <h1 className="text-4xl font-bold mb-4">Weather App</h1>
-        <div className="bg-white bg-opacity-20 rounded-3xl p-6 mb-6">
+        <h1 className="text-5xl font-bold mb-8 text-center text-yellow-300 drop-shadow-lg">Weather Forecast</h1>
+        <div className="bg-white bg-opacity-20 backdrop-blur-md rounded-3xl p-8 mb-8 shadow-2xl">
           <div className="flex items-center justify-between">
             <div>
-              <h2 className="text-3xl font-semibold">New York</h2>
-              <p className="text-xl">{currentWeather.day}</p>
+              <h2 className="text-4xl font-semibold">New York</h2>
+              <p className="text-2xl mt-2 text-yellow-200">{currentWeather.day}</p>
             </div>
             <WeatherIcon icon={currentWeather.icon} />
           </div>
-          <p className="text-6xl font-bold mt-4">{currentWeather.temp}°C</p>
+          <p className="text-7xl font-bold mt-6 text-center">{currentWeather.temp}°C</p>
         </div>
-        <div className="bg-white bg-opacity-20 rounded-3xl p-6">
-          <h3 className="text-xl font-semibold mb-4">7-Day Forecast</h3>
-          <ResponsiveContainer width="100%" height={200}>
+        <div className="bg-white bg-opacity-20 backdrop-blur-md rounded-3xl p-8 shadow-2xl">
+          <h3 className="text-2xl font-semibold mb-6 text-center text-yellow-300">7-Day Forecast</h3>
+          <ResponsiveContainer width="100%" height={250}>
             <LineChart data={weatherData}>
               <CartesianGrid strokeDasharray="3 3" stroke="rgba(255,255,255,0.2)" />
               <XAxis dataKey="day" stroke="white" />
               <YAxis stroke="white" />
               <Tooltip 
-                contentStyle={{ backgroundColor: 'rgba(255,255,255,0.8)', color: '#333' }}
+                contentStyle={{ backgroundColor: 'rgba(255,255,255,0.9)', color: '#333', borderRadius: '10px', padding: '10px' }}
                 itemStyle={{ color: '#333' }}
               />
-              <Line type="monotone" dataKey="temp" stroke="#8884d8" strokeWidth={2} />
+              <Line type="monotone" dataKey="temp" stroke="#FFD700" strokeWidth={3} dot={{ stroke: '#FFD700', strokeWidth: 2, r: 4 }} />
             </LineChart>
           </ResponsiveContainer>
-          <div className="flex justify-between mt-4">
+          <div className="flex justify-between mt-8">
             {weatherData.map((day) => (
               <div key={day.day} className="flex flex-col items-center">
-                <p className="text-sm">{day.day}</p>
+                <p className="text-sm font-medium">{day.day}</p>
                 <WeatherIcon icon={day.icon} />
-                <p className="text-sm">{day.temp}°</p>
+                <p className="text-sm font-bold mt-1">{day.temp}°</p>
               </div>
             ))}
           </div>
