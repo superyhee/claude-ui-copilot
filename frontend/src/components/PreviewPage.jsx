@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
-import { Box, Typography, Stack, Tabs, Tab, TextField, IconButton, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Checkbox, Avatar, FormControlLabel, Switch, Select, MenuItem } from '@mui/material';
-import { Search, MoreVert, CalendarToday, KeyboardArrowLeft, KeyboardArrowRight } from '@mui/icons-material';
+import { Box, Typography, Stack, Tabs, Tab, TextField, IconButton, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Checkbox, Avatar, FormControlLabel, Switch, Select, MenuItem, Menu, ListItemIcon, ListItemText } from '@mui/material';
+import { Search, MoreVert, CalendarToday, KeyboardArrowLeft, KeyboardArrowRight, Edit, Delete, Add, Visibility } from '@mui/icons-material';
 
 const PreviewPage = () => {
   const [value, setValue] = useState(0);
@@ -8,6 +8,8 @@ const PreviewPage = () => {
   const [rowsPerPage, setRowsPerPage] = useState(5);
   const [filteredInvoices, setFilteredInvoices] = useState([]);
   const [editingCell, setEditingCell] = useState(null);
+  const [anchorEl, setAnchorEl] = useState(null);
+  const [selectedInvoice, setSelectedInvoice] = useState(null);
 
   const [invoices, setInvoices] = useState([
     { name: 'Amiah Pruitt', invoiceNumber: 'INV-19919', createDate: '09 Aug 2024', createTime: '12:27 pm', dueDate: '02 Oct 2024', dueTime: '7:27 am', amount: '$2,331.63', sent: 9, status: 'Paid', color: '#4caf50' },
@@ -65,6 +67,48 @@ const PreviewPage = () => {
     setEditingCell(null);
   };
 
+  const handleMenuOpen = (event, invoice) => {
+    setAnchorEl(event.currentTarget);
+    setSelectedInvoice(invoice);
+  };
+
+  const handleMenuClose = () => {
+    setAnchorEl(null);
+    setSelectedInvoice(null);
+  };
+
+  const handleView = () => {
+    console.log('View invoice:', selectedInvoice);
+    handleMenuClose();
+  };
+
+  const handleEdit = () => {
+    console.log('Edit invoice:', selectedInvoice);
+    handleMenuClose();
+  };
+
+  const handleDelete = () => {
+    setInvoices(invoices.filter(invoice => invoice.invoiceNumber !== selectedInvoice.invoiceNumber));
+    handleMenuClose();
+  };
+
+  const handleAdd = () => {
+    const newInvoice = {
+      name: 'New Customer',
+      invoiceNumber: `INV-${Math.floor(Math.random() * 10000)}`,
+      createDate: new Date().toLocaleDateString(),
+      createTime: new Date().toLocaleTimeString(),
+      dueDate: 'TBD',
+      dueTime: 'TBD',
+      amount: '$0.00',
+      sent: 0,
+      status: 'Draft',
+      color: '#9e9e9e'
+    };
+    setInvoices([...invoices, newInvoice]);
+    handleMenuClose();
+  };
+
   return (
     <Box sx={{ p: 2, backgroundColor: '#ffffff', height: '100%' }}>
       <Tabs value={value} onChange={handleChange} aria-label="invoice tabs">
@@ -102,7 +146,7 @@ const PreviewPage = () => {
             startAdornment: <Search color="action" />,
           }}
         />
-        <IconButton>
+        <IconButton onClick={(e) => handleMenuOpen(e, null)}>
           <MoreVert />
         </IconButton>
       </Stack>
@@ -174,7 +218,7 @@ const PreviewPage = () => {
                   </Box>
                 </TableCell>
                 <TableCell>
-                  <IconButton size="small">
+                  <IconButton size="small" onClick={(e) => handleMenuOpen(e, invoice)}>
                     <MoreVert />
                   </IconButton>
                 </TableCell>
@@ -209,6 +253,42 @@ const PreviewPage = () => {
           </IconButton>
         </Box>
       </Box>
+
+      <Menu
+        anchorEl={anchorEl}
+        open={Boolean(anchorEl)}
+        onClose={handleMenuClose}
+      >
+        {selectedInvoice ? (
+          <>
+            <MenuItem onClick={handleView}>
+              <ListItemIcon>
+                <Visibility fontSize="small" />
+              </ListItemIcon>
+              <ListItemText>View</ListItemText>
+            </MenuItem>
+            <MenuItem onClick={handleEdit}>
+              <ListItemIcon>
+                <Edit fontSize="small" />
+              </ListItemIcon>
+              <ListItemText>Edit</ListItemText>
+            </MenuItem>
+            <MenuItem onClick={handleDelete}>
+              <ListItemIcon>
+                <Delete fontSize="small" />
+              </ListItemIcon>
+              <ListItemText>Delete</ListItemText>
+            </MenuItem>
+          </>
+        ) : (
+          <MenuItem onClick={handleAdd}>
+            <ListItemIcon>
+              <Add fontSize="small" />
+            </ListItemIcon>
+            <ListItemText>Add New Invoice</ListItemText>
+          </MenuItem>
+        )}
+      </Menu>
     </Box>
   );
 };
