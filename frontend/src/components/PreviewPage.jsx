@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { Box, Typography, Stack, Card, CardContent, Grid, IconButton } from '@mui/material';
+import { Box, Typography, Stack, Card, CardContent, Grid, IconButton, Container, Paper, Divider } from '@mui/material';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
-import { WbSunny, Cloud, Opacity, AcUnit, Air } from '@mui/icons-material';
+import { WbSunny, Cloud, Opacity, AcUnit, Air, LocationOn } from '@mui/icons-material';
 
 const WeatherApp = () => {
   const [currentWeather, setCurrentWeather] = useState({
@@ -9,6 +9,7 @@ const WeatherApp = () => {
     condition: 'Sunny',
     humidity: 60,
     windSpeed: 10,
+    location: 'New York City',
   });
 
   const [forecast, setForecast] = useState([
@@ -34,7 +35,6 @@ const WeatherApp = () => {
 
   useEffect(() => {
     // Mock API call to fetch weather data
-    // In a real application, you would make an API call here
   }, []);
 
   const getWeatherIcon = (condition) => {
@@ -53,58 +53,78 @@ const WeatherApp = () => {
   };
 
   return (
-    <Box sx={{ p: 2, backgroundColor: '#1976d2', minHeight: '100vh', color: 'white' }}>
-      <Stack spacing={4}>
-        <Typography variant="h4" align="center">Weather Forecast</Typography>
-        
-        <Card sx={{ backgroundColor: 'rgba(255, 255, 255, 0.1)', backdropFilter: 'blur(10px)' }}>
-          <CardContent>
+    <Box sx={{ 
+      minHeight: '100vh', 
+      background: 'linear-gradient(to bottom, #1e88e5, #64b5f6)',
+      color: 'white',
+      pt: 4,
+      pb: 8
+    }}>
+      <Container maxWidth="md">
+        <Stack spacing={4}>
+          <Paper elevation={3} sx={{ p: 3, borderRadius: 4, backgroundColor: 'rgba(255, 255, 255, 0.1)', backdropFilter: 'blur(10px)' }}>
             <Stack direction="row" justifyContent="space-between" alignItems="center">
-              <Typography variant="h2">{currentWeather.temperature}°C</Typography>
-              <IconButton size="large" sx={{ color: 'white' }}>
-                {getWeatherIcon(currentWeather.condition)}
-              </IconButton>
+              <Typography variant="h4">Weather Forecast</Typography>
+              <Stack direction="row" alignItems="center" spacing={1}>
+                <LocationOn />
+                <Typography variant="h6">{currentWeather.location}</Typography>
+              </Stack>
             </Stack>
-            <Typography variant="h6">{currentWeather.condition}</Typography>
-            <Typography>Humidity: {currentWeather.humidity}%</Typography>
-            <Typography>Wind: {currentWeather.windSpeed} km/h</Typography>
-          </CardContent>
-        </Card>
+          </Paper>
+          
+          <Paper elevation={3} sx={{ p: 3, borderRadius: 4, backgroundColor: 'rgba(255, 255, 255, 0.1)', backdropFilter: 'blur(10px)' }}>
+            <Grid container spacing={3} alignItems="center">
+              <Grid item xs={12} md={6}>
+                <Stack direction="row" alignItems="center" spacing={2}>
+                  <Typography variant="h1">{currentWeather.temperature}°C</Typography>
+                  <IconButton size="large" sx={{ color: 'white', backgroundColor: 'rgba(255, 255, 255, 0.2)', '&:hover': { backgroundColor: 'rgba(255, 255, 255, 0.3)' } }}>
+                    {getWeatherIcon(currentWeather.condition)}
+                  </IconButton>
+                </Stack>
+                <Typography variant="h5" sx={{ mt: 2 }}>{currentWeather.condition}</Typography>
+              </Grid>
+              <Grid item xs={12} md={6}>
+                <Stack spacing={2}>
+                  <Typography variant="body1">Humidity: {currentWeather.humidity}%</Typography>
+                  <Typography variant="body1">Wind: {currentWeather.windSpeed} km/h</Typography>
+                </Stack>
+              </Grid>
+            </Grid>
+          </Paper>
 
-        <Card sx={{ backgroundColor: 'rgba(255, 255, 255, 0.1)', backdropFilter: 'blur(10px)' }}>
-          <CardContent>
+          <Paper elevation={3} sx={{ p: 3, borderRadius: 4, backgroundColor: 'rgba(255, 255, 255, 0.1)', backdropFilter: 'blur(10px)' }}>
             <Typography variant="h6" gutterBottom>7-Day Forecast</Typography>
+            <Divider sx={{ mb: 2, backgroundColor: 'rgba(255, 255, 255, 0.2)' }} />
             <Grid container spacing={2}>
               {forecast.map((day, index) => (
-                <Grid item xs={12 / 7} key={index}>
-                  <Stack alignItems="center" spacing={1}>
+                <Grid item xs={6} sm={3} md={12 / 7} key={index}>
+                  <Paper elevation={2} sx={{ p: 2, textAlign: 'center', backgroundColor: 'rgba(255, 255, 255, 0.05)' }}>
                     <Typography>{day.day}</Typography>
-                    <IconButton size="small" sx={{ color: 'white' }}>
+                    <IconButton size="small" sx={{ color: 'white', my: 1 }}>
                       {getWeatherIcon(day.icon)}
                     </IconButton>
                     <Typography>{day.temp}°C</Typography>
-                  </Stack>
+                  </Paper>
                 </Grid>
               ))}
             </Grid>
-          </CardContent>
-        </Card>
+          </Paper>
 
-        <Card sx={{ backgroundColor: 'rgba(255, 255, 255, 0.1)', backdropFilter: 'blur(10px)', height: 300 }}>
-          <CardContent>
+          <Paper elevation={3} sx={{ p: 3, borderRadius: 4, backgroundColor: 'rgba(255, 255, 255, 0.1)', backdropFilter: 'blur(10px)', height: 400 }}>
             <Typography variant="h6" gutterBottom>Hourly Forecast</Typography>
-            <ResponsiveContainer width="100%" height="100%">
+            <Divider sx={{ mb: 2, backgroundColor: 'rgba(255, 255, 255, 0.2)' }} />
+            <ResponsiveContainer width="100%" height="85%">
               <LineChart data={hourlyForecast}>
-                <CartesianGrid strokeDasharray="3 3" />
-                <XAxis dataKey="hour" />
-                <YAxis />
-                <Tooltip />
-                <Line type="monotone" dataKey="temp" stroke="#8884d8" />
+                <CartesianGrid strokeDasharray="3 3" stroke="rgba(255, 255, 255, 0.2)" />
+                <XAxis dataKey="hour" stroke="white" />
+                <YAxis stroke="white" />
+                <Tooltip contentStyle={{ backgroundColor: 'rgba(0, 0, 0, 0.8)', border: 'none' }} />
+                <Line type="monotone" dataKey="temp" stroke="#ffffff" strokeWidth={2} dot={{ fill: '#ffffff' }} />
               </LineChart>
             </ResponsiveContainer>
-          </CardContent>
-        </Card>
-      </Stack>
+          </Paper>
+        </Stack>
+      </Container>
     </Box>
   );
 };
