@@ -1,132 +1,122 @@
 import React, { useState, useEffect } from 'react';
-import { Box, Typography, Stack, Card, CardContent, Grid, IconButton, Container, Paper, Divider } from '@mui/material';
-import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
-import { WbSunny, Cloud, Opacity, AcUnit, Air, LocationOn } from '@mui/icons-material';
+import { Box, Typography, Stack, IconButton, Slider, Card, CardMedia, CardContent } from '@mui/material';
+import { PlayArrow, Pause, SkipPrevious, SkipNext } from '@mui/icons-material';
 
-const WeatherApp = () => {
-  const [currentWeather, setCurrentWeather] = useState({
-    temperature: 25,
-    condition: 'Sunny',
-    humidity: 60,
-    windSpeed: 10,
-    location: 'New York City',
-  });
+const PreviewPage = () => {
+  const [isPlaying, setIsPlaying] = useState(false);
+  const [currentTime, setCurrentTime] = useState(0);
+  const [duration, setDuration] = useState(180);
 
-  const [forecast, setForecast] = useState([
-    { day: 'Mon', temp: 26, icon: 'WbSunny' },
-    { day: 'Tue', temp: 28, icon: 'WbSunny' },
-    { day: 'Wed', temp: 24, icon: 'Cloud' },
-    { day: 'Thu', temp: 22, icon: 'Opacity' },
-    { day: 'Fri', temp: 25, icon: 'WbSunny' },
-    { day: 'Sat', temp: 27, icon: 'WbSunny' },
-    { day: 'Sun', temp: 23, icon: 'Cloud' },
-  ]);
+  const songs = [
+    { title: 'Starry Night', artist: 'Vincent van Gogh', cover: 'https://placehold.co/300x300?text=Starry+Night' },
+    { title: 'Sunflowers', artist: 'Vincent van Gogh', cover: 'https://placehold.co/300x300?text=Sunflowers' },
+    { title: 'The Potato Eaters', artist: 'Vincent van Gogh', cover: 'https://placehold.co/300x300?text=The+Potato+Eaters' },
+  ];
 
-  const [hourlyForecast, setHourlyForecast] = useState([
-    { hour: '12AM', temp: 22 },
-    { hour: '3AM', temp: 21 },
-    { hour: '6AM', temp: 20 },
-    { hour: '9AM', temp: 23 },
-    { hour: '12PM', temp: 26 },
-    { hour: '3PM', temp: 28 },
-    { hour: '6PM', temp: 27 },
-    { hour: '9PM', temp: 24 },
-  ]);
+  const [currentSong, setCurrentSong] = useState(0);
 
   useEffect(() => {
-    // Mock API call to fetch weather data
-  }, []);
-
-  const getWeatherIcon = (condition) => {
-    switch (condition) {
-      case 'Sunny':
-        return <WbSunny />;
-      case 'Cloudy':
-        return <Cloud />;
-      case 'Rainy':
-        return <Opacity />;
-      case 'Snowy':
-        return <AcUnit />;
-      default:
-        return <WbSunny />;
+    let timer;
+    if (isPlaying) {
+      timer = setInterval(() => {
+        setCurrentTime((prevTime) => {
+          if (prevTime >= duration) {
+            clearInterval(timer);
+            setIsPlaying(false);
+            return 0;
+          }
+          return prevTime + 1;
+        });
+      }, 1000);
     }
+    return () => clearInterval(timer);
+  }, [isPlaying, duration]);
+
+  const handlePlayPause = () => {
+    setIsPlaying(!isPlaying);
+  };
+
+  const handlePrevious = () => {
+    setCurrentSong((prev) => (prev === 0 ? songs.length - 1 : prev - 1));
+    setCurrentTime(0);
+  };
+
+  const handleNext = () => {
+    setCurrentSong((prev) => (prev === songs.length - 1 ? 0 : prev + 1));
+    setCurrentTime(0);
+  };
+
+  const formatTime = (time) => {
+    const minutes = Math.floor(time / 60);
+    const seconds = Math.floor(time % 60);
+    return `${minutes}:${seconds < 10 ? '0' : ''}${seconds}`;
   };
 
   return (
-    <Box sx={{ 
-      minHeight: '100vh', 
-      background: 'linear-gradient(to bottom, #1e88e5, #64b5f6)',
-      color: 'white',
-      pt: 4,
-      pb: 8
-    }}>
-      <Container maxWidth="md">
-        <Stack spacing={4}>
-          <Paper elevation={3} sx={{ p: 3, borderRadius: 4, backgroundColor: 'rgba(255, 255, 255, 0.1)', backdropFilter: 'blur(10px)' }}>
-            <Stack direction="row" justifyContent="space-between" alignItems="center">
-              <Typography variant="h4">Weather Forecast</Typography>
-              <Stack direction="row" alignItems="center" spacing={1}>
-                <LocationOn />
-                <Typography variant="h6">{currentWeather.location}</Typography>
-              </Stack>
-            </Stack>
-          </Paper>
-          
-          <Paper elevation={3} sx={{ p: 3, borderRadius: 4, backgroundColor: 'rgba(255, 255, 255, 0.1)', backdropFilter: 'blur(10px)' }}>
-            <Grid container spacing={3} alignItems="center">
-              <Grid item xs={12} md={6}>
-                <Stack direction="row" alignItems="center" spacing={2}>
-                  <Typography variant="h1">{currentWeather.temperature}°C</Typography>
-                  <IconButton size="large" sx={{ color: 'white', backgroundColor: 'rgba(255, 255, 255, 0.2)', '&:hover': { backgroundColor: 'rgba(255, 255, 255, 0.3)' } }}>
-                    {getWeatherIcon(currentWeather.condition)}
-                  </IconButton>
-                </Stack>
-                <Typography variant="h5" sx={{ mt: 2 }}>{currentWeather.condition}</Typography>
-              </Grid>
-              <Grid item xs={12} md={6}>
-                <Stack spacing={2}>
-                  <Typography variant="body1">Humidity: {currentWeather.humidity}%</Typography>
-                  <Typography variant="body1">Wind: {currentWeather.windSpeed} km/h</Typography>
-                </Stack>
-              </Grid>
-            </Grid>
-          </Paper>
-
-          <Paper elevation={3} sx={{ p: 3, borderRadius: 4, backgroundColor: 'rgba(255, 255, 255, 0.1)', backdropFilter: 'blur(10px)' }}>
-            <Typography variant="h6" gutterBottom>7-Day Forecast</Typography>
-            <Divider sx={{ mb: 2, backgroundColor: 'rgba(255, 255, 255, 0.2)' }} />
-            <Grid container spacing={2}>
-              {forecast.map((day, index) => (
-                <Grid item xs={6} sm={3} md={12 / 7} key={index}>
-                  <Paper elevation={2} sx={{ p: 2, textAlign: 'center', backgroundColor: 'rgba(255, 255, 255, 0.05)' }}>
-                    <Typography>{day.day}</Typography>
-                    <IconButton size="small" sx={{ color: 'white', my: 1 }}>
-                      {getWeatherIcon(day.icon)}
-                    </IconButton>
-                    <Typography>{day.temp}°C</Typography>
-                  </Paper>
-                </Grid>
-              ))}
-            </Grid>
-          </Paper>
-
-          <Paper elevation={3} sx={{ p: 3, borderRadius: 4, backgroundColor: 'rgba(255, 255, 255, 0.1)', backdropFilter: 'blur(10px)', height: 400 }}>
-            <Typography variant="h6" gutterBottom>Hourly Forecast</Typography>
-            <Divider sx={{ mb: 2, backgroundColor: 'rgba(255, 255, 255, 0.2)' }} />
-            <ResponsiveContainer width="100%" height="85%">
-              <LineChart data={hourlyForecast}>
-                <CartesianGrid strokeDasharray="3 3" stroke="rgba(255, 255, 255, 0.2)" />
-                <XAxis dataKey="hour" stroke="white" />
-                <YAxis stroke="white" />
-                <Tooltip contentStyle={{ backgroundColor: 'rgba(0, 0, 0, 0.8)', border: 'none' }} />
-                <Line type="monotone" dataKey="temp" stroke="#ffffff" strokeWidth={2} dot={{ fill: '#ffffff' }} />
-              </LineChart>
-            </ResponsiveContainer>
-          </Paper>
-        </Stack>
-      </Container>
+    <Box sx={{ p: 4, backgroundColor: '#f5deb3', height: '100vh', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+      <Card sx={{ maxWidth: 345, backgroundColor: '#f0e68c', boxShadow: '0 4px 8px rgba(0,0,0,0.1)' }}>
+        <CardMedia
+          component="img"
+          height="300"
+          image={songs[currentSong].cover}
+          alt={`Album cover for ${songs[currentSong].title}`}
+        />
+        <CardContent>
+          <Typography variant="h5" component="div" sx={{ color: '#8b4513', fontWeight: 'bold' }}>
+            {songs[currentSong].title}
+          </Typography>
+          <Typography variant="subtitle1" color="text.secondary" sx={{ mb: 2 }}>
+            {songs[currentSong].artist}
+          </Typography>
+          <Slider
+            value={currentTime}
+            max={duration}
+            onChange={(_, newValue) => setCurrentTime(newValue)}
+            sx={{
+              color: '#8b4513',
+              '& .MuiSlider-thumb': {
+                width: 12,
+                height: 12,
+                transition: '0.3s cubic-bezier(.47,1.64,.41,.8)',
+                '&:before': {
+                  boxShadow: '0 2px 12px 0 rgba(0,0,0,0.4)',
+                },
+                '&:hover, &.Mui-focusVisible': {
+                  boxShadow: '0px 0px 0px 8px rgb(139 69 19 / 16%)',
+                },
+                '&.Mui-active': {
+                  width: 20,
+                  height: 20,
+                },
+              },
+              '& .MuiSlider-rail': {
+                opacity: 0.28,
+              },
+            }}
+          />
+          <Box sx={{ display: 'flex', justifyContent: 'space-between', mb: 2 }}>
+            <Typography variant="body2" color="text.secondary">
+              {formatTime(currentTime)}
+            </Typography>
+            <Typography variant="body2" color="text.secondary">
+              {formatTime(duration)}
+            </Typography>
+          </Box>
+          <Stack direction="row" spacing={1} justifyContent="center">
+            <IconButton onClick={handlePrevious} sx={{ color: '#8b4513' }}>
+              <SkipPrevious />
+            </IconButton>
+            <IconButton onClick={handlePlayPause} sx={{ color: '#8b4513' }}>
+              {isPlaying ? <Pause /> : <PlayArrow />}
+            </IconButton>
+            <IconButton onClick={handleNext} sx={{ color: '#8b4513' }}>
+              <SkipNext />
+            </IconButton>
+          </Stack>
+        </CardContent>
+      </Card>
     </Box>
   );
 };
 
-export default WeatherApp;
+export default PreviewPage;
