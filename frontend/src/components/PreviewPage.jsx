@@ -1,26 +1,28 @@
 import React, { useState } from 'react';
-import { Box, Typography, Stack, Drawer, List, ListItem, ListItemIcon, ListItemText, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper } from '@mui/material';
-import { Dashboard as DashboardIcon, ShoppingCart, People, BarChart } from '@mui/icons-material';
+import { Box, Typography, Stack, Drawer, List, ListItem, ListItemIcon, ListItemText, Grid, Card, CardContent, CardMedia, Button } from '@mui/material';
+import { Spa, ContentCut, Brush, ColorLens, LocalOffer } from '@mui/icons-material';
 
 const drawerWidth = 240;
 
 const sidebarItems = [
-  { text: 'Dashboard', icon: <DashboardIcon /> },
-  { text: 'Orders', icon: <ShoppingCart /> },
-  { text: 'Customers', icon: <People /> },
-  { text: 'Reports', icon: <BarChart /> },
+  { text: 'Haircuts', icon: <ContentCut /> },
+  { text: 'Coloring', icon: <ColorLens /> },
+  { text: 'Styling', icon: <Brush /> },
+  { text: 'Spa Services', icon: <Spa /> },
+  { text: 'Special Offers', icon: <LocalOffer /> },
 ];
 
-const recentOrders = [
-  { id: 1, customer: 'John Doe', date: '2023-05-01', status: 'Delivered', total: '$120.00' },
-  { id: 2, customer: 'Jane Smith', date: '2023-05-02', status: 'Pending', total: '$85.50' },
-  { id: 3, customer: 'Bob Johnson', date: '2023-05-03', status: 'Shipped', total: '$200.75' },
-  { id: 4, customer: 'Alice Brown', date: '2023-05-04', status: 'Processing', total: '$150.25' },
-  { id: 5, customer: 'Charlie Davis', date: '2023-05-05', status: 'Delivered', total: '$95.00' },
+const services = [
+  { id: 1, name: 'Mens Haircut', price: '$30', image: 'https://placehold.co/300x200?text=Mens+Haircut' },
+  { id: 2, name: 'Womens Haircut', price: '$45', image: 'https://placehold.co/300x200?text=Womens+Haircut' },
+  { id: 3, name: 'Hair Coloring', price: '$80', image: 'https://placehold.co/300x200?text=Hair+Coloring' },
+  { id: 4, name: 'Hair Styling', price: '$55', image: 'https://placehold.co/300x200?text=Hair+Styling' },
+  { id: 5, name: 'Facial Treatment', price: '$70', image: 'https://placehold.co/300x200?text=Facial+Treatment' },
+  { id: 6, name: 'Manicure', price: '$25', image: 'https://placehold.co/300x200?text=Manicure' },
 ];
 
-const DashboardPage = () => {
-  const [selectedItem, setSelectedItem] = useState('Dashboard');
+const ShopPage = () => {
+  const [selectedCategory, setSelectedCategory] = useState('Haircuts');
 
   return (
     <Box sx={{ display: 'flex' }}>
@@ -40,8 +42,8 @@ const DashboardPage = () => {
             <ListItem
               button
               key={item.text}
-              selected={selectedItem === item.text}
-              onClick={() => setSelectedItem(item.text)}
+              selected={selectedCategory === item.text}
+              onClick={() => setSelectedCategory(item.text)}
             >
               <ListItemIcon>{item.icon}</ListItemIcon>
               <ListItemText primary={item.text} />
@@ -51,45 +53,36 @@ const DashboardPage = () => {
       </Drawer>
       <Box component="main" sx={{ flexGrow: 1, p: 3 }}>
         <Typography variant="h4" gutterBottom>
-          E-commerce Dashboard
+          {selectedCategory}
         </Typography>
-        <Box sx={{ mb: 4 }}>
-          <img
-            src="https://placehold.co/600x200"
-            alt="Dashboard overview chart showing sales and revenue trends"
-            style={{ width: '100%', height: 'auto' }}
-          />
-        </Box>
-        <Typography variant="h5" gutterBottom>
-          Recent Orders
-        </Typography>
-        <TableContainer component={Paper}>
-          <Table>
-            <TableHead>
-              <TableRow>
-                <TableCell>Order ID</TableCell>
-                <TableCell>Customer</TableCell>
-                <TableCell>Date</TableCell>
-                <TableCell>Status</TableCell>
-                <TableCell>Total</TableCell>
-              </TableRow>
-            </TableHead>
-            <TableBody>
-              {recentOrders.map((order) => (
-                <TableRow key={order.id}>
-                  <TableCell>{order.id}</TableCell>
-                  <TableCell>{order.customer}</TableCell>
-                  <TableCell>{order.date}</TableCell>
-                  <TableCell>{order.status}</TableCell>
-                  <TableCell>{order.total}</TableCell>
-                </TableRow>
-              ))}
-            </TableBody>
-          </Table>
-        </TableContainer>
+        <Grid container spacing={3}>
+          {services.map((service) => (
+            <Grid item xs={12} sm={6} md={4} key={service.id}>
+              <Card>
+                <CardMedia
+                  component="img"
+                  height="200"
+                  image={service.image}
+                  alt={service.name}
+                />
+                <CardContent>
+                  <Typography gutterBottom variant="h5" component="div">
+                    {service.name}
+                  </Typography>
+                  <Typography variant="body2" color="text.secondary">
+                    {service.price}
+                  </Typography>
+                  <Button variant="contained" color="primary" sx={{ mt: 2 }}>
+                    Book Now
+                  </Button>
+                </CardContent>
+              </Card>
+            </Grid>
+          ))}
+        </Grid>
       </Box>
     </Box>
   );
 };
 
-export default DashboardPage;
+export default ShopPage;
