@@ -1,87 +1,184 @@
-import React, { useState } from 'react';
-import { FaHome, FaSearch, FaHeart, FaUser, FaPlusSquare, FaBell, FaEllipsisV, FaComment, FaBookmark, FaPaperPlane } from 'react-icons/fa';
+import React from 'react';
+import { Box, Typography, AppBar, Toolbar, Button, Container, Grid, Card, CardContent, Avatar, Accordion, AccordionSummary, AccordionDetails, TextField } from '@mui/material';
+import { ExpandMore, Star, CheckCircle, Group } from '@mui/icons-material';
 
-const mockPosts = [
-  { id: 1, username: 'john_doe', imageUrl: 'https://placehold.co/600x400', likes: 1243, comments: 89, caption: 'Exciting project kickoff meeting with the team!', timestamp: '2h ago' },
-  { id: 2, username: 'jane_smith', imageUrl: 'https://placehold.co/600x400', likes: 2891, comments: 156, caption: 'Celebrating a successful product launch!', timestamp: '4h ago' },
-  { id: 3, username: 'tech_innovator', imageUrl: 'https://placehold.co/600x400', likes: 3567, comments: 203, caption: 'Unveiling our latest AI-powered solution at the tech expo', timestamp: '6h ago' },
-];
+const LandingPage = () => {
+  const features = [
+    { title: 'Innovation', description: 'Cutting-edge technology solutions', icon: <Star /> },
+    { title: 'Reliability', description: '99.9% uptime guarantee', icon: <CheckCircle /> },
+    { title: 'Support', description: '24/7 customer assistance', icon: <Group /> },
+  ];
 
-const Post = ({ post }) => (
-  <div className="bg-white rounded-lg shadow-md mb-6">
-    <div className="flex items-center justify-between p-4">
-      <div className="flex items-center">
-        <img src="https://placehold.co/40x40" alt={`${post.username}'s profile picture`} className="w-10 h-10 rounded-full mr-3" />
-        <div>
-          <span className="font-semibold text-sm">{post.username}</span>
-          <p className="text-xs text-gray-500">{post.timestamp}</p>
-        </div>
-      </div>
-      <FaEllipsisV className="text-gray-500" />
-    </div>
-    <img src={post.imageUrl} alt={post.caption} className="w-full h-auto" />
-    <div className="p-4">
-      <div className="flex justify-between mb-4">
-        <div className="flex space-x-4">
-          <FaHeart className="text-2xl text-gray-500 hover:text-red-500 cursor-pointer" />
-          <FaComment className="text-2xl text-gray-500 hover:text-blue-500 cursor-pointer" />
-          <FaPaperPlane className="text-2xl text-gray-500 hover:text-green-500 cursor-pointer" />
-        </div>
-        <FaBookmark className="text-2xl text-gray-500 hover:text-yellow-500 cursor-pointer" />
-      </div>
-      <p className="font-semibold mb-1">{post.likes.toLocaleString()} likes</p>
-      <p><span className="font-semibold mr-2">{post.username}</span>{post.caption}</p>
-      <p className="text-gray-500 text-sm mt-1">View all {post.comments} comments</p>
-    </div>
-  </div>
-);
+  const testimonials = [
+    { name: 'John Doe', company: 'Tech Co', content: 'Amazing service! Highly recommended.' },
+    { name: 'Jane Smith', company: 'Innovate Inc', content: 'Transformed our business processes.' },
+  ];
 
-const BottomNavigation = () => (
-  <div className="fixed bottom-0 left-0 right-0 bg-white border-t flex justify-around py-3 px-4">
-    <FaHome className="text-2xl text-blue-500" />
-    <FaSearch className="text-2xl text-gray-500" />
-    <FaPlusSquare className="text-2xl text-gray-500" />
-    <FaBell className="text-2xl text-gray-500" />
-    <img src="https://placehold.co/30x30" alt="User profile picture" className="w-7 h-7 rounded-full" />
-  </div>
-);
-
-const StoryCircle = ({ username }) => (
-  <div className="flex flex-col items-center mr-4">
-    <div className="w-16 h-16 rounded-full bg-gradient-to-tr from-yellow-400 to-pink-500 p-0.5">
-      <img src="https://placehold.co/60x60" alt={`${username}'s story`} className="w-full h-full object-cover rounded-full border-2 border-white" />
-    </div>
-    <span className="text-xs mt-1">{username}</span>
-  </div>
-);
-
-export default function App() {
-  const [posts] = useState(mockPosts);
+  const faqs = [
+    { question: 'What services do you offer?', answer: 'We offer a wide range of innovative tech solutions.' },
+    { question: 'How can I get started?', answer: 'Simply contact our sales team for a personalized demo.' },
+  ];
 
   return (
-    <div className="bg-gray-100 min-h-screen pb-16">
-      <header className="bg-white border-b sticky top-0 z-10">
-        <div className="container mx-auto px-4 py-2 flex justify-between items-center">
-          <h1 className="text-2xl font-bold">Enterprise Feed</h1>
-          <div className="flex items-center space-x-4">
-            <FaBell className="text-2xl text-gray-600" />
-            <FaUser className="text-2xl text-gray-600" />
-          </div>
-        </div>
-      </header>
-      <main className="container mx-auto px-4 py-4">
-        <div className="bg-white rounded-lg shadow-md p-4 mb-6 overflow-x-auto">
-          <div className="flex">
-            {['YourStory', 'user1', 'user2', 'user3', 'user4'].map((username, index) => (
-              <StoryCircle key={index} username={username} />
+    <Box>
+      <AppBar position="static">
+        <Toolbar>
+          <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
+            TechStartup
+          </Typography>
+          <Button color="inherit">Home</Button>
+          <Button color="inherit">About</Button>
+          <Button color="inherit">Contact</Button>
+        </Toolbar>
+      </AppBar>
+
+      <Box sx={{ 
+        background: 'linear-gradient(45deg, #FE6B8B 30%, #FF8E53 90%)',
+        minHeight: '50vh',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        color: 'white',
+        textAlign: 'center'
+      }}>
+        <Container>
+          <Typography variant="h2" gutterBottom>
+            Revolutionize Your Business
+          </Typography>
+          <Typography variant="h5">
+            Innovative solutions for the digital age
+          </Typography>
+        </Container>
+      </Box>
+
+      <Container sx={{ my: 8 }}>
+        <Typography variant="h4" gutterBottom align="center">
+          Our Features
+        </Typography>
+        <Grid container spacing={4}>
+          {features.map((feature, index) => (
+            <Grid item xs={12} md={4} key={index}>
+              <Card>
+                <CardContent>
+                  <Avatar sx={{ bgcolor: 'secondary.main', mb: 2 }}>
+                    {feature.icon}
+                  </Avatar>
+                  <Typography variant="h6" gutterBottom>
+                    {feature.title}
+                  </Typography>
+                  <Typography variant="body2">
+                    {feature.description}
+                  </Typography>
+                </CardContent>
+              </Card>
+            </Grid>
+          ))}
+        </Grid>
+      </Container>
+
+      <Box sx={{ bgcolor: 'background.paper', py: 8 }}>
+        <Container>
+          <Typography variant="h4" gutterBottom align="center">
+            What Our Clients Say
+          </Typography>
+          <Grid container spacing={4}>
+            {testimonials.map((testimonial, index) => (
+              <Grid item xs={12} md={6} key={index}>
+                <Card>
+                  <CardContent>
+                    <Typography variant="body1" paragraph>
+                      "{testimonial.content}"
+                    </Typography>
+                    <Typography variant="subtitle1">
+                      {testimonial.name}, {testimonial.company}
+                    </Typography>
+                  </CardContent>
+                </Card>
+              </Grid>
             ))}
-          </div>
-        </div>
-        {posts.map(post => (
-          <Post key={post.id} post={post} />
+          </Grid>
+        </Container>
+      </Box>
+
+      <Container sx={{ my: 8 }}>
+        <Typography variant="h4" gutterBottom align="center">
+          Frequently Asked Questions
+        </Typography>
+        {faqs.map((faq, index) => (
+          <Accordion key={index}>
+            <AccordionSummary expandIcon={<ExpandMore />}>
+              <Typography variant="h6">{faq.question}</Typography>
+            </AccordionSummary>
+            <AccordionDetails>
+              <Typography>{faq.answer}</Typography>
+            </AccordionDetails>
+          </Accordion>
         ))}
-      </main>
-      <BottomNavigation />
-    </div>
+      </Container>
+
+      <Box sx={{ bgcolor: 'primary.main', color: 'white', py: 4 }}>
+        <Container>
+          <Typography variant="h5" gutterBottom align="center">
+            Ready to Transform Your Business?
+          </Typography>
+          <Box sx={{ display: 'flex', justifyContent: 'center', mt: 2 }}>
+            <Button variant="contained" color="secondary">
+              Get Started Now
+            </Button>
+          </Box>
+        </Container>
+      </Box>
+
+      <Box component="footer" sx={{ bgcolor: 'background.paper', py: 6 }}>
+        <Container maxWidth="lg">
+          <Grid container spacing={4} justifyContent="space-between">
+            <Grid item xs={12} sm={6} md={3}>
+              <Typography variant="h6" gutterBottom>
+                Contact Us
+              </Typography>
+              <Typography variant="body2">
+                123 Tech Street<br />
+                San Francisco, CA 94122<br />
+                Email: info@techstartup.com<br />
+                Phone: (123) 456-7890
+              </Typography>
+            </Grid>
+            <Grid item xs={12} sm={6} md={3}>
+              <Typography variant="h6" gutterBottom>
+                Quick Links
+              </Typography>
+              <Typography variant="body2">
+                <Button color="inherit">About Us</Button><br />
+                <Button color="inherit">Services</Button><br />
+                <Button color="inherit">Careers</Button><br />
+                <Button color="inherit">Contact</Button>
+              </Typography>
+            </Grid>
+            <Grid item xs={12} sm={6} md={3}>
+              <Typography variant="h6" gutterBottom>
+                Newsletter
+              </Typography>
+              <TextField
+                label="Email Address"
+                variant="outlined"
+                fullWidth
+                margin="normal"
+                size="small"
+              />
+              <Button variant="contained" color="primary">
+                Subscribe
+              </Button>
+            </Grid>
+          </Grid>
+          <Box mt={5}>
+            <Typography variant="body2" align="center">
+              © 2023 TechStartup. All rights reserved.
+            </Typography>
+          </Box>
+        </Container>
+      </Box>
+    </Box>
   );
-}
+};
+
+export default LandingPage;
