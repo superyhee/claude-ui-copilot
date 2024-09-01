@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
 import { Box, Typography, Stack, Drawer, List, ListItem, ListItemIcon, ListItemText, Table, TableBody, TableCell, TableContainer, TableHead, TableRow, Paper } from '@mui/material';
-import { Dashboard, ShoppingCart, People, BarChart } from '@mui/icons-material';
+import { Dashboard as DashboardIcon, ShoppingCart, People, BarChart } from '@mui/icons-material';
 
 const drawerWidth = 240;
 
 const sidebarItems = [
-  { text: 'Dashboard', icon: <Dashboard /> },
+  { text: 'Dashboard', icon: <DashboardIcon /> },
   { text: 'Orders', icon: <ShoppingCart /> },
   { text: 'Customers', icon: <People /> },
   { text: 'Reports', icon: <BarChart /> },
@@ -19,7 +19,7 @@ const recentOrders = [
   { id: 5, customer: 'Charlie Davis', date: '2023-05-05', status: 'Delivered', total: '$95.00' },
 ];
 
-const Dashboard = () => {
+const DashboardPage = () => {
   const [selectedItem, setSelectedItem] = useState('Dashboard');
 
   return (
@@ -92,4 +92,4 @@ const Dashboard = () => {
   );
 };
 
-export default Dashboard;
+export default DashboardPage;
