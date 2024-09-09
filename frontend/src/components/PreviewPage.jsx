@@ -1,71 +1,56 @@
 import React from 'react';
-import { Box, Typography, Stack } from '@mui/material';
-import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
 
-const data = [
-  { name: 'Marketing', value2023: 2, value2024: 19 },
-  { name: 'Product design/R&D', value2023: 3, value2024: 19 },
-  { name: 'ESG/sustainability*', value2023: 0, value2024: 22 },
-  { name: 'Human resources*', value2023: 0, value2024: 24 },
-  { name: 'Finance', value2023: 5, value2024: 25 },
-  { name: 'Sales/customer operations', value2023: 4, value2024: 25 },
-  { name: 'Logistics', value2023: 2, value2024: 26 },
-  { name: 'Risk management', value2023: 4, value2024: 26 },
-  { name: 'IT', value2023: 4, value2024: 27 },
-];
-
-const PreviewPage = () => {
+const App = () => {
   return (
-    <Box sx={{ p: 4, backgroundColor: '#ffffff', height: '100%' }}>
-      <Stack alignItems="center" spacing={2}>
-        <Typography variant="h4" fontWeight="bold" textAlign="center">
-          Top 9 Use Cases for Generative AI
-        </Typography>
-        <Typography variant="subtitle1" textAlign="center">
-          % of organizations implementing generative AI use cases, by function
-        </Typography>
-        <Box sx={{ width: '100%', height: 500 }}>
-          <ResponsiveContainer width="100%" height="100%">
-            <BarChart
-              layout="vertical"
-              data={data}
-              margin={{
-                top: 20,
-                right: 30,
-                left: 100,
-                bottom: 5,
-              }}
-            >
-              <CartesianGrid strokeDasharray="3 3" horizontal={false} />
-              <XAxis type="number" tickFormatter={(value) => `${value}%`} />
-              <YAxis dataKey="name" type="category" tick={{ fontSize: 12 }} />
-              <Tooltip formatter={(value) => `${value}%`} />
-              <Legend />
-              <Bar dataKey="value2023" name="2023" fill="#39c0c8" barSize={20} />
-              <Bar dataKey="value2024" name="2024" fill="#0070ad" barSize={20} />
-            </BarChart>
-          </ResponsiveContainer>
-        </Box>
-        <Box sx={{ width: '100%', mt: 2 }}>
-          <Typography variant="caption" sx={{ fontStyle: 'italic' }}>
-            Copyright © 2024 Capgemini. All rights reserved.
-          </Typography>
-          <Typography variant="caption" sx={{ display: 'block', mt: 1 }}>
-            Source: Capgemini Research Institute, Generative AI executive survey, April 2023, N = 800 organizations; Generative AI executive survey, May-June 2024, N = 1,031 organizations that are at least exploring generative AI capabilities; N varies per functional use case, ranging from 499 to 716.
-          </Typography>
-          <Typography variant="caption" sx={{ display: 'block' }}>
-            *ESG/sustainability and human resources were excluded from the 2023 research.
-          </Typography>
-          <Typography variant="caption" sx={{ display: 'block' }}>
-            ** Implementation refers to organizations that have partially scaled the functional use case in question.
-          </Typography>
-          <Typography variant="caption" sx={{ display: 'block' }}>
-            ***In the 2024 averages, respondents from the public sector and India are excluded, as they were not included in the 2023 research.
-          </Typography>
-        </Box>
-      </Stack>
-    </Box>
+    <div className="min-h-screen bg-white text-black">
+      <header className="flex justify-between items-center px-8 py-4">
+        <div className="text-2xl font-bold">TESLA</div>
+        <nav className="hidden md:flex space-x-4">
+          <a href="#" className="hover:text-gray-600">Vehicles</a>
+          <a href="#" className="hover:text-gray-600">Energy</a>
+          <a href="#" className="hover:text-gray-600">Charging</a>
+          <a href="#" className="hover:text-gray-600">Discover</a>
+          <a href="#" className="hover:text-gray-600">Shop</a>
+        </nav>
+        <div className="flex space-x-4">
+          <button className="hover:bg-gray-200 p-2 rounded-full">
+            <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8.228 9c.549-1.165 2.03-2 3.772-2 2.21 0 4 1.343 4 3 0 1.4-1.278 2.575-3.006 2.907-.542.104-.994.54-.994 1.093m0 3h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+            </svg>
+          </button>
+          <button className="hover:bg-gray-200 p-2 rounded-full">
+            <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3.055 11H5a2 2 0 012 2v1a2 2 0 002 2 2 2 0 012 2v2.945M8 3.935V5.5A2.5 2.5 0 0010.5 8h.5a2 2 0 012 2 2 2 0 104 0 2 2 0 012-2h1.064M15 20.488V18a2 2 0 012-2h3.064M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+            </svg>
+          </button>
+          <button className="hover:bg-gray-200 p-2 rounded-full">
+            <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M16 7a4 4 0 11-8 0 4 4 0 018 0zM12 14a7 7 0 00-7 7h14a7 7 0 00-7-7z" />
+            </svg>
+          </button>
+        </div>
+      </header>
+
+      <main className="relative">
+        <img src="https://placehold.co/1920x1080.png" alt="Blue Tesla Model Y driving on a road with misty forest background" className="w-full h-screen object-cover" />
+        <div className="absolute inset-0 flex flex-col justify-between p-16">
+          <div className="text-center">
+            <h1 className="text-6xl font-bold mb-2">Model Y</h1>
+            <p className="text-2xl mb-1">1.99% APR Financing</p>
+            <p className="text-xl">From $31,490*</p>
+          </div>
+          <div className="flex justify-center space-x-4">
+            <button className="bg-blue-600 text-white px-20 py-2 rounded hover:bg-blue-700">
+              Order Now
+            </button>
+            <button className="bg-gray-100 text-gray-800 px-16 py-2 rounded hover:bg-gray-200">
+              Experience Model Y
+            </button>
+          </div>
+        </div>
+      </main>
+    </div>
   );
 };
 
-export default PreviewPage;
+export default App;
