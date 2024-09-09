@@ -8,8 +8,8 @@ import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 
 const PreviewPage = () => {
   return (
-    <Box sx={{ backgroundColor: '#fff', minHeight: '100vh' }}>
-      <Box sx={{ backgroundColor: '#232f3e', color: 'white', p: 1 }}>
+    <Box sx={{ backgroundColor: '#eaeded', minHeight: '100vh' }}>
+      <Box sx={{ backgroundColor: '#131921', color: 'white', p: 1 }}>
         <Stack direction="row" justifyContent="space-between" alignItems="center">
           <Typography variant="h6">amazon</Typography>
           <Stack direction="row" spacing={1} alignItems="center">
@@ -63,7 +63,7 @@ const PreviewPage = () => {
         </Stack>
       </Box>
 
-      <Box sx={{ backgroundColor: '#ffdab9', p: 2, position: 'relative' }}>
+      <Box sx={{ backgroundColor: '#fff', p: 2, position: 'relative', mb: 2 }}>
         <IconButton sx={{ position: 'absolute', left: 10, top: '50%', transform: 'translateY(-50%)' }}>
           <ArrowBackIosIcon />
         </IconButton>
@@ -97,7 +97,7 @@ const PreviewPage = () => {
                   </Grid>
                 ))}
               </Grid>
-              <Typography variant="body2" color="primary" sx={{ mt: 1 }}>Shop all dorm essentials</Typography>
+              <Typography variant="body2" color="#007185" sx={{ mt: 1 }}>Shop all dorm essentials</Typography>
             </CardContent>
           </Card>
         </Grid>
@@ -118,7 +118,7 @@ const PreviewPage = () => {
                   </Grid>
                 ))}
               </Grid>
-              <Typography variant="body2" color="primary" sx={{ mt: 1 }}>Shop more Halloween</Typography>
+              <Typography variant="body2" color="#007185" sx={{ mt: 1 }}>Shop more Halloween</Typography>
             </CardContent>
           </Card>
         </Grid>
@@ -139,7 +139,7 @@ const PreviewPage = () => {
                   </Grid>
                 ))}
               </Grid>
-              <Typography variant="body2" color="primary" sx={{ mt: 1 }}>Shop Off to College</Typography>
+              <Typography variant="body2" color="#007185" sx={{ mt: 1 }}>Shop Off to College</Typography>
             </CardContent>
           </Card>
         </Grid>
@@ -171,7 +171,7 @@ const PreviewPage = () => {
         </Grid>
       </Grid>
 
-      <Box sx={{ p: 2 }}>
+      <Box sx={{ p: 2, backgroundColor: '#fff' }}>
         <Typography variant="h6" gutterBottom>Best Sellers in Home & Kitchen</Typography>
         <Stack direction="row" spacing={2} sx={{ overflowX: 'auto' }}>
           {['Bedding', 'Water Bottle', 'Sheets', 'Mug', 'Shower Curtain', 'Picture Frame', 'Ant Bait', 'Pillow'].map((item, index) => (
