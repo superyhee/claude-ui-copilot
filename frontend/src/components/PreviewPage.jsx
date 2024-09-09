@@ -5,7 +5,7 @@ const Calculator = () => {
   const [display, setDisplay] = useState('');
 
   const handleClick = (value) => {
-    setDisplay(prevDisplay => prevDisplay + value);
+    setDisplay(prev => prev + value);
   };
 
   const handleClear = () => {
@@ -28,34 +28,34 @@ const Calculator = () => {
   ];
 
   return (
-    <Box sx={{ 
-      display: 'flex', 
-      justifyContent: 'center', 
-      alignItems: 'center', 
-      height: '100vh', 
-      backgroundColor: '#000000'
+    <Box sx={{
+      display: 'flex',
+      justifyContent: 'center',
+      alignItems: 'center',
+      height: '100vh',
+      backgroundColor: '#1e1e1e'
     }}>
-      <Paper 
+      <Paper
         elevation={3}
         sx={{
           width: '300px',
           padding: '20px',
-          backgroundColor: '#FF0000',
-          border: '2px solid #FF0000',
-          borderRadius: '10px'
+          backgroundColor: '#ff9999',
+          border: '2px solid #ff0000'
         }}
       >
-        <Box 
-          sx={{ 
-            backgroundColor: '#FFE4E1', 
-            p: 1, 
-            mb: 2, 
+        <Box
+          sx={{
+            width: '100%',
             height: '50px',
+            backgroundColor: '#ffcccc',
+            marginBottom: '10px',
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'flex-end',
-            overflow: 'hidden',
-            borderRadius: '5px'
+            padding: '0 10px',
+            boxSizing: 'border-box',
+            border: '1px solid #000000'
           }}
         >
           {display}
@@ -66,14 +66,14 @@ const Calculator = () => {
               <Button
                 variant="outlined"
                 fullWidth
-                onClick={() => btn === 'C' ? handleClear() : btn === '=' ? handleCalculate() : handleClick(btn)}
+                onClick={() => btn === '=' ? handleCalculate() : btn === 'C' ? handleClear() : handleClick(btn)}
                 sx={{
-                  backgroundColor: '#FFE4E1',
+                  backgroundColor: '#ffcccc',
                   color: '#000000',
                   border: '1px solid #000000',
                   '&:hover': {
-                    backgroundColor: '#FFC0CB',
-                  },
+                    backgroundColor: '#ffb3b3',
+                  }
                 }}
               >
                 {btn}
@@ -82,6 +82,28 @@ const Calculator = () => {
           ))}
         </Grid>
       </Paper>
+      <Box
+        sx={{
+          width: '300px',
+          height: '340px',
+          backgroundColor: '#1e1e1e',
+          marginLeft: '20px',
+          border: '2px solid #ffffff',
+          display: 'flex',
+          justifyContent: 'center',
+          alignItems: 'center'
+        }}
+      >
+        <Box
+          component="img"
+          sx={{
+            width: '80%',
+            height: 'auto',
+          }}
+          alt="A curved line graph"
+          src="https://placehold.co/240x240?text=Graph"
+        />
+      </Box>
     </Box>
   );
 };
