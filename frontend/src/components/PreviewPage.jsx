@@ -1,221 +1,115 @@
 import React, { useState } from 'react';
-import { Box, Typography, Stack, AppBar, Toolbar, Button, Card, CardContent, Grid, TextField, IconButton, Accordion, AccordionSummary, AccordionDetails, Drawer, List, ListItem, ListItemText, Container, Paper, Chip } from '@mui/material';
-import { Menu as MenuIcon, ExpandMore as ExpandMoreIcon, Facebook, Twitter, Instagram, ArrowForward, Close } from '@mui/icons-material';
+import { Dialog } from '@headlessui/react';
 
-const PreviewPage = () => {
-  const [drawerOpen, setDrawerOpen] = useState(false);
+const products = [
+  { id: 1, name: 'Classic Espresso', price: 3.99, image: 'https://placehold.co/200x200?text=Espresso' },
+  { id: 2, name: 'Caramel Macchiato', price: 4.99, image: 'https://placehold.co/200x200?text=Macchiato' },
+  { id: 3, name: 'Iced Latte', price: 4.49, image: 'https://placehold.co/200x200?text=Latte' },
+];
 
-  const testimonials = [
-    { name: 'John Doe', text: 'This startup changed my life!', avatar: 'https://placehold.co/50x50?text=JD' },
-    { name: 'Jane Smith', text: 'Incredible service and support.', avatar: 'https://placehold.co/50x50?text=JS' },
-    { name: 'Mike Johnson', text: 'I cannot recommend them enough.', avatar: 'https://placehold.co/50x50?text=MJ' },
-  ];
+export default function App() {
+  const [cart, setCart] = useState([]);
+  const [isCartOpen, setIsCartOpen] = useState(false);
 
-  const faqs = [
-    { question: 'What services do you offer?', answer: 'We offer a wide range of innovative solutions...' },
-    { question: 'How can I get started?', answer: 'Getting started is easy! Simply sign up on our website...' },
-    { question: 'What makes your startup unique?', answer: 'Our unique approach combines cutting-edge technology...' },
-  ];
+  const addToCart = (product) => {
+    setCart([...cart, product]);
+  };
 
-  const features = [
-    { title: 'Innovative Technology', description: 'Cutting-edge solutions for modern problems', icon: 'https://placehold.co/80x80?text=Tech' },
-    { title: 'User-Friendly Interface', description: 'Intuitive design for seamless user experience', icon: 'https://placehold.co/80x80?text=UI' },
-    { title: '24/7 Support', description: 'Round-the-clock assistance for our valued customers', icon: 'https://placehold.co/80x80?text=Support' },
-  ];
+  const removeFromCart = (productId) => {
+    setCart(cart.filter(item => item.id !== productId));
+  };
 
   return (
-    <Box sx={{ backgroundColor: '#f8f9fa', minHeight: '100vh' }}>
-      <AppBar position="static" color="transparent" elevation={0}>
-        <Container>
-          <Toolbar>
-            <Typography variant="h6" component="div" sx={{ flexGrow: 1, fontWeight: 'bold', color: '#1a73e8' }}>
-              StartupLogo
-            </Typography>
-            <Box sx={{ display: { xs: 'none', md: 'block' } }}>
-              {['Home', 'Features', 'Testimonials', 'FAQ', 'Contact'].map((item) => (
-                <Button key={item} sx={{ color: '#333', mx: 1 }}>{item}</Button>
+    <div className="bg-amber-50 min-h-screen">
+      <header className="bg-amber-800 text-white p-4">
+        <nav className="container mx-auto flex justify-between items-center">
+          <h1 className="text-2xl font-bold">Cozy Coffee</h1>
+          <ul className="flex space-x-4">
+            <li><a href="#home" className="hover:text-amber-200">Home</a></li>
+            <li><a href="#products" className="hover:text-amber-200">Products</a></li>
+            <li><a href="#about" className="hover:text-amber-200">About</a></li>
+            <li><button onClick={() => setIsCartOpen(true)} className="hover:text-amber-200">Cart ({cart.length})</button></li>
+          </ul>
+        </nav>
+      </header>
+
+      <main>
+        <section id="home" className="container mx-auto py-12 flex items-center">
+          <div className="w-1/2 pr-8">
+            <h2 className="text-4xl font-bold text-amber-900 mb-4">Welcome to Cozy Coffee</h2>
+            <p className="text-amber-800 mb-6">Experience the warmth of our carefully crafted coffee, where every sip tells a story of passion and tradition.</p>
+            <a href="#products" className="bg-amber-600 text-white px-6 py-2 rounded-full hover:bg-amber-700 transition duration-300">Shop Now</a>
+          </div>
+          <div className="w-1/2">
+            <img src="https://placehold.co/600x400?text=Cozy+Coffee+Shop" alt="Cozy coffee shop interior" className="rounded-lg shadow-lg" />
+          </div>
+        </section>
+
+        <section id="products" className="bg-amber-100 py-12">
+          <div className="container mx-auto">
+            <h2 className="text-3xl font-bold text-amber-900 mb-8 text-center">Our Products</h2>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
+              {products.map((product) => (
+                <div key={product.id} className="bg-white p-6 rounded-lg shadow-md">
+                  <img src={product.image} alt={product.name} className="w-full h-48 object-cover mb-4 rounded" />
+                  <h3 className="text-xl font-semibold text-amber-900 mb-2">{product.name}</h3>
+                  <p className="text-amber-700 mb-4">${product.price.toFixed(2)}</p>
+                  <button onClick={() => addToCart(product)} className="bg-amber-600 text-white px-4 py-2 rounded hover:bg-amber-700 transition duration-300">Add to Cart</button>
+                </div>
               ))}
-            </Box>
-            <IconButton
-              size="large"
-              edge="end"
-              color="inherit"
-              aria-label="menu"
-              sx={{ display: { md: 'none' } }}
-              onClick={() => setDrawerOpen(true)}
-            >
-              <MenuIcon />
-            </IconButton>
-          </Toolbar>
-        </Container>
-      </AppBar>
+            </div>
+          </div>
+        </section>
 
-      <Drawer anchor="right" open={drawerOpen} onClose={() => setDrawerOpen(false)}>
-        <Box sx={{ width: 250, p: 2 }}>
-          <IconButton sx={{ mb: 2 }} onClick={() => setDrawerOpen(false)}>
-            <Close />
-          </IconButton>
-          <List>
-            {['Home', 'Features', 'Testimonials', 'FAQ', 'Contact'].map((text) => (
-              <ListItem button key={text}>
-                <ListItemText primary={text} />
-              </ListItem>
-            ))}
-          </List>
-        </Box>
-      </Drawer>
+        <section className="bg-amber-700 text-white py-12">
+          <div className="container mx-auto text-center">
+            <h2 className="text-3xl font-bold mb-4">Enjoy 10% Off Your First Order</h2>
+            <p className="mb-6">Sign up for our newsletter and get a special welcome discount!</p>
+            <a href="#" className="bg-white text-amber-700 px-6 py-2 rounded-full hover:bg-amber-100 transition duration-300">Subscribe Now</a>
+          </div>
+        </section>
+      </main>
 
-      <Box sx={{
-        background: 'linear-gradient(45deg, #1a73e8 30%, #8e24aa 90%)',
-        padding: '8rem 2rem',
-        textAlign: 'center',
-        color: 'white'
-      }}>
-        <Container maxWidth="md">
-          <Typography variant="h2" gutterBottom fontWeight="bold">
-            Revolutionize Your Business
-          </Typography>
-          <Typography variant="h5" paragraph>
-            Empower your startup with our innovative solutions and take your business to new heights.
-          </Typography>
-          <Button variant="contained" size="large" endIcon={<ArrowForward />}
-            sx={{ mt: 4, backgroundColor: 'white', color: '#1a73e8', '&:hover': { backgroundColor: '#f5f5f5' } }}>
-            Get Started
-          </Button>
-        </Container>
-      </Box>
+      <footer className="bg-amber-900 text-white py-8">
+        <div className="container mx-auto flex justify-between">
+          <div>
+            <h3 className="text-xl font-bold mb-2">Cozy Coffee</h3>
+            <p>123 Coffee Lane, Brewville, CF 12345</p>
+            <p>Phone: (555) 123-4567</p>
+            <p>Email: info@cozycoffee.com</p>
+          </div>
+          <div>
+            <h3 className="text-xl font-bold mb-2">Quick Links</h3>
+            <ul>
+              <li><a href="#" className="hover:text-amber-200">Privacy Policy</a></li>
+              <li><a href="#" className="hover:text-amber-200">Terms of Service</a></li>
+              <li><a href="#" className="hover:text-amber-200">FAQ</a></li>
+            </ul>
+          </div>
+        </div>
+      </footer>
 
-      <Container sx={{ my: 8 }}>
-        <Typography variant="h4" gutterBottom align="center" fontWeight="bold" color="#333">
-          Our Features
-        </Typography>
-        <Grid container spacing={4} justifyContent="center">
-          {features.map((feature, index) => (
-            <Grid item xs={12} md={4} key={index}>
-              <Paper elevation={3} sx={{ p: 3, height: '100%', display: 'flex', flexDirection: 'column', alignItems: 'center', transition: '0.3s', '&:hover': { transform: 'translateY(-5px)' } }}>
-                <img src={feature.icon} alt={`${feature.title} icon`} style={{ width: 80, height: 80, marginBottom: 16 }} />
-                <Typography variant="h6" gutterBottom align="center" fontWeight="bold">
-                  {feature.title}
-                </Typography>
-                <Typography align="center">
-                  {feature.description}
-                </Typography>
-              </Paper>
-            </Grid>
-          ))}
-        </Grid>
-      </Container>
-
-      <Box sx={{ backgroundColor: '#f0f4f8', py: 8 }}>
-        <Container>
-          <Typography variant="h4" gutterBottom align="center" fontWeight="bold" color="#333">
-            What Our Customers Say
-          </Typography>
-          <Grid container spacing={4}>
-            {testimonials.map((testimonial, index) => (
-              <Grid item xs={12} md={4} key={index}>
-                <Card sx={{ height: '100%', display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
-                  <CardContent>
-                    <Typography variant="body1" paragraph>
-                      "{testimonial.text}"
-                    </Typography>
-                    <Box sx={{ display: 'flex', alignItems: 'center' }}>
-                      <img src={testimonial.avatar} alt={`${testimonial.name}'s avatar`} style={{ width: 50, height: 50, borderRadius: '50%', marginRight: 16 }} />
-                      <Typography variant="subtitle1" fontWeight="bold">
-                        {testimonial.name}
-                      </Typography>
-                    </Box>
-                  </CardContent>
-                </Card>
-              </Grid>
-            ))}
-          </Grid>
-        </Container>
-      </Box>
-
-      <Container sx={{ my: 8 }}>
-        <Typography variant="h4" gutterBottom align="center" fontWeight="bold" color="#333">
-          Frequently Asked Questions
-        </Typography>
-        {faqs.map((faq, index) => (
-          <Accordion key={index} sx={{ mb: 2 }}>
-            <AccordionSummary expandIcon={<ExpandMoreIcon />}>
-              <Typography fontWeight="bold">{faq.question}</Typography>
-            </AccordionSummary>
-            <AccordionDetails>
-              <Typography>{faq.answer}</Typography>
-            </AccordionDetails>
-          </Accordion>
-        ))}
-      </Container>
-
-      <Box sx={{
-        backgroundColor: '#1a73e8',
-        color: 'white',
-        py: 6,
-        textAlign: 'center'
-      }}>
-        <Container>
-          <Typography variant="h4" gutterBottom fontWeight="bold">
-            Ready to Get Started?
-          </Typography>
-          <Typography variant="h6" paragraph>
-            Join thousands of satisfied customers and transform your business today.
-          </Typography>
-          <Button variant="contained" size="large" 
-            sx={{ mt: 2, backgroundColor: 'white', color: '#1a73e8', '&:hover': { backgroundColor: '#f5f5f5' } }}>
-            Sign Up Now
-          </Button>
-        </Container>
-      </Box>
-
-      <Box sx={{ backgroundColor: '#212121', color: 'white', py: 6 }}>
-        <Container>
-          <Grid container spacing={4}>
-            <Grid item xs={12} md={4}>
-              <Typography variant="h6" gutterBottom fontWeight="bold">
-                Contact Us
-              </Typography>
-              <Typography paragraph>
-                123 Startup Street, Silicon Valley, CA 94000
-              </Typography>
-              <Typography paragraph>
-                Email: info@startup.com
-              </Typography>
-              <Typography>
-                Phone: (123) 456-7890
-              </Typography>
-            </Grid>
-            <Grid item xs={12} md={4}>
-              <Typography variant="h6" gutterBottom fontWeight="bold">
-                Follow Us
-              </Typography>
-              <IconButton color="inherit"><Facebook /></IconButton>
-              <IconButton color="inherit"><Twitter /></IconButton>
-              <IconButton color="inherit"><Instagram /></IconButton>
-            </Grid>
-            <Grid item xs={12} md={4}>
-              <Typography variant="h6" gutterBottom fontWeight="bold">
-                Newsletter
-              </Typography>
-              <TextField
-                variant="outlined"
-                placeholder="Enter your email"
-                fullWidth
-                sx={{ backgroundColor: 'white', mb: 2 }}
-              />
-              <Button variant="contained" fullWidth>
-                Subscribe
-              </Button>
-            </Grid>
-          </Grid>
-          <Typography variant="body2" align="center" sx={{ mt: 4 }}>
-            © 2023 Our Startup. All rights reserved.
-          </Typography>
-        </Container>
-      </Box>
-    </Box>
+      <Dialog open={isCartOpen} onClose={() => setIsCartOpen(false)} className="fixed inset-0 z-10 overflow-y-auto">
+        <div className="flex items-center justify-center min-h-screen">
+          <Dialog.Overlay className="fixed inset-0 bg-black opacity-30" />
+          <div className="relative bg-white rounded max-w-md mx-auto p-6">
+            <Dialog.Title className="text-2xl font-bold text-amber-900 mb-4">Your Cart</Dialog.Title>
+            {cart.length === 0 ? (
+              <p>Your cart is empty.</p>
+            ) : (
+              <ul>
+                {cart.map((item, index) => (
+                  <li key={index} className="flex justify-between items-center mb-2">
+                    <span>{item.name} - ${item.price.toFixed(2)}</span>
+                    <button onClick={() => removeFromCart(item.id)} className="text-red-500 hover:text-red-700">Remove</button>
+                  </li>
+                ))}
+              </ul>
+            )}
+            <button onClick={() => setIsCartOpen(false)} className="mt-4 bg-amber-600 text-white px-4 py-2 rounded hover:bg-amber-700 transition duration-300">Close</button>
+          </div>
+        </div>
+      </Dialog>
+    </div>
   );
-};
-
-export default PreviewPage;
+}
