@@ -6,23 +6,37 @@ import mermaid from 'mermaid';
 
 const mermaidCode = `
 graph TB
-    subgraph "Presentation Layer"
-        A[Web Browser]
-        B[Mobile App]
+    subgraph "Vehicle"
+        A[In-Vehicle System]
+        B[Sensors]
+        C[Actuators]
     end
-    subgraph "Application Layer"
-        C[Web Server]
-        D[Application Server]
+    subgraph "Communication"
+        D[V2V Communication]
+        E[V2I Communication]
     end
-    subgraph "Data Layer"
-        E[Database]
-        F[File Storage]
+    subgraph "Infrastructure"
+        F[Traffic Management]
+        G[Road Infrastructure]
     end
-    A --> C
-    B --> C
-    C --> D
-    D --> E
-    D --> F
+    subgraph "Cloud Services"
+        H[Data Analytics]
+        I[Remote Monitoring]
+        J[OTA Updates]
+    end
+    A <--> B
+    A <--> C
+    A <--> D
+    A <--> E
+    D <--> E
+    E <--> F
+    E <--> G
+    F <--> H
+    G <--> H
+    H <--> I
+    H <--> J
+    I <--> A
+    J --> A
 `;
 
 const PreviewPage = () => {
@@ -37,25 +51,25 @@ const PreviewPage = () => {
   };
 
   return (
-    <Box sx={{ width: '100%', height: '100vh', display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', bgcolor: '#f5f5f5' }}>
-      <Typography variant="h4" gutterBottom sx={{ color: '#333', fontWeight: 'bold' }}>
-        Three-Tier Web Application Architecture
+    <Box sx={{ width: '100%', height: '100vh', display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', bgcolor: '#f0f8ff' }}>
+      <Typography variant="h4" gutterBottom sx={{ color: '#1a5f7a', fontWeight: 'bold' }}>
+        车联网架构图
       </Typography>
-      <Box sx={{ width: '80%', height: '70%', bgcolor: 'white', borderRadius: 2, boxShadow: 3, display: 'flex', justifyContent: 'center', alignItems: 'center', position: 'relative', overflow: 'hidden' }}>
+      <Box sx={{ width: '90%', height: '75%', bgcolor: 'white', borderRadius: 4, boxShadow: 3, display: 'flex', justifyContent: 'center', alignItems: 'center', position: 'relative', overflow: 'hidden' }}>
         <Box sx={{ transform: `scale(${scale})`, transition: 'transform 0.3s ease' }}>
           <Mermaid chart={mermaidCode} />
         </Box>
-        <Box sx={{ position: 'absolute', right: 16, bottom: 16, display: 'flex', flexDirection: 'column', bgcolor: 'rgba(255,255,255,0.8)', borderRadius: 1, p: 1 }}>
-          <IconButton onClick={handleZoomIn} size="small">
+        <Box sx={{ position: 'absolute', right: 16, bottom: 16, display: 'flex', flexDirection: 'column', bgcolor: 'rgba(255,255,255,0.9)', borderRadius: 2, p: 1, boxShadow: 1 }}>
+          <IconButton onClick={handleZoomIn} size="small" sx={{ color: '#1a5f7a' }}>
             <ZoomInIcon />
           </IconButton>
-          <IconButton onClick={handleZoomOut} size="small" disabled={scale <= 0.5}>
+          <IconButton onClick={handleZoomOut} size="small" disabled={scale <= 0.5} sx={{ color: '#1a5f7a' }}>
             <ZoomOutIcon />
           </IconButton>
         </Box>
       </Box>
-      <Typography variant="body2" sx={{ mt: 2, color: '#666' }}>
-        This diagram illustrates the three layers of a typical web application: Presentation, Application, and Data.
+      <Typography variant="body2" sx={{ mt: 2, color: '#4a6572', maxWidth: '80%', textAlign: 'center' }}>
+        此架构图展示了车联网系统的主要组成部分，包括车载系统、通信网络、基础设施和云服务，以及它们之间的相互作用。
       </Typography>
     </Box>
   );
@@ -63,7 +77,7 @@ const PreviewPage = () => {
 
 mermaid.initialize({
   startOnLoad: true,
-  theme: 'neutral',
+  theme: 'forest',
   flowchart: {
     curve: 'basis'
   }
