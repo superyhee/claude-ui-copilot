@@ -1,26 +1,21 @@
-import React, { useState, useEffect } from 'react';
-import { Box, IconButton, Typography, TextField, Button } from '@mui/material';
+import React, { useState } from 'react';
+import { Box, IconButton, Typography } from '@mui/material';
 import ZoomInIcon from '@mui/icons-material/ZoomIn';
 import ZoomOutIcon from '@mui/icons-material/ZoomOut';
 import mermaid from 'mermaid';
 
-const initialMermaidCode = "graph TB\n    A[需求分析] --> B[设计]\n    B --> C[开发]\n    C --> D[测试]\n    D --> E[部署]\n    E --> F[维护]\n    F --> A";
+const mermaidCode = `
+graph TD
+    A[需求分析] --> B[设计]
+    B --> C[编码实现]
+    C --> D[测试]
+    D --> E[部署]
+    E --> F[维护]
+    F -.-> A
+`;
 
 const PreviewPage = () => {
-  const [mermaidCode, setMermaidCode] = useState(initialMermaidCode);
   const [scale, setScale] = useState(1.5);
-  const [isEditing, setIsEditing] = useState(false);
-
-  useEffect(() => {
-    mermaid.initialize({
-      startOnLoad: true,
-      theme: 'default',
-      flowchart: { 
-        useMaxWidth: false,
-        curve: 'basis'
-      }
-    });
-  }, []);
 
   const handleZoomIn = () => {
     setScale(scale + 0.1);
@@ -30,60 +25,47 @@ const PreviewPage = () => {
     setScale(Math.max(scale - 0.1, 0.5));
   };
 
-  const handleEditClick = () => {
-    setIsEditing(true);
-  };
-
-  const handleSaveClick = () => {
-    setIsEditing(false);
-    mermaid.contentLoaded();
-  };
-
-  const handleCodeChange = (event) => {
-    setMermaidCode(event.target.value);
-  };
-
   return (
-    <Box sx={{ width: '100%', height: '90vh', display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', backgroundColor: '#f0f4f8' }}>
-      <Typography variant="h4" sx={{ mb: 2, color: '#2c3e50', fontWeight: 'bold' }}>
-        软件研发生命周期流程图
+    <Box sx={{ width: '100%', height: '100vh', display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', bgcolor: '#f5f5f5' }}>
+      <Typography variant="h4" gutterBottom sx={{ color: '#333', fontWeight: 'bold' }}>
+        软件开发生命周期
       </Typography>
-      <Box sx={{ flex: 1, width: '100%', display: 'flex', justifyContent: 'center', alignItems: 'center', position: 'relative' }}>
-        {isEditing ? (
-          <Box sx={{ width: '90%', height: '90%', display: 'flex', flexDirection: 'column' }}>
-            <TextField
-              multiline
-              rows={20}
-              value={mermaidCode}
-              onChange={handleCodeChange}
-              variant="outlined"
-              sx={{ mb: 2, backgroundColor: 'white' }}
-            />
-            <Button variant="contained" onClick={handleSaveClick} sx={{ alignSelf: 'flex-end', backgroundColor: '#3498db', '&:hover': { backgroundColor: '#2980b9' } }}>
-              保存
-            </Button>
+      <Box sx={{ width: '80%', height: '70%', bgcolor: 'white', borderRadius: 2, boxShadow: 3, p: 3, display: 'flex', justifyContent: 'center', alignItems: 'center', position: 'relative' }}>
+        <Box sx={{ flex: 1, height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', overflow: 'auto' }}>
+          <Box sx={{ transform: `scale(${scale})` }}>
+            <Mermaid chart={mermaidCode} />
           </Box>
-        ) : (
-          <Box sx={{ width: '90%', height: '90%', overflow: 'auto', border: '1px solid #bdc3c7', borderRadius: '12px', backgroundColor: 'white', boxShadow: '0 6px 12px rgba(0,0,0,0.1)' }}>
-            <Box sx={{ transform: `scale(${scale})`, transformOrigin: 'top left', padding: '30px' }}>
-              <div className="mermaid">{mermaidCode}</div>
-            </Box>
-          </Box>
-        )}
-        <Box sx={{ position: 'absolute', right: '30px', top: '50%', transform: 'translateY(-50%)', display: 'flex', flexDirection: 'column', backgroundColor: 'white', borderRadius: '30px', padding: '15px', boxShadow: '0 4px 8px rgba(0,0,0,0.1)' }}>
-          <IconButton onClick={handleZoomIn} sx={{ mb: 1, color: '#3498db' }}>
+        </Box>
+        <Box sx={{ position: 'absolute', right: 16, top: '50%', transform: 'translateY(-50%)', display: 'flex', flexDirection: 'column', bgcolor: 'rgba(255,255,255,0.7)', borderRadius: 1, p: 0.5 }}>
+          <IconButton onClick={handleZoomIn} size="small">
             <ZoomInIcon />
           </IconButton>
-          <IconButton onClick={handleZoomOut} disabled={scale <= 0.5} sx={{ color: scale <= 0.5 ? '#bdc3c7' : '#3498db' }}>
+          <IconButton onClick={handleZoomOut} size="small" disabled={scale <= 0.5}>
             <ZoomOutIcon />
-          </IconButton>
-          <IconButton onClick={handleEditClick} sx={{ mt: 1, color: '#3498db' }}>
-            <img src="https://placehold.co/24x24?text=Edit" alt="Edit icon for modifying the software development lifecycle diagram" />
           </IconButton>
         </Box>
       </Box>
+      <Typography variant="body2" sx={{ mt: 2, color: '#666' }}>
+        点击缩放按钮可调整图表大小
+      </Typography>
     </Box>
   );
+};
+
+mermaid.initialize({
+  startOnLoad: true,
+  theme: 'neutral',
+  flowchart: {
+    curve: 'basis'
+  }
+});
+
+const Mermaid = ({ chart }) => {
+  React.useEffect(() => {
+    mermaid.contentLoaded();
+  }, []);
+
+  return <div className="mermaid">{chart}</div>;
 };
 
 export default PreviewPage;
