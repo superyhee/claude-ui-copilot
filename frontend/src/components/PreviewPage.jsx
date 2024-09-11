@@ -1,81 +1,81 @@
 import React, { useState } from 'react';
-import { Box, IconButton, Typography, Paper, Grid, Tooltip } from '@mui/material';
+import { Box, IconButton } from '@mui/material';
 import ZoomInIcon from '@mui/icons-material/ZoomIn';
 import ZoomOutIcon from '@mui/icons-material/ZoomOut';
-import InfoIcon from '@mui/icons-material/Info';
 import mermaid from 'mermaid';
 
 const mermaidCode = `
-graph TD
-    A[需求分析] --> B[设计]
-    B --> C[编码实现]
-    C --> D[测试]
-    D --> E[部署]
-    E --> F[维护]
-    F -.-> A
+mindmap
+  root((Amazon Leadership Principles))
+    Customer Obsession
+      :: Start with the customer and work backwards
+      :: Work vigorously to earn and keep customer trust
+    Ownership
+      :: Think long term
+      :: Act on behalf of the entire company
+    Invent and Simplify
+      :: Expect and require innovation from your team
+      :: Always find ways to simplify
+    Are Right, A Lot
+      :: Have strong judgment and good instincts
+      :: Seek diverse perspectives
+    Learn and Be Curious
+      :: Never stop learning
+      :: Be curious about new possibilities
+    Hire and Develop the Best
+      :: Raise the performance bar with every hire
+      :: Recognize exceptional talent
+    Insist on the Highest Standards
+      :: Have relentlessly high standards
+      :: Continually raise the bar
+    Think Big
+      :: Create and communicate a bold direction
+      :: Think differently and look around corners
+    Bias for Action
+      :: Speed matters in business
+      :: Many decisions are reversible and do not need extensive study
+    Frugality
+      :: Accomplish more with less
+      :: Constraints breed resourcefulness, self-sufficiency, and invention
+    Earn Trust
+      :: Listen attentively, speak candidly, and treat others respectfully
+      :: Be vocally self-critical
+    Dive Deep
+      :: Operate at all levels, stay connected to the details
+      :: Audit frequently, and skeptically
+    Have Backbone; Disagree and Commit
+      :: Challenge decisions when you disagree, even when doing so is uncomfortable
+      :: Commit wholly once a decision is made
+    Deliver Results
+      :: Focus on key inputs for your business
+      :: Deliver with the right quality and in a timely fashion
 `;
 
 const PreviewPage = () => {
-  const [scale, setScale] = useState(1.5);
+  const [scale, setScale] = useState(1);
 
   const handleZoomIn = () => {
-    setScale(scale + 0.1);
+    setScale(prevScale => Math.min(prevScale + 0.1, 2));
   };
 
   const handleZoomOut = () => {
-    setScale(Math.max(scale - 0.1, 0.5));
+    setScale(prevScale => Math.max(prevScale - 0.1, 0.5));
   };
 
   return (
-    <Box sx={{ width: '100%', minHeight: '100vh', display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', bgcolor: '#f0f4f8' }}>
-      <Paper elevation={3} sx={{ width: '90%', maxWidth: 1200, p: 4, borderRadius: 4 }}>
-        <Grid container spacing={3}>
-          <Grid item xs={12}>
-            <Typography variant="h4" gutterBottom sx={{ color: '#1a237e', fontWeight: 'bold', textAlign: 'center' }}>
-              软件开发生命周期
-              <Tooltip title="软件开发生命周期是一个完整的软件开发过程，从需求分析到维护的循环流程">
-                <IconButton size="small" sx={{ ml: 1, verticalAlign: 'super' }}>
-                  <InfoIcon fontSize="small" />
-                </IconButton>
-              </Tooltip>
-            </Typography>
-          </Grid>
-          <Grid item xs={12}>
-            <Box sx={{ width: '100%', height: 500, bgcolor: 'white', borderRadius: 2, boxShadow: 1, p: 3, display: 'flex', justifyContent: 'center', alignItems: 'center', position: 'relative' }}>
-              <Box sx={{ flex: 1, height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', overflow: 'auto' }}>
-                <Box sx={{ transform: `scale(${scale})`, transition: 'transform 0.3s ease' }}>
-                  <Mermaid chart={mermaidCode} />
-                </Box>
-              </Box>
-              <Box sx={{ position: 'absolute', right: 16, bottom: 16, display: 'flex', flexDirection: 'column', bgcolor: 'rgba(255,255,255,0.9)', borderRadius: 2, p: 1, boxShadow: 2 }}>
-                <Tooltip title="放大">
-                  <IconButton onClick={handleZoomIn} size="small" sx={{ mb: 1 }}>
-                    <ZoomInIcon />
-                  </IconButton>
-                </Tooltip>
-                <Tooltip title="缩小">
-                  <IconButton onClick={handleZoomOut} size="small" disabled={scale <= 0.5}>
-                    <ZoomOutIcon />
-                  </IconButton>
-                </Tooltip>
-              </Box>
-            </Box>
-          </Grid>
-          <Grid item xs={12}>
-            <Typography variant="body2" sx={{ mt: 2, color: '#455a64', textAlign: 'center' }}>
-              点击缩放按钮可调整图表大小，拖动可移动图表位置
-            </Typography>
-          </Grid>
-        </Grid>
-      </Paper>
-      <Box sx={{ mt: 4, display: 'flex', justifyContent: 'center', alignItems: 'center', flexWrap: 'wrap', gap: 2 }}>
-        {['需求分析', '设计', '编码实现', '测试', '部署', '维护'].map((stage, index) => (
-          <Paper key={index} elevation={2} sx={{ p: 2, bgcolor: '#e3f2fd', borderRadius: 2 }}>
-            <Typography variant="subtitle1" sx={{ color: '#0d47a1', fontWeight: 'medium' }}>
-              {stage}
-            </Typography>
-          </Paper>
-        ))}
+    <Box sx={{ width: '100%', height: '90vh', display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+      <Box sx={{ width: '100%', height: '85vh', overflow: 'auto', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+        <Box sx={{ transform: `scale(${scale})`, transformOrigin: 'center center' }}>
+          <Mermaid chart={mermaidCode} />
+        </Box>
+      </Box>
+      <Box sx={{ display: 'flex', justifyContent: 'center', mt: 2 }}>
+        <IconButton onClick={handleZoomOut} disabled={scale <= 0.5}>
+          <ZoomOutIcon />
+        </IconButton>
+        <IconButton onClick={handleZoomIn} disabled={scale >= 2}>
+          <ZoomInIcon />
+        </IconButton>
       </Box>
     </Box>
   );
@@ -83,16 +83,17 @@ const PreviewPage = () => {
 
 mermaid.initialize({
   startOnLoad: true,
-  theme: 'neutral',
-  flowchart: {
-    curve: 'basis'
+  theme: 'default',
+  mindmap: {
+    padding: 20,
+    curve: 'bump'
   }
 });
 
 const Mermaid = ({ chart }) => {
   React.useEffect(() => {
     mermaid.contentLoaded();
-  }, []);
+  }, [chart]);
 
   return <div className="mermaid">{chart}</div>;
 };
