@@ -5,44 +5,24 @@ import ZoomOutIcon from '@mui/icons-material/ZoomOut';
 import mermaid from 'mermaid';
 
 const mermaidCode = `
-erDiagram
-    VEHICLE ||--o{ TRIP : makes
-    VEHICLE {
-        int id
-        string make
-        string model
-        int year
-        string licensePlate
-    }
-    TRIP ||--|{ STOP : contains
-    TRIP {
-        int id
-        datetime startTime
-        datetime endTime
-        float totalDistance
-        string status
-    }
-    STOP {
-        int id
-        int tripId
-        string location
-        datetime arrivalTime
-        datetime departureTime
-    }
-    DRIVER ||--o{ TRIP : drives
-    DRIVER {
-        int id
-        string name
-        string licenseNumber
-        string contactInfo
-    }
-    CUSTOMER ||--o{ TRIP : books
-    CUSTOMER {
-        int id
-        string name
-        string contactInfo
-        string address
-    }
+graph TB
+    subgraph "Presentation Layer"
+        A[Web Browser]
+        B[Mobile App]
+    end
+    subgraph "Application Layer"
+        C[Web Server]
+        D[Application Server]
+    end
+    subgraph "Data Layer"
+        E[Database]
+        F[File Storage]
+    end
+    A --> C
+    B --> C
+    C --> D
+    D --> E
+    D --> F
 `;
 
 const PreviewPage = () => {
@@ -57,30 +37,26 @@ const PreviewPage = () => {
   };
 
   return (
-    <Box sx={{ width: '100%', height: '100vh', display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', bgcolor: '#f0f4f8' }}>
-      <Typography variant="h4" gutterBottom sx={{ color: '#2c3e50', fontWeight: 'bold', mb: 3 }}>
-        Auto TSP System ER Diagram
+    <Box sx={{ width: '100%', height: '100vh', display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', bgcolor: '#f5f5f5' }}>
+      <Typography variant="h4" gutterBottom sx={{ color: '#333', fontWeight: 'bold' }}>
+        Three-Tier Web Application Architecture
       </Typography>
-      <Box sx={{ width: '90%', height: '70vh', display: 'flex', justifyContent: 'center', alignItems: 'center', bgcolor: 'white', borderRadius: 4, boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)' }}>
-        <Box sx={{ flex: 1, display: 'flex', height: '100%', alignItems: 'center', justifyContent: 'center', overflow: 'auto' }}>
-          <Box sx={{ transform: `scale(${scale})`, marginRight: 2 }}>
-            <Mermaid chart={mermaidCode} />
-          </Box>
+      <Box sx={{ width: '80%', height: '70%', bgcolor: 'white', borderRadius: 2, boxShadow: 3, display: 'flex', justifyContent: 'center', alignItems: 'center', position: 'relative', overflow: 'hidden' }}>
+        <Box sx={{ transform: `scale(${scale})`, transition: 'transform 0.3s ease' }}>
+          <Mermaid chart={mermaidCode} />
         </Box>
-        <Box sx={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', mr: 2 }}>
-          <IconButton onClick={handleZoomOut} disabled={scale <= 0.5} sx={{ bgcolor: '#ecf0f1', mb: 1, '&:hover': { bgcolor: '#bdc3c7' } }}>
-            <ZoomOutIcon />
-          </IconButton>
-          <IconButton onClick={handleZoomIn} sx={{ bgcolor: '#ecf0f1', '&:hover': { bgcolor: '#bdc3c7' } }}>
+        <Box sx={{ position: 'absolute', right: 16, bottom: 16, display: 'flex', flexDirection: 'column', bgcolor: 'rgba(255,255,255,0.8)', borderRadius: 1, p: 1 }}>
+          <IconButton onClick={handleZoomIn} size="small">
             <ZoomInIcon />
           </IconButton>
+          <IconButton onClick={handleZoomOut} size="small" disabled={scale <= 0.5}>
+            <ZoomOutIcon />
+          </IconButton>
         </Box>
       </Box>
-      <Box sx={{ mt: 3 }}>
-        <Typography variant="body2" sx={{ color: '#7f8c8d' }}>
-          Use the + and - buttons to zoom in or out of the ER diagram
-        </Typography>
-      </Box>
+      <Typography variant="body2" sx={{ mt: 2, color: '#666' }}>
+        This diagram illustrates the three layers of a typical web application: Presentation, Application, and Data.
+      </Typography>
     </Box>
   );
 };
@@ -88,10 +64,8 @@ const PreviewPage = () => {
 mermaid.initialize({
   startOnLoad: true,
   theme: 'neutral',
-  er: {
-    useMaxWidth: false,
-    htmlLabels: true,
-    diagramPadding: 20
+  flowchart: {
+    curve: 'basis'
   }
 });
 
@@ -99,7 +73,6 @@ class Mermaid extends React.Component {
   componentDidMount() {
     mermaid.contentLoaded();
   }
-
   render() {
     return <div className="mermaid">{this.props.chart}</div>;
   }
