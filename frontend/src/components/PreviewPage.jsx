@@ -6,51 +6,53 @@ import mermaid from 'mermaid';
 
 const mermaidCode = `
 graph TB
-    subgraph "车载设备"
-        A[ECU]
-        B[IVI]
-        C[ADAS]
-        D[OBD]
+    subgraph "Data Collection"
+        A[AWS IoT Core]
+        B[Amazon Kinesis]
     end
-    subgraph "数据收集"
-        E[AWS IoT Core]
-        F[Amazon Kinesis]
+    subgraph "Data Storage"
+        C[Amazon S3]
+        D[Amazon DynamoDB]
     end
-    subgraph "数据存储"
-        G[Amazon S3]
-        H[Amazon DynamoDB]
+    subgraph "Data Processing & Analysis"
+        E[AWS Lambda]
+        F[Amazon EMR]
+        G[Amazon SageMaker]
     end
-    subgraph "数据处理与分析"
-        I[AWS Lambda]
-        J[Amazon EMR]
-        K[Amazon SageMaker]
+    subgraph "AI/ML Services"
+        H[Amazon Comprehend]
+        I[Amazon Rekognition]
+        J[Amazon Transcribe]
     end
-    subgraph "安全监控"
-        L[Amazon GuardDuty]
-        M[AWS Security Hub]
-        N[Amazon Detective]
+    subgraph "Visualization & Reporting"
+        K[Amazon QuickSight]
     end
-    subgraph "可视化与报告"
-        O[Amazon QuickSight]
+    subgraph "Security & Compliance"
+        L[AWS IAM]
+        M[Amazon GuardDuty]
     end
-    A --> E
-    B --> E
+    A --> B
+    B --> C
+    B --> D
     C --> E
     D --> E
     E --> F
-    F --> G
+    E --> G
     F --> H
     G --> I
-    H --> I
-    I --> J
+    G --> J
+    H --> K
     I --> K
-    J --> L
-    K --> L
-    L --> M
-    M --> N
-    L --> O
-    M --> O
-    N --> O
+    J --> K
+    L --> A
+    L --> B
+    L --> C
+    L --> D
+    L --> E
+    M --> A
+    M --> B
+    M --> C
+    M --> D
 `;
 
 const PreviewPage = () => {
@@ -67,7 +69,7 @@ const PreviewPage = () => {
   return (
     <Box sx={{ width: '100%', height: '100vh', display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', bgcolor: '#f0f8ff' }}>
       <Typography variant="h4" gutterBottom sx={{ color: '#1a5f7a', fontWeight: 'bold' }}>
-        基于AWS安全产品的汽车SOC架构图
+        AWS Generative AI Solution Architecture
       </Typography>
       <Box sx={{ width: '90%', height: '75%', bgcolor: 'white', borderRadius: 4, boxShadow: 3, display: 'flex', justifyContent: 'center', alignItems: 'center', position: 'relative', overflow: 'hidden' }}>
         <Box sx={{ transform: `scale(${scale})`, transition: 'transform 0.3s ease' }}>
@@ -83,7 +85,7 @@ const PreviewPage = () => {
         </Box>
       </Box>
       <Typography variant="body2" sx={{ mt: 2, color: '#4a6572', maxWidth: '80%', textAlign: 'center' }}>
-        此架构图展示了基于AWS安全产品的汽车安全运营中心（SOC）架构，包括数据收集、存储、处理、分析、安全监控和可视化报告等关键组件。
+        This architecture diagram illustrates the AWS Generative AI solution, showcasing key components for data collection, storage, processing, AI/ML services, visualization, and security.
       </Typography>
     </Box>
   );
