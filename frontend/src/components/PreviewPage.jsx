@@ -6,37 +6,49 @@ import mermaid from 'mermaid';
 
 const mermaidCode = `
 graph TB
-    subgraph "Vehicle"
-        A[In-Vehicle System]
-        B[Sensors]
-        C[Actuators]
+    subgraph "Data Sources"
+        A[IoT Devices]
+        B[Mobile Apps]
+        C[Web Applications]
+        D[Databases]
     end
-    subgraph "Communication"
-        D[V2V Communication]
-        E[V2I Communication]
+    subgraph "Data Ingestion"
+        E[Amazon Kinesis]
+        F[AWS IoT Core]
+        G[Amazon API Gateway]
     end
-    subgraph "Infrastructure"
-        F[Traffic Management]
-        G[Road Infrastructure]
+    subgraph "Storage"
+        H[Amazon S3]
+        I[Amazon RDS]
+        J[Amazon DynamoDB]
     end
-    subgraph "Cloud Services"
-        H[Data Analytics]
-        I[Remote Monitoring]
-        J[OTA Updates]
+    subgraph "Processing"
+        K[AWS Lambda]
+        L[Amazon EMR]
+        M[Amazon Athena]
     end
-    A <--> B
-    A <--> C
-    A <--> D
-    A <--> E
-    D <--> E
-    E <--> F
-    E <--> G
-    F <--> H
-    G <--> H
-    H <--> I
-    H <--> J
-    I <--> A
-    J --> A
+    subgraph "Analytics"
+        N[Amazon QuickSight]
+        O[Amazon SageMaker]
+    end
+    A --> E
+    B --> G
+    C --> G
+    D --> G
+    E --> H
+    F --> H
+    G --> H
+    H --> K
+    H --> L
+    H --> M
+    I --> K
+    J --> K
+    K --> N
+    L --> N
+    M --> N
+    K --> O
+    L --> O
+    M --> O
 `;
 
 const PreviewPage = () => {
@@ -53,7 +65,7 @@ const PreviewPage = () => {
   return (
     <Box sx={{ width: '100%', height: '100vh', display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', bgcolor: '#f0f8ff' }}>
       <Typography variant="h4" gutterBottom sx={{ color: '#1a5f7a', fontWeight: 'bold' }}>
-        车联网架构图
+        AWS数据湖架构图
       </Typography>
       <Box sx={{ width: '90%', height: '75%', bgcolor: 'white', borderRadius: 4, boxShadow: 3, display: 'flex', justifyContent: 'center', alignItems: 'center', position: 'relative', overflow: 'hidden' }}>
         <Box sx={{ transform: `scale(${scale})`, transition: 'transform 0.3s ease' }}>
@@ -69,7 +81,7 @@ const PreviewPage = () => {
         </Box>
       </Box>
       <Typography variant="body2" sx={{ mt: 2, color: '#4a6572', maxWidth: '80%', textAlign: 'center' }}>
-        此架构图展示了车联网系统的主要组成部分，包括车载系统、通信网络、基础设施和云服务，以及它们之间的相互作用。
+        此架构图展示了AWS数据湖的主要组成部分，包括数据源、数据摄取、存储、处理和分析层，以及它们之间的数据流动关系。
       </Typography>
     </Box>
   );
