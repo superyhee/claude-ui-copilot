@@ -1,38 +1,26 @@
 import React, { useState } from 'react';
-import { Box, IconButton } from '@mui/material';
+import { Box, IconButton, Typography } from '@mui/material';
 import ZoomInIcon from '@mui/icons-material/ZoomIn';
 import ZoomOutIcon from '@mui/icons-material/ZoomOut';
 import mermaid from 'mermaid';
 
 const mermaidCode = `
-mindmap
-  root((GAI))
-    自然语言处理
-      机器翻译
-      文本分类
-      情感分析
-      问答系统
-    计算机视觉
-      图像识别
-      目标检测
-      图像分割
-      人脸识别
-    语音技术
-      语音识别
-      语音合成
-      声纹识别
-    强化学习
-      游戏AI
-      机器人控制
-      自动驾驶
-    生成式AI
-      图像生成
-      文本生成
-      音乐生成
-    伦理与安全
-      数据隐私
-      算法偏见
-      AI监管
+sequenceDiagram
+    participant User as 用户
+    participant Vehicle as 车辆
+    participant OTA_Server as OTA服务器
+    participant Cloud as 云端
+
+    User->>Vehicle: 启动OTA升级
+    Vehicle->>OTA_Server: 请求升级包
+    OTA_Server->>Cloud: 获取最新固件
+    Cloud-->>OTA_Server: 返回固件
+    OTA_Server-->>Vehicle: 发送升级包
+    Vehicle->>Vehicle: 验证升级包
+    Vehicle->>Vehicle: 安装升级
+    Vehicle-->>User: 显示升级进度
+    Vehicle->>Vehicle: 重启系统
+    Vehicle-->>User: 升级完成通知
 `;
 
 const PreviewPage = () => {
@@ -47,19 +35,21 @@ const PreviewPage = () => {
   };
 
   return (
-    <Box sx={{ width: '100%', height: '90vh', display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', backgroundColor: '#f5f5f5' }}>
-      <Box sx={{ fontSize: '24px', fontWeight: 'bold', mb: 2 }}>GAI 思维导图</Box>
+    <Box sx={{ width: '100%', height: '90vh', display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', backgroundColor: '#f0f4f8' }}>
+      <Typography variant="h4" sx={{ mb: 2, color: '#2c3e50', fontWeight: 'bold' }}>
+        汽车OTA升级流程图
+      </Typography>
       <Box sx={{ flex: 1, width: '100%', display: 'flex', justifyContent: 'center', alignItems: 'center', position: 'relative' }}>
-        <Box sx={{ width: '90%', height: '90%', overflow: 'auto', border: '1px solid #ddd', borderRadius: '8px', backgroundColor: 'white', boxShadow: '0 4px 6px rgba(0,0,0,0.1)' }}>
-          <Box sx={{ transform: `scale(${scale})`, transformOrigin: 'top left', padding: '20px' }}>
+        <Box sx={{ width: '90%', height: '90%', overflow: 'auto', border: '1px solid #bdc3c7', borderRadius: '12px', backgroundColor: 'white', boxShadow: '0 6px 12px rgba(0,0,0,0.1)' }}>
+          <Box sx={{ transform: `scale(${scale})`, transformOrigin: 'top left', padding: '30px' }}>
             <Mermaid chart={mermaidCode} />
           </Box>
         </Box>
-        <Box sx={{ position: 'absolute', right: '20px', top: '50%', transform: 'translateY(-50%)', display: 'flex', flexDirection: 'column', backgroundColor: 'white', borderRadius: '20px', padding: '10px', boxShadow: '0 2px 4px rgba(0,0,0,0.1)' }}>
-          <IconButton onClick={handleZoomIn} sx={{ mb: 1 }}>
+        <Box sx={{ position: 'absolute', right: '30px', top: '50%', transform: 'translateY(-50%)', display: 'flex', flexDirection: 'column', backgroundColor: 'white', borderRadius: '30px', padding: '15px', boxShadow: '0 4px 8px rgba(0,0,0,0.1)' }}>
+          <IconButton onClick={handleZoomIn} sx={{ mb: 1, color: '#3498db' }}>
             <ZoomInIcon />
           </IconButton>
-          <IconButton onClick={handleZoomOut} disabled={scale <= 0.5}>
+          <IconButton onClick={handleZoomOut} disabled={scale <= 0.5} sx={{ color: scale <= 0.5 ? '#bdc3c7' : '#3498db' }}>
             <ZoomOutIcon />
           </IconButton>
         </Box>
@@ -71,13 +61,13 @@ const PreviewPage = () => {
 mermaid.initialize({
   startOnLoad: true,
   theme: 'default',
-  flowchart: {
-    curve: 'basis'
-  },
-  mindmap: {
-    padding: 20,
-    nodeSpacing: 100,
-    rankSpacing: 100
+  sequence: {
+    diagramMarginX: 50,
+    diagramMarginY: 10,
+    boxTextMargin: 5,
+    noteMargin: 10,
+    messageMargin: 35,
+    mirrorActors: true
   }
 });
 
