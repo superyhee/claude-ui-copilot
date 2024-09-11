@@ -1,115 +1,128 @@
-import React, { useState } from 'react';
-import { Dialog } from '@headlessui/react';
+import React from 'react';
+import { FaTwitter, FaLinkedin, FaGithub } from 'react-icons/fa';
 
-const products = [
-  { id: 1, name: 'Classic Espresso', price: 3.99, image: 'https://placehold.co/200x200?text=Espresso' },
-  { id: 2, name: 'Caramel Macchiato', price: 4.99, image: 'https://placehold.co/200x200?text=Macchiato' },
-  { id: 3, name: 'Iced Latte', price: 4.49, image: 'https://placehold.co/200x200?text=Latte' },
-];
+const Header = () => (
+  <header className="bg-gray-800 text-white p-4">
+    <nav className="container mx-auto flex justify-between items-center">
+      <h1 className="text-2xl font-bold">John Doe</h1>
+      <ul className="flex space-x-4">
+        <li><a href="#home" className="hover:text-gray-300">Home</a></li>
+        <li><a href="#about" className="hover:text-gray-300">About</a></li>
+        <li><a href="#blogs" className="hover:text-gray-300">Blogs</a></li>
+        <li><a href="#contact" className="hover:text-gray-300">Contact</a></li>
+      </ul>
+    </nav>
+  </header>
+);
 
-export default function App() {
-  const [cart, setCart] = useState([]);
-  const [isCartOpen, setIsCartOpen] = useState(false);
+const Hero = () => (
+  <section id="home" className="bg-blue-600 text-white py-20">
+    <div className="container mx-auto text-center">
+      <h2 className="text-4xl font-bold mb-4">Welcome to My Blog</h2>
+      <p className="text-xl mb-8">Exploring ideas, sharing knowledge, and inspiring others</p>
+      <a href="#blogs" className="bg-white text-blue-600 px-6 py-2 rounded-full font-bold hover:bg-blue-100 transition duration-300">Read My Blogs</a>
+    </div>
+  </section>
+);
 
-  const addToCart = (product) => {
-    setCart([...cart, product]);
-  };
+const About = () => (
+  <section id="about" className="py-20 bg-gray-100">
+    <div className="container mx-auto flex items-center">
+      <div className="w-1/2 pr-8">
+        <img src="https://placehold.co/400x400" alt="John Doe profile picture" className="rounded-full w-64 h-64 mx-auto" />
+      </div>
+      <div className="w-1/2">
+        <h2 className="text-3xl font-bold mb-4">About Me</h2>
+        <p className="text-gray-700 mb-4">
+          Hi, I'm John Doe, a passionate writer and tech enthusiast. I love exploring new ideas and sharing my knowledge through my blog. With over 10 years of experience in the industry, I bring a unique perspective to various topics.
+        </p>
+        <p className="text-gray-700 mb-4">
+          When I'm not writing, you can find me hiking in the mountains or experimenting with new recipes in the kitchen.
+        </p>
+        <div className="flex space-x-4">
+          <a href="#" className="text-gray-600 hover:text-blue-500"><FaTwitter size={24} /></a>
+          <a href="#" className="text-gray-600 hover:text-blue-700"><FaLinkedin size={24} /></a>
+          <a href="#" className="text-gray-600 hover:text-gray-900"><FaGithub size={24} /></a>
+        </div>
+      </div>
+    </div>
+  </section>
+);
 
-  const removeFromCart = (productId) => {
-    setCart(cart.filter(item => item.id !== productId));
-  };
+const BlogPost = ({ title, excerpt, date, imageUrl }) => (
+  <div className="bg-white rounded-lg shadow-md overflow-hidden">
+    <img src={imageUrl} alt={title} className="w-full h-48 object-cover" />
+    <div className="p-6">
+      <h3 className="text-xl font-bold mb-2">{title}</h3>
+      <p className="text-gray-600 mb-4">{excerpt}</p>
+      <div className="flex justify-between items-center">
+        <span className="text-sm text-gray-500">{date}</span>
+        <a href="#" className="text-blue-600 hover:text-blue-800 font-semibold">Read More</a>
+      </div>
+    </div>
+  </div>
+);
+
+const Blogs = () => {
+  const blogPosts = [
+    {
+      id: 1,
+      title: "The Future of AI in Everyday Life",
+      excerpt: "Exploring how artificial intelligence is shaping our daily routines and what to expect in the coming years.",
+      date: "May 15, 2023",
+      imageUrl: "https://placehold.co/600x400?text=AI+Future"
+    },
+    {
+      id: 2,
+      title: "10 Must-Visit Hidden Gems in Europe",
+      excerpt: "Discover lesser-known but equally stunning destinations across Europe for your next adventure.",
+      date: "April 28, 2023",
+      imageUrl: "https://placehold.co/600x400?text=Europe+Travel"
+    },
+    {
+      id: 3,
+      title: "Mastering the Art of Productivity",
+      excerpt: "Learn effective techniques and tools to boost your productivity and achieve your goals faster.",
+      date: "April 10, 2023",
+      imageUrl: "https://placehold.co/600x400?text=Productivity"
+    }
+  ];
 
   return (
-    <div className="bg-amber-50 min-h-screen">
-      <header className="bg-amber-800 text-white p-4">
-        <nav className="container mx-auto flex justify-between items-center">
-          <h1 className="text-2xl font-bold">Cozy Coffee</h1>
-          <ul className="flex space-x-4">
-            <li><a href="#home" className="hover:text-amber-200">Home</a></li>
-            <li><a href="#products" className="hover:text-amber-200">Products</a></li>
-            <li><a href="#about" className="hover:text-amber-200">About</a></li>
-            <li><button onClick={() => setIsCartOpen(true)} className="hover:text-amber-200">Cart ({cart.length})</button></li>
-          </ul>
-        </nav>
-      </header>
-
-      <main>
-        <section id="home" className="container mx-auto py-12 flex items-center">
-          <div className="w-1/2 pr-8">
-            <h2 className="text-4xl font-bold text-amber-900 mb-4">Welcome to Cozy Coffee</h2>
-            <p className="text-amber-800 mb-6">Experience the warmth of our carefully crafted coffee, where every sip tells a story of passion and tradition.</p>
-            <a href="#products" className="bg-amber-600 text-white px-6 py-2 rounded-full hover:bg-amber-700 transition duration-300">Shop Now</a>
-          </div>
-          <div className="w-1/2">
-            <img src="https://placehold.co/600x400?text=Cozy+Coffee+Shop" alt="Cozy coffee shop interior" className="rounded-lg shadow-lg" />
-          </div>
-        </section>
-
-        <section id="products" className="bg-amber-100 py-12">
-          <div className="container mx-auto">
-            <h2 className="text-3xl font-bold text-amber-900 mb-8 text-center">Our Products</h2>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-              {products.map((product) => (
-                <div key={product.id} className="bg-white p-6 rounded-lg shadow-md">
-                  <img src={product.image} alt={product.name} className="w-full h-48 object-cover mb-4 rounded" />
-                  <h3 className="text-xl font-semibold text-amber-900 mb-2">{product.name}</h3>
-                  <p className="text-amber-700 mb-4">${product.price.toFixed(2)}</p>
-                  <button onClick={() => addToCart(product)} className="bg-amber-600 text-white px-4 py-2 rounded hover:bg-amber-700 transition duration-300">Add to Cart</button>
-                </div>
-              ))}
-            </div>
-          </div>
-        </section>
-
-        <section className="bg-amber-700 text-white py-12">
-          <div className="container mx-auto text-center">
-            <h2 className="text-3xl font-bold mb-4">Enjoy 10% Off Your First Order</h2>
-            <p className="mb-6">Sign up for our newsletter and get a special welcome discount!</p>
-            <a href="#" className="bg-white text-amber-700 px-6 py-2 rounded-full hover:bg-amber-100 transition duration-300">Subscribe Now</a>
-          </div>
-        </section>
-      </main>
-
-      <footer className="bg-amber-900 text-white py-8">
-        <div className="container mx-auto flex justify-between">
-          <div>
-            <h3 className="text-xl font-bold mb-2">Cozy Coffee</h3>
-            <p>123 Coffee Lane, Brewville, CF 12345</p>
-            <p>Phone: (555) 123-4567</p>
-            <p>Email: info@cozycoffee.com</p>
-          </div>
-          <div>
-            <h3 className="text-xl font-bold mb-2">Quick Links</h3>
-            <ul>
-              <li><a href="#" className="hover:text-amber-200">Privacy Policy</a></li>
-              <li><a href="#" className="hover:text-amber-200">Terms of Service</a></li>
-              <li><a href="#" className="hover:text-amber-200">FAQ</a></li>
-            </ul>
-          </div>
+    <section id="blogs" className="py-20 bg-gray-50">
+      <div className="container mx-auto">
+        <h2 className="text-3xl font-bold mb-8 text-center">Latest Blog Posts</h2>
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+          {blogPosts.map(post => (
+            <BlogPost key={post.id} {...post} />
+          ))}
         </div>
-      </footer>
+      </div>
+    </section>
+  );
+};
 
-      <Dialog open={isCartOpen} onClose={() => setIsCartOpen(false)} className="fixed inset-0 z-10 overflow-y-auto">
-        <div className="flex items-center justify-center min-h-screen">
-          <Dialog.Overlay className="fixed inset-0 bg-black opacity-30" />
-          <div className="relative bg-white rounded max-w-md mx-auto p-6">
-            <Dialog.Title className="text-2xl font-bold text-amber-900 mb-4">Your Cart</Dialog.Title>
-            {cart.length === 0 ? (
-              <p>Your cart is empty.</p>
-            ) : (
-              <ul>
-                {cart.map((item, index) => (
-                  <li key={index} className="flex justify-between items-center mb-2">
-                    <span>{item.name} - ${item.price.toFixed(2)}</span>
-                    <button onClick={() => removeFromCart(item.id)} className="text-red-500 hover:text-red-700">Remove</button>
-                  </li>
-                ))}
-              </ul>
-            )}
-            <button onClick={() => setIsCartOpen(false)} className="mt-4 bg-amber-600 text-white px-4 py-2 rounded hover:bg-amber-700 transition duration-300">Close</button>
-          </div>
-        </div>
-      </Dialog>
+const Footer = () => (
+  <footer className="bg-gray-800 text-white py-8">
+    <div className="container mx-auto text-center">
+      <p>&copy; 2023 John Doe. All rights reserved.</p>
+      <div className="mt-4 flex justify-center space-x-4">
+        <a href="#" className="hover:text-gray-300">Privacy Policy</a>
+        <a href="#" className="hover:text-gray-300">Terms of Service</a>
+        <a href="#" className="hover:text-gray-300">Contact</a>
+      </div>
+    </div>
+  </footer>
+);
+
+export default function App() {
+  return (
+    <div className="font-sans">
+      <Header />
+      <Hero />
+      <About />
+      <Blogs />
+      <Footer />
     </div>
   );
 }
