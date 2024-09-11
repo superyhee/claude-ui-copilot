@@ -1,5 +1,6 @@
 import React from 'react';
 import { FaTwitter, FaLinkedin, FaGithub } from 'react-icons/fa';
+import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
 
 const Header = () => (
   <header className="bg-gray-800 text-white p-4">
@@ -9,6 +10,7 @@ const Header = () => (
         <li><a href="#home" className="hover:text-gray-300">Home</a></li>
         <li><a href="#about" className="hover:text-gray-300">About</a></li>
         <li><a href="#blogs" className="hover:text-gray-300">Blogs</a></li>
+        <li><a href="#budget" className="hover:text-gray-300">Budget</a></li>
         <li><a href="#contact" className="hover:text-gray-300">Contact</a></li>
       </ul>
     </nav>
@@ -102,6 +104,36 @@ const Blogs = () => {
   );
 };
 
+const BudgetChart = () => {
+  const data = [
+    { year: 2018, budget: 300000 },
+    { year: 2019, budget: 100000 },
+    { year: 2020, budget: 350000 },
+    { year: 2021, budget: 380000 },
+    { year: 2022, budget: 400000 },
+  ];
+
+  return (
+    <section id="budget" className="py-20 bg-white">
+      <div className="container mx-auto">
+        <h2 className="text-3xl font-bold mb-8 text-center">Company's Total Yearly Budget</h2>
+        <div className="w-full h-96">
+          <ResponsiveContainer width="100%" height="100%">
+            <LineChart data={data}>
+              <CartesianGrid strokeDasharray="3 3" />
+              <XAxis dataKey="year" />
+              <YAxis />
+              <Tooltip />
+              <Legend />
+              <Line type="monotone" dataKey="budget" stroke="#8884d8" activeDot={{ r: 8 }} />
+            </LineChart>
+          </ResponsiveContainer>
+        </div>
+      </div>
+    </section>
+  );
+};
+
 const Footer = () => (
   <footer className="bg-gray-800 text-white py-8">
     <div className="container mx-auto text-center">
@@ -122,6 +154,7 @@ export default function App() {
       <Hero />
       <About />
       <Blogs />
+      <BudgetChart />
       <Footer />
     </div>
   );
