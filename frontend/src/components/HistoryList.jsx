@@ -1,4 +1,4 @@
-import React, { useState, memo } from 'react';
+import React, { useState, memo, useCallback } from 'react';
 import { FixedSizeList as List } from 'react-window';
 import {
   Box,
@@ -12,6 +12,7 @@ import {
   FileOpen as FileOpenIcon,
   Search as SearchIcon
 } from '@mui/icons-material';
+import DeleteIcon from '@mui/icons-material/Delete';
 import { makeStyles } from '@mui/styles';
 import AutoSizer from 'react-virtualized-auto-sizer';
 import axios from 'axios';
@@ -48,7 +49,7 @@ const useStyles = makeStyles((theme) => ({
 const HistoryList = ({ history }) => {
   const classes = useStyles();
   const [searchText, setSearchText] = useState('');
-
+  const [historyList, setHistoryList] = useState(history);
   const loadHistoryFile = async (commitHash) => {
     try {
       const response = await axios.get(
@@ -64,6 +65,17 @@ const HistoryList = ({ history }) => {
       console.error(error);
     }
   };
+
+  const handleDelete = useCallback(async (commitHash) => {
+    try {
+      await axios.delete(`http://localhost:3001/delete-history/${commitHash}`);
+      setHistoryList((prevHistory) =>
+        prevHistory.filter((item) => item.commitHash !== commitHash)
+      );
+    } catch (error) {
+      console.error('Error deleting history:', error);
+    }
+  }, []);
 
   const HistoryItem = memo(({ item }) => {
     const classes = useStyles();
@@ -86,6 +98,14 @@ const HistoryList = ({ history }) => {
               {item.commitMessage}
             </Typography>
           </Box>
+          {/* <IconButton
+            onClick={(e) => {
+              e.stopPropagation();
+              handleDelete(item.commitHash);
+            }}
+          >
+            <DeleteIcon />
+          </IconButton> */}
         </ListItemButton>
       </Tooltip>
     );
@@ -103,10 +123,6 @@ const HistoryList = ({ history }) => {
     return (
       <Card key={index} className={classes.historyItem} style={style}>
         <HistoryItem item={item} />
-
-        {/* <IconButton onClick={() => loadHistoryFile(item.commitHash)}>
-          <FileOpenIcon size="small" />
-        </IconButton> */}
       </Card>
     );
   });

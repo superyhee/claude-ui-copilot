@@ -1,4 +1,4 @@
-# ui-gen-gpt
+# claude-ui-copilot
 
 A React and Vite-based tool with an Express backend that converts text, screenshots, and Figma designs into clean, functional code powered by LLMs. It employs a conversational approach for continuous page effect adjustments. Now supports AWS Bedrock and Claude 3.5 Sonnet.
 
@@ -37,7 +37,7 @@ https://github.com/user-attachments/assets/a77d428f-ce29-4f0a-b692-d983fdb02258
 1. Clone the repository:
 
    ```shell
-   git clone https://github.com/superyhee/ui-gen-gpt.git
+   git clone https://github.com/superyhee/claude-ui-copilot.git
    cd ui-code-generator
    ```
 

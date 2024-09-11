@@ -12,18 +12,18 @@
   "description": "",
   "dependencies": {
     "@anthropic-ai/bedrock-sdk": "^0.10.2",
-    "@anthropic-ai/sdk": "^0.25.0",
-    "aws-sdk": "^2.1664.0",
-    "axios": "^1.7.2",
-    "body-parser": "^1.20.2",
+    "@anthropic-ai/sdk": "^0.27.3",
+    "aws-sdk": "^2.1691.0",
+    "axios": "^1.7.7",
+    "body-parser": "^1.20.3",
     "cors": "^2.8.5",
-    "diff": "^5.2.0",
+    "diff": "^7.0.0",
     "dotenv": "^16.4.5",
     "events": "^3.3.0",
-    "express": "^4.19.2",
+    "express": "^4.20.0",
     "is-docker": "^3.0.0",
     "multer": "^1.4.5-lts.1",
-    "sharp": "^0.33.4",
+    "sharp": "^0.33.5",
     "uuid": "^10.0.0"
   }
 }

@@ -1,3 +1,16 @@
+/**
+ * @file index.js
+ * @description Main server file for ui-gen-gpt, setting up the Express server and API routes.
+ * 
+ * This file initializes the Express application, configures middleware, and sets up the
+ * necessary routes for handling image processing, code generation, and history management.
+ * It uses libraries such as multer for file uploads, cors for cross-origin resource sharing,
+ * and integrates with AI services like Anthropic's Claude and AWS Bedrock.
+ * 
+ * The server provides endpoints for processing images, generating code, managing code history,
+ * and other related functionalities required by the ui-gen-gpt frontend application.
+ */
+
 const express = require('express');
 const bodyParser = require('body-parser');
 const multer = require('multer');
@@ -13,6 +26,7 @@ const {
   getHistory,
   getHistoryFile,
   autoCommit,
+  deleteHistoryRecord,
   initCode
 } = require('./history');
 const { getDefaultUIContent: getUITemplate } = require('./utils/utils');
@@ -73,7 +87,7 @@ const generateCode = async (req, res) => {
     const currentCode = await readCode(template);
     const uiTemplate = getUITemplate(template);
     const myPrompt = hasFile
-      ? 'Make sure the page looks exactly like the screenshot,match the colors,sizes exactly.'
+      ? 'Make sure the page looks exactly like the screenshot,match the colors,sizes exactly,think step by step.'
       : prompt;
     const detailedPrompt = getPrompt(currentCode, myPrompt);
     const content = [
@@ -180,6 +194,17 @@ app.post('/new-page', async (req, res) => {
   try {
     const code = await initCode(req.body.ui);
     res.json({ success: true, code });
+  } catch (error) {
+    res.status(500).json({ success: false, error: error.message });
+  }
+});
+
+app.delete('/delete-history/:commitHash', async (req, res) => {
+  try {
+    const { commitHash } = req.params;
+    // 实现删除历史记录的逻辑
+    await deleteHistoryRecord(commitHash);
+    res.json({ success: true, message: 'History record deleted successfully' });
   } catch (error) {
     res.status(500).json({ success: false, error: error.message });
   }

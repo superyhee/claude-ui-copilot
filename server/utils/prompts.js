@@ -2,7 +2,7 @@
 
 const getDetailedPrompt = (currentCode, prompt) => {
   return `
-You are a professional front-end expert at building single page,please make the following changes:
+You are a professional front-end expert at building single page,please make the following changes step by step:
 <>
 ${prompt}
 </>
@@ -14,7 +14,7 @@ ${currentCode}
 2. If any functionality requires a backend call, mock the data; do not import mock data.Do not use import to reference mock data.
 3. The text string can't contain the "\`" characters.
 4. Focus on intuitive interactions and visual appeal while ensuring ease of use. Clear layout and information hierarchy, with thoughtful color schemes and design elements.
-Return the code implementation of react functional component without any explanations and markdown code block markers.
+return the code implementation of react functional component without any explanations and markdown code block markers.
 `;
 };
 

@@ -1,6 +1,6 @@
 const fs = require('fs').promises;
 const path = require('path');
-const { execSync } = require('child_process');
+const { execSync, exec } = require('child_process');
 
 const { getDefaultUIContent } = require('./utils/utils');
 
@@ -83,11 +83,29 @@ const autoCommit = async (commitMessage) => {
   }
 };
 
+function deleteHistoryRecord(commitHash) {
+  // // 使用模板字符串和引号来增加安全性
+  // const command = `git rebase --rebase-merges --onto "${commitHash}^" "${commitHash}"`;
+  // return execSync(command)
+  //   .then(({ stdout, stderr }) => {
+  //     if (stderr) {
+  //       throw new Error(stderr);
+  //     }
+  //     return stdout;
+  //   })
+  //   .catch((error) => {
+  //     // 这里可以使用更好的日志记录方式
+  //     console.error('Error executing git command:', error);
+  //     throw error;
+  //   });
+}
+
 module.exports = {
   readCode,
   writeCode,
   getHistory,
   getHistoryFile,
   autoCommit,
-  initCode
+  initCode,
+  deleteHistoryRecord
 };
