@@ -1,15 +1,16 @@
 import React, { useState } from 'react';
-import { Dialog } from '@headlessui/react';
+import { Box, Typography, Stack, AppBar, Toolbar, Button, Card, CardContent, CardMedia, Dialog, DialogTitle, DialogContent, DialogActions, IconButton, Badge } from '@mui/material';
+import { ShoppingCart, Close } from '@mui/icons-material';
 
-const products = [
-  { id: 1, name: 'Espresso', price: 3.99, image: 'https://placehold.co/200x200?text=Espresso', description: 'Rich and bold espresso shot' },
-  { id: 2, name: 'Cappuccino', price: 4.99, image: 'https://placehold.co/200x200?text=Cappuccino', description: 'Espresso with steamed milk and foam' },
-  { id: 3, name: 'Latte', price: 4.99, image: 'https://placehold.co/200x200?text=Latte', description: 'Espresso with steamed milk' },
+const coffeeProducts = [
+  { id: 1, name: 'Espresso', price: 2.99, image: 'https://placehold.co/300x200?text=Espresso', description: 'Rich and bold espresso shot' },
+  { id: 2, name: 'Latte', price: 3.99, image: 'https://placehold.co/300x200?text=Latte', description: 'Smooth espresso with steamed milk' },
+  { id: 3, name: 'Cappuccino', price: 3.99, image: 'https://placehold.co/300x200?text=Cappuccino', description: 'Equal parts espresso, steamed milk, and foam' }
 ];
 
-export default function App() {
+const CoffeePage = () => {
   const [cart, setCart] = useState([]);
-  const [isCartOpen, setIsCartOpen] = useState(false);
+  const [openCart, setOpenCart] = useState(false);
 
   const addToCart = (product) => {
     setCart([...cart, product]);
@@ -19,102 +20,130 @@ export default function App() {
     setCart(cart.filter(item => item.id !== productId));
   };
 
+  const handleOpenCart = () => {
+    setOpenCart(true);
+  };
+
+  const handleCloseCart = () => {
+    setOpenCart(false);
+  };
+
   return (
-    <div className="bg-amber-50 min-h-screen">
-      <header className="bg-amber-800 text-white p-4">
-        <nav className="container mx-auto flex justify-between items-center">
-          <h1 className="text-2xl font-bold">Cozy Coffee</h1>
-          <ul className="flex space-x-4">
-            <li><a href="#home" className="hover:text-amber-200">Home</a></li>
-            <li><a href="#products" className="hover:text-amber-200">Products</a></li>
-            <li><a href="#about" className="hover:text-amber-200">About</a></li>
-            <li><button onClick={() => setIsCartOpen(true)} className="hover:text-amber-200">Cart ({cart.length})</button></li>
-          </ul>
-        </nav>
-      </header>
+    <Box sx={{ backgroundColor: '#FFF8E1', minHeight: '100vh' }}>
+      <AppBar position="static" sx={{ backgroundColor: '#795548' }}>
+        <Toolbar>
+          <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
+            Cozy Coffee Shop
+          </Typography>
+          <Button color="inherit">Home</Button>
+          <Button color="inherit">Menu</Button>
+          <Button color="inherit">About</Button>
+          <IconButton color="inherit" onClick={handleOpenCart}>
+            <Badge badgeContent={cart.length} color="secondary">
+              <ShoppingCart />
+            </Badge>
+          </IconButton>
+        </Toolbar>
+      </AppBar>
 
-      <main>
-        <section id="home" className="container mx-auto py-12 flex items-center">
-          <div className="w-1/2 pr-8">
-            <h2 className="text-4xl font-bold text-amber-900 mb-4">Welcome to Cozy Coffee</h2>
-            <p className="text-amber-800 mb-6">Experience the warmth and comfort of our carefully crafted coffee. Each cup tells a story of passion and dedication.</p>
-            <a href="#products" className="bg-amber-600 text-white px-6 py-2 rounded hover:bg-amber-700 transition">Shop Now</a>
-          </div>
-          <div className="w-1/2">
-            <img src="https://placehold.co/600x400?text=Cozy+Coffee+Shop" alt="Cozy coffee shop interior" className="rounded-lg shadow-lg" />
-          </div>
-        </section>
+      <Box sx={{ p: 4 }}>
+        <Stack spacing={6}>
+          <Box sx={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+            <Box sx={{ maxWidth: '50%' }}>
+              <Typography variant="h3" gutterBottom>Welcome to Our Coffee Haven</Typography>
+              <Typography variant="body1">
+                Discover the perfect blend of tradition and innovation in every cup. Our passion for coffee is reflected in every bean we source and every brew we serve.
+              </Typography>
+            </Box>
+            <Box component="img" src="https://placehold.co/600x400?text=Cozy+Coffee+Shop" alt="Cozy coffee shop interior" sx={{ maxWidth: '45%', borderRadius: 2 }} />
+          </Box>
 
-        <section id="products" className="bg-amber-100 py-12">
-          <div className="container mx-auto">
-            <h2 className="text-3xl font-bold text-amber-900 mb-8 text-center">Our Products</h2>
-            <div className="grid grid-cols-3 gap-8">
-              {products.map(product => (
-                <div key={product.id} className="bg-white p-6 rounded-lg shadow-md">
-                  <img src={product.image} alt={product.name} className="w-full h-48 object-cover mb-4 rounded" />
-                  <h3 className="text-xl font-semibold text-amber-900 mb-2">{product.name}</h3>
-                  <p className="text-amber-700 mb-4">{product.description}</p>
-                  <div className="flex justify-between items-center">
-                    <span className="text-lg font-bold text-amber-600">${product.price.toFixed(2)}</span>
-                    <button onClick={() => addToCart(product)} className="bg-amber-500 text-white px-4 py-2 rounded hover:bg-amber-600 transition">Add to Cart</button>
-                  </div>
-                </div>
+          <Box>
+            <Typography variant="h4" gutterBottom>Our Signature Brews</Typography>
+            <Stack direction="row" spacing={3} justifyContent="center">
+              {coffeeProducts.map((product) => (
+                <Card key={product.id} sx={{ maxWidth: 345, backgroundColor: '#FFECB3' }}>
+                  <CardMedia
+                    component="img"
+                    height="140"
+                    image={product.image}
+                    alt={product.name}
+                  />
+                  <CardContent>
+                    <Typography gutterBottom variant="h5" component="div">
+                      {product.name}
+                    </Typography>
+                    <Typography variant="body2" color="text.secondary">
+                      {product.description}
+                    </Typography>
+                    <Typography variant="h6" sx={{ mt: 2 }}>
+                      ${product.price.toFixed(2)}
+                    </Typography>
+                    <Button variant="contained" sx={{ mt: 2, backgroundColor: '#795548' }} onClick={() => addToCart(product)}>
+                      Add to Cart
+                    </Button>
+                  </CardContent>
+                </Card>
               ))}
-            </div>
-          </div>
-        </section>
+            </Stack>
+          </Box>
 
-        <section className="bg-amber-700 text-white py-12">
-          <div className="container mx-auto text-center">
-            <h2 className="text-3xl font-bold mb-4">Special Offer</h2>
-            <p className="text-xl mb-6">Get 10% off your first order when you sign up for our newsletter!</p>
-            <button className="bg-white text-amber-700 px-6 py-2 rounded hover:bg-amber-100 transition">Sign Up Now</button>
-          </div>
-        </section>
-      </main>
+          <Box sx={{ backgroundColor: '#D7CCC8', p: 4, borderRadius: 2 }}>
+            <Typography variant="h4" gutterBottom>Limited Time Offer</Typography>
+            <Typography variant="body1">
+              Join our loyalty program and get your 10th coffee for free! Plus, enjoy exclusive member-only discounts on our specialty brews.
+            </Typography>
+            <Button variant="contained" sx={{ mt: 2, backgroundColor: '#795548' }}>
+              Join Now
+            </Button>
+          </Box>
+        </Stack>
+      </Box>
 
-      <footer className="bg-amber-900 text-white py-8">
-        <div className="container mx-auto flex justify-between">
-          <div>
-            <h3 className="text-xl font-bold mb-2">Cozy Coffee</h3>
-            <p>123 Coffee Street, Brewtown, CB 12345</p>
-            <p>Phone: (555) 123-4567</p>
-            <p>Email: info@cozycoffee.com</p>
-          </div>
-          <div>
-            <h4 className="text-lg font-semibold mb-2">Quick Links</h4>
-            <ul>
-              <li><a href="#" className="hover:text-amber-200">Privacy Policy</a></li>
-              <li><a href="#" className="hover:text-amber-200">Terms of Service</a></li>
-              <li><a href="#" className="hover:text-amber-200">FAQ</a></li>
-            </ul>
-          </div>
-        </div>
-      </footer>
+      <Box component="footer" sx={{ backgroundColor: '#795548', color: 'white', p: 4, mt: 4 }}>
+        <Typography variant="h6" gutterBottom>Cozy Coffee Shop</Typography>
+        <Typography variant="body2">123 Coffee Street, Brew City, BC 12345</Typography>
+        <Typography variant="body2">Phone: (123) 456-7890</Typography>
+        <Typography variant="body2">Email: info@cozycoffeeshop.com</Typography>
+        <Typography variant="body2" sx={{ mt: 2 }}>© 2023 Cozy Coffee Shop. All rights reserved.</Typography>
+      </Box>
 
-      <Dialog open={isCartOpen} onClose={() => setIsCartOpen(false)} className="fixed inset-0 z-10 overflow-y-auto">
-        <div className="flex items-center justify-center min-h-screen">
-          <Dialog.Overlay className="fixed inset-0 bg-black opacity-30" />
-          <div className="relative bg-white rounded max-w-md mx-auto p-6">
-            <Dialog.Title className="text-2xl font-bold text-amber-900 mb-4">Your Cart</Dialog.Title>
-            {cart.length === 0 ? (
-              <p>Your cart is empty.</p>
-            ) : (
-              <ul>
-                {cart.map((item, index) => (
-                  <li key={index} className="flex justify-between items-center mb-2">
-                    <span>{item.name} - ${item.price.toFixed(2)}</span>
-                    <button onClick={() => removeFromCart(item.id)} className="text-red-500 hover:text-red-700">Remove</button>
-                  </li>
-                ))}
-              </ul>
-            )}
-            <div className="mt-4 flex justify-end">
-              <button onClick={() => setIsCartOpen(false)} className="bg-amber-500 text-white px-4 py-2 rounded hover:bg-amber-600 transition">Close</button>
-            </div>
-          </div>
-        </div>
+      <Dialog open={openCart} onClose={handleCloseCart}>
+        <DialogTitle>
+          Your Cart
+          <IconButton
+            aria-label="close"
+            onClick={handleCloseCart}
+            sx={{ position: 'absolute', right: 8, top: 8 }}
+          >
+            <Close />
+          </IconButton>
+        </DialogTitle>
+        <DialogContent>
+          {cart.length === 0 ? (
+            <Typography>Your cart is empty</Typography>
+          ) : (
+            cart.map((item, index) => (
+              <Box key={index} sx={{ mb: 2, display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+                <Typography>{item.name} - ${item.price.toFixed(2)}</Typography>
+                <Button onClick={() => removeFromCart(item.id)} color="secondary">Remove</Button>
+              </Box>
+            ))
+          )}
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={handleCloseCart} color="primary">
+            Close
+          </Button>
+          {cart.length > 0 && (
+            <Button onClick={handleCloseCart} color="primary" variant="contained">
+              Checkout
+            </Button>
+          )}
+        </DialogActions>
       </Dialog>
-    </div>
+    </Box>
   );
-}
+};
+
+export default CoffeePage;
