@@ -6,24 +6,18 @@ import mermaid from 'mermaid';
 
 const mermaidCode = `
 timeline
-    title 五代十国变更时间线
-    907 : 后梁建立
-    923 : 后唐建立
-    936 : 后晋建立
-    947 : 后汉建立
-    951 : 后周建立
-    960 : 北宋建立，五代结束
-    907-979 : 十国并存时期
-      : 前蜀 (907-925)
-      : 后蜀 (934-965)
-      : 吴 (902-937)
-      : 南唐 (937-975)
-      : 武朗 (907-951)
-      : 闽 (909-945)
-      : 楚 (907-951)
-      : 南汉 (917-971)
-      : 南平 (924-963)
-      : 北汉 (951-979)
+    title AI Development Timeline
+    1950 : Turing Test Proposed
+    1956 : Dartmouth Conference
+    1969 : First AI in Healthcare
+    1997 : IBM's Deep Blue Beats Chess Champion
+    2011 : IBM Watson Wins Jeopardy!
+    2014 : Chatbots Become Mainstream
+    2016 : AlphaGo Defeats World Go Champion
+    2018 : GPT Language Models Introduced
+    2020 : GPT-3 Released
+    2022 : DALL-E 2 and Stable Diffusion Launch
+    2023 : ChatGPT and GPT-4 Released
 `;
 
 const PreviewPage = () => {
@@ -38,28 +32,28 @@ const PreviewPage = () => {
   };
 
   return (
-    <Box sx={{ width: '100%', height: '100vh', display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center' }}>
-      <Typography variant="h4" gutterBottom>
-        五代十国变更时间线
+    <Box sx={{ width: '100%', height: '100vh', display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', bgcolor: '#f5f5f5' }}>
+      <Typography variant="h4" gutterBottom sx={{ color: '#333', fontWeight: 'bold' }}>
+        AI Development Timeline
       </Typography>
-      <Box sx={{ width: '100%', height: '70vh', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+      <Box sx={{ width: '90%', height: '70vh', display: 'flex', justifyContent: 'center', alignItems: 'center', bgcolor: 'white', borderRadius: 2, boxShadow: 3 }}>
         <Box sx={{ flex: 1, display: 'flex', height: '100%', alignItems: 'center', justifyContent: 'center', overflow: 'auto' }}>
           <Box sx={{ transform: `scale(${scale})`, marginRight: 2 }}>
             <Mermaid chart={mermaidCode} />
           </Box>
         </Box>
-        <Box sx={{ display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
-          <IconButton onClick={handleZoomOut} disabled={scale <= 0.5}>
+        <Box sx={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', mr: 2 }}>
+          <IconButton onClick={handleZoomOut} disabled={scale <= 0.5} sx={{ bgcolor: '#e0e0e0', mb: 1 }}>
             <ZoomOutIcon />
           </IconButton>
-          <IconButton onClick={handleZoomIn}>
+          <IconButton onClick={handleZoomIn} sx={{ bgcolor: '#e0e0e0' }}>
             <ZoomInIcon />
           </IconButton>
         </Box>
       </Box>
       <Box sx={{ mt: 2 }}>
-        <Typography variant="body2">
-          点击 + 或 - 按钮可以放大或缩小时间线视图
+        <Typography variant="body2" sx={{ color: '#666' }}>
+          Use + or - buttons to zoom in or out of the timeline view
         </Typography>
       </Box>
     </Box>
