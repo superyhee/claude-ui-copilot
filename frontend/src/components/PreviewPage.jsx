@@ -5,22 +5,34 @@ import ZoomOutIcon from '@mui/icons-material/ZoomOut';
 import mermaid from 'mermaid';
 
 const mermaidCode = `
-sequenceDiagram
-    participant User as 用户
-    participant Vehicle as 车辆
-    participant OTA_Server as OTA服务器
-    participant Cloud as 云端
-
-    User->>Vehicle: 启动OTA升级
-    Vehicle->>OTA_Server: 请求升级包
-    OTA_Server->>Cloud: 获取最新固件
-    Cloud-->>OTA_Server: 返回固件
-    OTA_Server-->>Vehicle: 发送升级包
-    Vehicle->>Vehicle: 验证升级包
-    Vehicle->>Vehicle: 安装升级
-    Vehicle-->>User: 显示升级进度
-    Vehicle->>Vehicle: 重启系统
-    Vehicle-->>User: 升级完成通知
+mindmap
+  root((R155安全规则))
+    网络安全管理系统
+      安全政策
+      风险评估
+      安全监控
+    车辆类型和ECU
+      车辆OTA能力
+      ECU更新机制
+    软件更新
+      更新流程
+      验证机制
+      回滚能力
+    访问控制
+      身份认证
+      授权管理
+    通信安全
+      加密传输
+      完整性保护
+    入侵检测
+      异常行为监测
+      日志记录
+    数据保护
+      个人数据加密
+      数据最小化
+    供应链安全
+      供应商评估
+      组件追溯
 `;
 
 const PreviewPage = () => {
@@ -37,7 +49,7 @@ const PreviewPage = () => {
   return (
     <Box sx={{ width: '100%', height: '90vh', display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', backgroundColor: '#f0f4f8' }}>
       <Typography variant="h4" sx={{ mb: 2, color: '#2c3e50', fontWeight: 'bold' }}>
-        汽车OTA升级流程图
+        汽车R155安全规则思维导图
       </Typography>
       <Box sx={{ flex: 1, width: '100%', display: 'flex', justifyContent: 'center', alignItems: 'center', position: 'relative' }}>
         <Box sx={{ width: '90%', height: '90%', overflow: 'auto', border: '1px solid #bdc3c7', borderRadius: '12px', backgroundColor: 'white', boxShadow: '0 6px 12px rgba(0,0,0,0.1)' }}>
@@ -61,13 +73,10 @@ const PreviewPage = () => {
 mermaid.initialize({
   startOnLoad: true,
   theme: 'default',
-  sequence: {
-    diagramMarginX: 50,
-    diagramMarginY: 10,
-    boxTextMargin: 5,
-    noteMargin: 10,
-    messageMargin: 35,
-    mirrorActors: true
+  mindmap: {
+    padding: 20,
+    nodeSpacing: 60,
+    rankSpacing: 80,
   }
 });
 
