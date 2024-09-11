@@ -6,34 +6,42 @@ import mermaid from 'mermaid';
 
 const mermaidCode = `
 erDiagram
-    CUSTOMER ||--o{ ORDER : places
+    VEHICLE ||--o{ TRIP : makes
+    VEHICLE {
+        int id
+        string make
+        string model
+        int year
+        string licensePlate
+    }
+    TRIP ||--|{ STOP : contains
+    TRIP {
+        int id
+        datetime startTime
+        datetime endTime
+        float totalDistance
+        string status
+    }
+    STOP {
+        int id
+        int tripId
+        string location
+        datetime arrivalTime
+        datetime departureTime
+    }
+    DRIVER ||--o{ TRIP : drives
+    DRIVER {
+        int id
+        string name
+        string licenseNumber
+        string contactInfo
+    }
+    CUSTOMER ||--o{ TRIP : books
     CUSTOMER {
         int id
         string name
-        string email
+        string contactInfo
         string address
-    }
-    ORDER ||--|{ ORDER_ITEM : contains
-    ORDER {
-        int id
-        date orderDate
-        string status
-        float totalAmount
-    }
-    ORDER_ITEM {
-        int id
-        int orderId
-        int productId
-        int quantity
-        float price
-    }
-    PRODUCT ||--o{ ORDER_ITEM : "is part of"
-    PRODUCT {
-        int id
-        string name
-        string description
-        float price
-        int stockQuantity
     }
 `;
 
@@ -51,7 +59,7 @@ const PreviewPage = () => {
   return (
     <Box sx={{ width: '100%', height: '100vh', display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', bgcolor: '#f0f4f8' }}>
       <Typography variant="h4" gutterBottom sx={{ color: '#2c3e50', fontWeight: 'bold', mb: 3 }}>
-        Order System ER Diagram
+        Auto TSP System ER Diagram
       </Typography>
       <Box sx={{ width: '90%', height: '70vh', display: 'flex', justifyContent: 'center', alignItems: 'center', bgcolor: 'white', borderRadius: 4, boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)' }}>
         <Box sx={{ flex: 1, display: 'flex', height: '100%', alignItems: 'center', justifyContent: 'center', overflow: 'auto' }}>
