@@ -2,23 +2,15 @@ import React from 'react';
 import Plot from 'react-plotly.js';
 
 function App() {
-  // Generate mock data for 3D surface plot
   const size = 50;
-  const x = [];
-  const y = [];
-  const z = [];
-
-  for (let i = 0; i < size; i++) {
-    x.push(i);
-    y.push(i);
-    z.push([]);
-    for (let j = 0; j < size; j++) {
-      z[i].push(Math.sin(i / 10) * Math.cos(j / 10) * 10);
-    }
-  }
+  const x = Array.from({ length: size }, (_, i) => i);
+  const y = Array.from({ length: size }, (_, i) => i);
+  const z = Array.from({ length: size }, () => 
+    Array.from({ length: size }, () => Math.random() * 100)
+  );
 
   const data = [{
-    type: 'surface',
+    type: 'heatmap',
     x: x,
     y: y,
     z: z,
@@ -26,7 +18,7 @@ function App() {
   }];
 
   const layout = {
-    title: '3D Surface Plot',
+    title: 'Interactive Heatmap',
     autosize: false,
     width: 800,
     height: 600,
@@ -35,7 +27,9 @@ function App() {
       r: 50,
       b: 65,
       t: 90,
-    }
+    },
+    xaxis: { title: 'X Axis' },
+    yaxis: { title: 'Y Axis' },
   };
 
   return (
@@ -44,14 +38,16 @@ function App() {
       flexDirection: 'column',
       alignItems: 'center',
       justifyContent: 'center',
-      height: '100vh',
-      backgroundColor: '#f0f0f0',
+      minHeight: '100vh',
+      backgroundColor: '#f5f5f5',
+      padding: '20px',
     }}>
-      <h1 style={{ color: '#333', marginBottom: '20px' }}>Interactive 3D Surface Plot</h1>
+      <h1 style={{ color: '#333', marginBottom: '20px', textAlign: 'center' }}>Interactive Heatmap Visualization</h1>
       <div style={{
         boxShadow: '0 4px 8px 0 rgba(0,0,0,0.2)',
         borderRadius: '10px',
         overflow: 'hidden',
+        backgroundColor: 'white',
       }}>
         <Plot
           data={data}
@@ -60,10 +56,42 @@ function App() {
         />
       </div>
       <p style={{ color: '#666', marginTop: '20px', textAlign: 'center', maxWidth: '600px' }}>
-        This 3D surface plot visualizes a mathematical function. You can interact with it by rotating, zooming, and hovering over data points.
+        This heatmap visualizes random data. The color intensity represents the value at each point.
+        You can interact with the heatmap by zooming, panning, and hovering over data points.
       </p>
+      <div style={{
+        marginTop: '20px',
+        display: 'flex',
+        justifyContent: 'center',
+        flexWrap: 'wrap',
+        gap: '10px',
+      }}>
+        <button style={buttonStyle}>Download Data</button>
+        <button style={buttonStyle}>Change Color Scale</button>
+        <button style={buttonStyle}>Reset View</button>
+      </div>
+      <img 
+        src="https://placehold.co/300x200?text=Heatmap+Legend" 
+        alt="Heatmap color scale legend showing the relationship between colors and values" 
+        style={{
+          marginTop: '20px',
+          borderRadius: '5px',
+          boxShadow: '0 2px 4px rgba(0,0,0,0.1)',
+        }}
+      />
     </div>
   );
 }
+
+const buttonStyle = {
+  padding: '10px 15px',
+  backgroundColor: '#4CAF50',
+  color: 'white',
+  border: 'none',
+  borderRadius: '5px',
+  cursor: 'pointer',
+  fontSize: '14px',
+  transition: 'background-color 0.3s',
+};
 
 export default App;
