@@ -1,24 +1,24 @@
 import React, { useState } from 'react';
-import { Box, IconButton } from '@mui/material';
+import { Box, IconButton, Typography } from '@mui/material';
 import ZoomInIcon from '@mui/icons-material/ZoomIn';
 import ZoomOutIcon from '@mui/icons-material/ZoomOut';
 import mermaid from 'mermaid';
 
 const mermaidCode = `
-quadrantChart
-    title Reach and engagement of campaigns
-    x-axis Low Reach --> High Reach
-    y-axis Low Engagement --> High Engagement
-    quadrant-1 We should expand
-    quadrant-2 Need to promote
-    quadrant-3 Re-evaluate
-    quadrant-4 May be improved
-    Campaign A: [0.3, 0.6]
-    Campaign B: [0.45, 0.23]
-    Campaign C: [0.57, 0.69]
-    Campaign D: [0.78, 0.34]
-    Campaign E: [0.40, 0.34]
-    Campaign F: [0.35, 0.78]
+graph TD
+    A[Client Layer] --> B[Application Layer]
+    B --> C[Data Layer]
+    A --> |HTTP/HTTPS| D[Web Browser]
+    B --> |API Calls| E[Web Server]
+    B --> |Business Logic| F[Application Server]
+    C --> |Data Access| G[Database]
+    style A fill:#f9d5e5,stroke:#333,stroke-width:2px
+    style B fill:#eeac99,stroke:#333,stroke-width:2px
+    style C fill:#e06377,stroke:#333,stroke-width:2px
+    style D fill:#f9d5e5,stroke:#333,stroke-width:2px
+    style E fill:#eeac99,stroke:#333,stroke-width:2px
+    style F fill:#eeac99,stroke:#333,stroke-width:2px
+    style G fill:#e06377,stroke:#333,stroke-width:2px
 `;
 
 const PreviewPage = () => {
@@ -33,19 +33,30 @@ const PreviewPage = () => {
   };
 
   return (
-    <Box sx={{ width: '100%', height: '70vh', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-      <Box sx={{ flex: 1, height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', overflow: 'auto' }}>
-        <Box sx={{ transform: `scale(${scale})`, marginRight: 2 }}>
-          <Mermaid chart={mermaidCode} />
+    <Box sx={{ width: '100%', height: '100vh', display: 'flex', flexDirection: 'column', alignItems: 'center', padding: 2 }}>
+      <Typography variant="h4" gutterBottom>
+        3-Tier Web Application Architecture
+      </Typography>
+      <Box sx={{ width: '100%', height: 'calc(100% - 80px)', display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+        <Box sx={{ flex: 1, height: '100%', display: 'flex', alignItems: 'center', justifyContent: 'center', overflow: 'auto', border: '1px solid #ccc', borderRadius: 2 }}>
+          <Box sx={{ transform: `scale(${scale})`, margin: 2 }}>
+            <Mermaid chart={mermaidCode} />
+          </Box>
+        </Box>
+        <Box sx={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', marginLeft: 2 }}>
+          <IconButton onClick={handleZoomIn} sx={{ marginBottom: 1 }}>
+            <ZoomInIcon />
+          </IconButton>
+          <IconButton onClick={handleZoomOut} disabled={scale <= 0.5}>
+            <ZoomOutIcon />
+          </IconButton>
         </Box>
       </Box>
-      <Box sx={{ display: 'flex', flexDirection: 'column', justifyContent: 'center' }}>
-        <IconButton onClick={handleZoomOut} disabled={scale <= 0.5}>
-          <ZoomOutIcon />
-        </IconButton>
-        <IconButton onClick={handleZoomIn}>
-          <ZoomInIcon />
-        </IconButton>
+      <Box sx={{ marginTop: 2 }}>
+        <Typography variant="body1">
+          This diagram illustrates the three main layers of a typical web application:
+          Client Layer, Application Layer, and Data Layer.
+        </Typography>
       </Box>
     </Box>
   );
@@ -53,6 +64,8 @@ const PreviewPage = () => {
 
 mermaid.initialize({
   startOnLoad: true,
+  theme: 'neutral',
+  fontFamily: 'Arial, sans-serif',
 });
 
 class Mermaid extends React.Component {
