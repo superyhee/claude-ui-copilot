@@ -1,86 +1,103 @@
-import React, { useState } from 'react';
-import { Box, IconButton, Typography } from '@mui/material';
+import React, { useState, useEffect } from 'react';
+import { Box, IconButton, Typography, TextField, Button } from '@mui/material';
 import ZoomInIcon from '@mui/icons-material/ZoomIn';
 import ZoomOutIcon from '@mui/icons-material/ZoomOut';
-import mermaid from 'mermaid';
-
-const mermaidCode = `
-graph TB
-    subgraph "Presentation Layer"
-        A[Route 53]
-        B[CloudFront]
-    end
-    subgraph "Application Layer"
-        C[Elastic Load Balancer]
-        D[EC2 Instances]
-        E[Auto Scaling]
-    end
-    subgraph "Data Layer"
-        F[RDS]
-        G[S3]
-    end
-    A --> B
-    B --> C
-    C --> D
-    D --> E
-    D --> F
-    D --> G
-`;
+import { ScatterChart, Scatter, XAxis, YAxis, ZAxis, Tooltip, Legend, Label } from 'recharts';
 
 const PreviewPage = () => {
-  const [scale, setScale] = useState(1.5);
+  const [scale, setScale] = useState(1);
+  const [data, setData] = useState([]);
+  const [newItem, setNewItem] = useState({ name: '', x: 0, y: 0 });
 
-  const handleZoomIn = () => {
-    setScale(scale + 0.1);
+  useEffect(() => {
+    const mockData = [
+      { name: 'Item A', x: 80, y: 70, z: 100 },
+      { name: 'Item B', x: 40, y: 30, z: 80 },
+      { name: 'Item C', x: 60, y: 50, z: 60 },
+      { name: 'Item D', x: 20, y: 90, z: 40 },
+    ];
+    setData(mockData);
+  }, []);
+
+  const handleZoomIn = () => setScale(scale + 0.1);
+  const handleZoomOut = () => setScale(Math.max(scale - 0.1, 0.5));
+
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setNewItem({ ...newItem, [name]: name === 'name' ? value : Number(value) });
   };
 
-  const handleZoomOut = () => {
-    setScale(Math.max(scale - 0.1, 0.5));
+  const handleAddItem = () => {
+    if (newItem.name && newItem.x >= 0 && newItem.x <= 100 && newItem.y >= 0 && newItem.y <= 100) {
+      setData([...data, { ...newItem, z: 50 }]);
+      setNewItem({ name: '', x: 0, y: 0 });
+    }
   };
 
   return (
-    <Box sx={{ width: '100%', height: '100vh', display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', bgcolor: '#f0f8ff' }}>
-      <Typography variant="h4" gutterBottom sx={{ color: '#0f3057', fontWeight: 'bold' }}>
-        AWS-Based Three-Tier Web Application Architecture
+    <Box sx={{ width: '100%', height: '100vh', display: 'flex', flexDirection: 'column', alignItems: 'center', p: 2 }}>
+      <Typography variant="h4" gutterBottom>
+        Magic Quadrant Chart
       </Typography>
-      <Box sx={{ width: '80%', height: '70%', bgcolor: 'white', borderRadius: 4, boxShadow: 3, display: 'flex', justifyContent: 'center', alignItems: 'center', position: 'relative', overflow: 'hidden' }}>
-        <Box sx={{ transform: `scale(${scale})`, transition: 'transform 0.3s ease' }}>
-          <Mermaid chart={mermaidCode} />
-        </Box>
-        <Box sx={{ position: 'absolute', right: 16, bottom: 16, display: 'flex', flexDirection: 'column', bgcolor: 'rgba(255,255,255,0.8)', borderRadius: 2, p: 1 }}>
-          <IconButton onClick={handleZoomIn} size="small" sx={{ color: '#008080' }}>
-            <ZoomInIcon />
-          </IconButton>
-          <IconButton onClick={handleZoomOut} size="small" disabled={scale <= 0.5} sx={{ color: '#008080' }}>
-            <ZoomOutIcon />
-          </IconButton>
-        </Box>
+      <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', mb: 2 }}>
+        <IconButton onClick={handleZoomOut} disabled={scale <= 0.5}>
+          <ZoomOutIcon />
+        </IconButton>
+        <IconButton onClick={handleZoomIn}>
+          <ZoomInIcon />
+        </IconButton>
       </Box>
-      <Typography variant="body2" sx={{ mt: 2, color: '#555', maxWidth: '80%', textAlign: 'center' }}>
-        This diagram illustrates a three-tier web application architecture using AWS services. 
-        It showcases how Route 53 and CloudFront handle the presentation layer, 
-        EC2 instances with Auto Scaling manage the application layer, 
-        and RDS and S3 comprise the data layer.
-      </Typography>
+      <Box sx={{ transform: `scale(${scale})`, transformOrigin: 'top center' }}>
+        <ScatterChart width={600} height={400} margin={{ top: 20, right: 20, bottom: 20, left: 20 }}>
+          <XAxis type="number" dataKey="x" name="Ability to Execute" domain={[0, 100]}>
+            <Label value="Ability to Execute" offset={-10} position="insideBottom" />
+          </XAxis>
+          <YAxis type="number" dataKey="y" name="Completeness of Vision" domain={[0, 100]}>
+            <Label value="Completeness of Vision" angle={-90} position="insideLeft" offset={-5} />
+          </YAxis>
+          <ZAxis type="number" dataKey="z" range={[50, 400]} />
+          <Tooltip cursor={{ strokeDasharray: '3 3' }} />
+          <Legend />
+          <Scatter name="Items" data={data} fill="#8884d8" />
+        </ScatterChart>
+      </Box>
+      <Box sx={{ mt: 4, display: 'flex', flexDirection: 'column', alignItems: 'center' }}>
+        <Typography variant="h6" gutterBottom>
+          Add New Item
+        </Typography>
+        <Box sx={{ display: 'flex', gap: 2, mb: 2 }}>
+          <TextField
+            label="Name"
+            name="name"
+            value={newItem.name}
+            onChange={handleInputChange}
+            size="small"
+          />
+          <TextField
+            label="X (0-100)"
+            name="x"
+            type="number"
+            value={newItem.x}
+            onChange={handleInputChange}
+            size="small"
+            inputProps={{ min: 0, max: 100 }}
+          />
+          <TextField
+            label="Y (0-100)"
+            name="y"
+            type="number"
+            value={newItem.y}
+            onChange={handleInputChange}
+            size="small"
+            inputProps={{ min: 0, max: 100 }}
+          />
+        </Box>
+        <Button variant="contained" onClick={handleAddItem}>
+          Add Item
+        </Button>
+      </Box>
     </Box>
   );
 };
-
-mermaid.initialize({
-  startOnLoad: true,
-  theme: 'forest',
-  flowchart: {
-    curve: 'basis'
-  }
-});
-
-class Mermaid extends React.Component {
-  componentDidMount() {
-    mermaid.contentLoaded();
-  }
-  render() {
-    return <div className="mermaid">{this.props.chart}</div>;
-  }
-}
 
 export default PreviewPage;
