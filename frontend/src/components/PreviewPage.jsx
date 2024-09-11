@@ -5,19 +5,36 @@ import ZoomOutIcon from '@mui/icons-material/ZoomOut';
 import mermaid from 'mermaid';
 
 const mermaidCode = `
-timeline
-    title AI Development Timeline
-    1950 : Turing Test Proposed
-    1956 : Dartmouth Conference
-    1969 : First AI in Healthcare
-    1997 : IBM's Deep Blue Beats Chess Champion
-    2011 : IBM Watson Wins Jeopardy!
-    2014 : Chatbots Become Mainstream
-    2016 : AlphaGo Defeats World Go Champion
-    2018 : GPT Language Models Introduced
-    2020 : GPT-3 Released
-    2022 : DALL-E 2 and Stable Diffusion Launch
-    2023 : ChatGPT and GPT-4 Released
+erDiagram
+    CUSTOMER ||--o{ ORDER : places
+    CUSTOMER {
+        int id
+        string name
+        string email
+        string address
+    }
+    ORDER ||--|{ ORDER_ITEM : contains
+    ORDER {
+        int id
+        date orderDate
+        string status
+        float totalAmount
+    }
+    ORDER_ITEM {
+        int id
+        int orderId
+        int productId
+        int quantity
+        float price
+    }
+    PRODUCT ||--o{ ORDER_ITEM : "is part of"
+    PRODUCT {
+        int id
+        string name
+        string description
+        float price
+        int stockQuantity
+    }
 `;
 
 const PreviewPage = () => {
@@ -32,28 +49,28 @@ const PreviewPage = () => {
   };
 
   return (
-    <Box sx={{ width: '100%', height: '100vh', display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', bgcolor: '#f5f5f5' }}>
-      <Typography variant="h4" gutterBottom sx={{ color: '#333', fontWeight: 'bold' }}>
-        AI Development Timeline
+    <Box sx={{ width: '100%', height: '100vh', display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', bgcolor: '#f0f4f8' }}>
+      <Typography variant="h4" gutterBottom sx={{ color: '#2c3e50', fontWeight: 'bold', mb: 3 }}>
+        Order System ER Diagram
       </Typography>
-      <Box sx={{ width: '90%', height: '70vh', display: 'flex', justifyContent: 'center', alignItems: 'center', bgcolor: 'white', borderRadius: 2, boxShadow: 3 }}>
+      <Box sx={{ width: '90%', height: '70vh', display: 'flex', justifyContent: 'center', alignItems: 'center', bgcolor: 'white', borderRadius: 4, boxShadow: '0 4px 6px rgba(0, 0, 0, 0.1)' }}>
         <Box sx={{ flex: 1, display: 'flex', height: '100%', alignItems: 'center', justifyContent: 'center', overflow: 'auto' }}>
           <Box sx={{ transform: `scale(${scale})`, marginRight: 2 }}>
             <Mermaid chart={mermaidCode} />
           </Box>
         </Box>
         <Box sx={{ display: 'flex', flexDirection: 'column', justifyContent: 'center', mr: 2 }}>
-          <IconButton onClick={handleZoomOut} disabled={scale <= 0.5} sx={{ bgcolor: '#e0e0e0', mb: 1 }}>
+          <IconButton onClick={handleZoomOut} disabled={scale <= 0.5} sx={{ bgcolor: '#ecf0f1', mb: 1, '&:hover': { bgcolor: '#bdc3c7' } }}>
             <ZoomOutIcon />
           </IconButton>
-          <IconButton onClick={handleZoomIn} sx={{ bgcolor: '#e0e0e0' }}>
+          <IconButton onClick={handleZoomIn} sx={{ bgcolor: '#ecf0f1', '&:hover': { bgcolor: '#bdc3c7' } }}>
             <ZoomInIcon />
           </IconButton>
         </Box>
       </Box>
-      <Box sx={{ mt: 2 }}>
-        <Typography variant="body2" sx={{ color: '#666' }}>
-          Use + or - buttons to zoom in or out of the timeline view
+      <Box sx={{ mt: 3 }}>
+        <Typography variant="body2" sx={{ color: '#7f8c8d' }}>
+          Use the + and - buttons to zoom in or out of the ER diagram
         </Typography>
       </Box>
     </Box>
@@ -62,10 +79,11 @@ const PreviewPage = () => {
 
 mermaid.initialize({
   startOnLoad: true,
-  theme: 'default',
-  flowchart: {
+  theme: 'neutral',
+  er: {
     useMaxWidth: false,
-    htmlLabels: true
+    htmlLabels: true,
+    diagramPadding: 20
   }
 });
 
