@@ -6,49 +6,51 @@ import mermaid from 'mermaid';
 
 const mermaidCode = `
 graph TB
-    subgraph "Data Sources"
-        A[IoT Devices]
-        B[Mobile Apps]
-        C[Web Applications]
-        D[Databases]
+    subgraph "车载设备"
+        A[ECU]
+        B[IVI]
+        C[ADAS]
+        D[OBD]
     end
-    subgraph "Data Ingestion"
-        E[Amazon Kinesis]
-        F[AWS IoT Core]
-        G[Amazon API Gateway]
+    subgraph "数据收集"
+        E[AWS IoT Core]
+        F[Amazon Kinesis]
     end
-    subgraph "Storage"
-        H[Amazon S3]
-        I[Amazon RDS]
-        J[Amazon DynamoDB]
+    subgraph "数据存储"
+        G[Amazon S3]
+        H[Amazon DynamoDB]
     end
-    subgraph "Processing"
-        K[AWS Lambda]
-        L[Amazon EMR]
-        M[Amazon Athena]
+    subgraph "数据处理与分析"
+        I[AWS Lambda]
+        J[Amazon EMR]
+        K[Amazon SageMaker]
     end
-    subgraph "Analytics"
-        N[Amazon QuickSight]
-        O[Amazon SageMaker]
+    subgraph "安全监控"
+        L[Amazon GuardDuty]
+        M[AWS Security Hub]
+        N[Amazon Detective]
+    end
+    subgraph "可视化与报告"
+        O[Amazon QuickSight]
     end
     A --> E
-    B --> G
-    C --> G
-    D --> G
-    E --> H
+    B --> E
+    C --> E
+    D --> E
+    E --> F
+    F --> G
     F --> H
-    G --> H
-    H --> K
-    H --> L
-    H --> M
+    G --> I
+    H --> I
+    I --> J
     I --> K
-    J --> K
-    K --> N
-    L --> N
+    J --> L
+    K --> L
+    L --> M
     M --> N
-    K --> O
     L --> O
     M --> O
+    N --> O
 `;
 
 const PreviewPage = () => {
@@ -65,7 +67,7 @@ const PreviewPage = () => {
   return (
     <Box sx={{ width: '100%', height: '100vh', display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center', bgcolor: '#f0f8ff' }}>
       <Typography variant="h4" gutterBottom sx={{ color: '#1a5f7a', fontWeight: 'bold' }}>
-        AWS数据湖架构图
+        基于AWS安全产品的汽车SOC架构图
       </Typography>
       <Box sx={{ width: '90%', height: '75%', bgcolor: 'white', borderRadius: 4, boxShadow: 3, display: 'flex', justifyContent: 'center', alignItems: 'center', position: 'relative', overflow: 'hidden' }}>
         <Box sx={{ transform: `scale(${scale})`, transition: 'transform 0.3s ease' }}>
@@ -81,7 +83,7 @@ const PreviewPage = () => {
         </Box>
       </Box>
       <Typography variant="body2" sx={{ mt: 2, color: '#4a6572', maxWidth: '80%', textAlign: 'center' }}>
-        此架构图展示了AWS数据湖的主要组成部分，包括数据源、数据摄取、存储、处理和分析层，以及它们之间的数据流动关系。
+        此架构图展示了基于AWS安全产品的汽车安全运营中心（SOC）架构，包括数据收集、存储、处理、分析、安全监控和可视化报告等关键组件。
       </Typography>
     </Box>
   );
